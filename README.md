@@ -21,6 +21,7 @@ Below is an example of typesetting an example.
 ```
 
 <img src="assets/example.svg" alt="an example with subexamples and glosses" width="450"/>
+
 - Numbered lists are treated as subexamples, and bullet lists --- as glosses. This can be toggled off with passing `auto-subexamples: false` and `auto-glosses: false` to `example`;
 - `judge` typesets text without taking up space;
 - `ex-label` adds a label to the example;
