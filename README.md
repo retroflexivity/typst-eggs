@@ -4,7 +4,7 @@ This is a [Typst](https://github.com/typst/typst) package that provides linguist
 
 # Usage
 
-Below is an example of typesetting an example.
+Below is an example of how to typeset an example.
 
 ```typst
 #import "@preview/eggs:0.1.0": *
