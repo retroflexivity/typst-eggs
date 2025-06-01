@@ -40,7 +40,7 @@
     show figure.where(kind: "subexample"): set align(start)
 
     show figure.where(kind: "subexample"): set block(
-      // spacing: auto-sub(config.spacing, par.leading),
+      spacing: auto-sub(config.spacing, par.leading),
       breakable: config.breakable,
     )
 
