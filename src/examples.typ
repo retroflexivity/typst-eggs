@@ -12,6 +12,8 @@
   label: none,
   parent-label: none,
   config: none,
+  auto-subexamples: auto,
+  auto-glosses: auto,
 ) = {
   if number == none {
     example-count.step(level: level + 1)
@@ -38,18 +40,13 @@
     show figure.where(kind: "subexample"): set align(start)
 
     show figure.where(kind: "subexample"): set block(
-      spacing: auto-sub(config.spacing, par.leading),
+      // spacing: auto-sub(config.spacing, par.leading),
       breakable: config.breakable,
     )
 
-    // example spacing
-    let spacing = config.spacing
-    if spacing == auto {
-      spacing = par.spacing
-    }
     show figure.where(kind: "example"): it => {
       set block(
-        spacing: spacing,
+        spacing: auto-sub(config.spacing, par.spacing),
         breakable: config.breakable,
       )
       // override auto centering in figures
@@ -61,7 +58,7 @@
 
       // turn +'s into subexamples
       show enum: it => context {
-        if config.auto-subexamples {
+        if auto-sub(auto-subexamples, config.auto-subexamples) {
           for item in it.children {
             {
               build-example(
@@ -70,6 +67,7 @@
                 parent-label: label,
                 number: number,
                 config: config.sub,
+                auto-glosses: auto-sub(auto-glosses, config.auto-glosses)
               )
             }
           }
@@ -79,7 +77,7 @@
       }
       // turn -'s into glosses
       show list: it => {
-        if config.auto-glosses {
+        if auto-sub(auto-glosses, config.auto-glosses) {
           gloss(
             ..it.children.map(it => it.body),
          )
@@ -121,6 +119,8 @@
   /// Overrides automatic numbering of the subexample.
   /// If not none, the counter does not increment. -> int | none
   number: none,
+  /// Override config preset for automatic bullet list conversion. -> bool
+  auto-glosses: auto,
 ) = context {
 
   let config = state("eggs-config").get().sub
@@ -130,6 +130,7 @@
     label: label,
     number: number,
     config: config,
+    auto-glosses: auto-glosses,
   )
 }
 
@@ -144,6 +145,10 @@
   /// Overrides automatic numbering of the example.
   /// If not none, the counter does not increment. -> int | none
   number: none,
+  /// Override config preset for automatic numbered linst conversion. -> bool
+  auto-subexamples: auto,
+  /// Override config preset for automatic bullet list conversion. -> bool
+  auto-glosses: auto,
 ) = context {
 
   let config = state("eggs-config").get()
@@ -153,6 +158,8 @@
     label: label,
     number: number,
     config: config,
+    auto-subexamples: auto-subexamples,
+    auto-glosses: auto-glosses,
   )
 }
 

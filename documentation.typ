@@ -107,13 +107,13 @@ Numbered lists inside examples (lines that begin with `+ `) are automatically ty
   ```
 )
 
-In case you prefer it manual, the function `subexample` is defined. It is intended to only be used inside `example`. Automatic conversion of numbered lists can be toggled off by passing ```typst auto-subexamples: false``` to the config (see @customization).
+In case you prefer it manual, the function `subexample` is defined. It is intended to only be used inside `example`. Automatic conversion of numbered lists can be toggled off by setting ```typst auto-subexamples: false``` in the config (see @customization). To suspend it for a single example, pass ```typst auto-subexamples: false``` to the subexample directly.
 
 #counter("example").update((..it) => it.at(0) - 1)
 #code-ex(
   ```typst
   Compare the following two sentences, of which only the former exhibits the Definiteness Effect.
-  #example[
+  #example(auto-subexamples: false)[
     #subexample[There is a/\*the subexample.]
     #subexample[Here is a/the subexample.]
   ]
@@ -155,13 +155,13 @@ Translations and preambles are written as lines below and above glosses, respect
   ```
 )
 
-Automatic bullet list conversion can be toggled off by passing ```typst auto-glosses: false``` to the config (see @customization). Glosses can by typeset manually with `gloss`. It accepts either a content that it splits automatically or a list.
+Glosses can by typeset manually with `gloss`. It accepts either a content that it splits automatically or a list. Automatic bullet list conversion can be toggled off by setting ```typst auto-glosses: false``` in the config (see @customization). To suspend it for a single example, pass `auto-glosses: false` to the subexample directly.
 
 #counter("example").update(it => it - 1)
 #code-ex(
   ```typst
   The following example presents the Russian _eto_-construction.
-  #example[
+  #example(auto-glosses: false)[
     Russian
     #gloss(
       [Jajca      eto   vkusno.],
