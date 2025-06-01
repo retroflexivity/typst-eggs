@@ -4,7 +4,7 @@ This is a [Typst](https://github.com/typst/typst) package that provides linguist
 
 # Example
 
-Numbered lists are treated as subexamples, and bullet lists --- as glosses. Typesetting an example is as simple as
+Numbered lists are treated as subexamples, and bullet lists — as glosses. Typesetting an example is as simple as
 
 ```typst
 #import "@preview/eggs:0.1.0": example as ex, judge as j, abbreviations
