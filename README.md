@@ -19,7 +19,7 @@ Numbered lists are treated as subexamples, and bullet lists --- as glosses. Type
 ]
 ```
 
-![an example with subexamples and glosses](assets/example.svg)
+<img src="assets/example.svg" alt="an example with subexamples and glosses" width="450"/>
 
 # Contributing
 
