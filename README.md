@@ -27,7 +27,7 @@ Below is an example of typesetting an example.
 - `ex-label` adds a label to the example;
 - Customization is done via the global show rule: `#show eggs.with()`.
 
-See [documentation.pdf](documentation.pdf) for more info.
+See [documentation.pdf](https://github.com/retroflexivity/typst-eggs/blob/main/documentation.pdf) for more info.
 
 # Contributing
 
