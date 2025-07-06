@@ -2,6 +2,8 @@
 
 This is a [Typst](https://github.com/typst/typst) package that provides linguistic examples and interlinear glossing. It is a heavily modified fork of [neunenak's typst-leipzig-glossing](https://github.com/neunenak/typst-leipzig-glossing).
 
+See it on [Typst Universe](https://typst.app/universe/package/eggs).
+
 ## Usage
 
 Below is an example of how to typeset an example.
