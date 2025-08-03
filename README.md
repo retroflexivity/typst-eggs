@@ -69,6 +69,7 @@ Contributions are much welcome, too.
 
 TODO:
 - Automatic numbering in footnotes;
+- Subex refs via [itemize](https://github.com/tianyi-smile/itemize)
 - Smarter gloss line styling;
 - Figure out how to modify spacing between examples specifically;
 - `\trailingcitation`.
