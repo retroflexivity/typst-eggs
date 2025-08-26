@@ -47,7 +47,7 @@ For cool smart references, use `#ex-ref()` (`ref` and `@`-refs work too, though)
 
 ```typst
 #ex-ref(<gl>, <pex:b>) // (1a-b)
-#ex-ref(left: "e.g. ", <pex>, right: "etc.") // (e.g. 1 etc.)
+#ex-ref(left: "e.g. ", <pex>, right: " etc.") // (e.g. 1 etc.)
 #ex-ref(1) // (2) --- relative numbering like expex's nextx
 ```
 
