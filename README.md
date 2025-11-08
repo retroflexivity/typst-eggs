@@ -2,6 +2,8 @@
 
 This is a [Typst](https://github.com/typst/typst) package that provides linguistic examples and interlinear glossing. It is a heavily modified fork of [neunenak's typst-leipzig-glossing](https://github.com/neunenak/typst-leipzig-glossing).
 
+See it on [Typst Universe](https://typst.app/universe/package/eggs).
+
 ## Usage
 
 Below is an example of how to typeset an example.
@@ -44,8 +46,8 @@ Examples (and subexamples) can be labeled by putting `#ex-label(<label-name>)` s
 For cool smart references, use `#ex-ref()` (`ref` and `@`-refs work too, though).
 
 ```typst
-#ex-ref(<pex:a>, <gl>) // (1a-b)
-#ex-ref(left: "e.g. ", <pex>, right: "etc.") // (e.g. 1 etc.)
+#ex-ref(<gl>, <pex:b>) // (1a-b)
+#ex-ref(left: "e.g. ", <pex>, right: " etc.") // (e.g. 1 etc.)
 #ex-ref(1) // (2) --- relative numbering like expex's nextx
 ```
 
@@ -67,6 +69,7 @@ Contributions are much welcome, too.
 
 TODO:
 - Automatic numbering in footnotes;
+- Subex refs via [itemize](https://github.com/tianyi-smile/itemize);
 - Smarter gloss line styling;
 - Figure out how to modify spacing between examples specifically;
 - `\trailingcitation`.
