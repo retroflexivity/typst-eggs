@@ -120,22 +120,8 @@ In case you prefer it manual, the function `subexample` is defined. It is intend
   ```
 )
 
-= Judges
-
-`judge` is a simple function that typesets any text without taking up space. Intended to be used in the beginning of an example or a gloss word.
-
-#code-ex(
-  ```typst
-  The following pair shows the information-structural rigidity of specificational sentences.
-  #example[
-    + SMITH is the killer.
-    + #judge[\*]THE KILLER is Smith.
-  ]
-  ```
-)
-
 #pagebreak()
-= Glosses
+= Glosses <glosses>
 
 Bullet lists in examples (lines that begin with `- `) are automatically treated as gloss lines.
 
@@ -155,7 +141,7 @@ Translations and preambles are written as lines below and above glosses, respect
   ```
 )
 
-Glosses can by typeset manually with `gloss`. It accepts either a content that it splits automatically or a list. Automatic bullet list conversion can be toggled off by setting ```typst auto-glosses: false``` in the config (see @customization). To suspend it for a single example, pass `auto-glosses: false` to the subexample directly.
+Glosses can by typeset manually with `gloss`. It accepts either a content that it splits automatically or a list. Automatic bullet list conversion can be toggled off by setting ```typst auto-glosses: false``` in the config (see @customization). To suspend it for a single example, pass `auto-glosses: false` to the (sub)example directly.
 
 #counter("example").update(it => it - 1)
 #code-ex(
@@ -172,6 +158,40 @@ Glosses can by typeset manually with `gloss`. It accepts either a content that i
   ```
 )
 
+#pagebreak()
+= Judges
+
+Certain strings at the beginning of a line or a gloss word (see @glosses) are automatically transformed into left judges.#footnote[In fact, due to the way show rules work, this happens at the beginning of any elements inside examples, including inline ones. This might overgenerate left judges in certain narrow cases like in ```typst this one _?here_```. Disable auto judges if it is a problem.] Left judges are negatively padded strings that take up no space.
+
+By default, such strings are `*`, `#`, `?`, `OK`, and all combinations of these. All except the asterisk are also superscripted. Spaces after a judge are omitted for readability.
+
+#code-ex(
+  ```typst
+  The following pair shows the information-structural rigidity of specificational sentences.
+  #example[
+    + OK SMITH is the killer.
+    +  \*THE KILLER is Smith.
+  ]
+  ```
+)
+
+This can be modified by tweaking `auto-judges` in the config (see @customization) or by passing the `auto-judges` argument to an example directly. `auto-judges` takes a dictionary where keys are the strings and values indicate whether to additionally superscript them. For instance, if you would like to make hashes and question marks non-superscripted, try ```typst auto-judges: ("\*": false, "\#": false, "?": false, "OK": true)```. Use `auto-judges: ()` to disable the automatic conversion completely.
+
+Again, a function `judge` is provided to typeset judges manually. Following spaces are *not* omitted.
+
+#counter("example").update(4)
+#code-ex(
+  ```typst
+  The following pair shows the information-structural rigidity of specificational sentences.
+  #example(auto-judges: ())[
+    + #judge(super[OK])SMITH is the killer.
+    +  #judge[\*]THE KILLER is Smith.
+  ]
+  ```
+)
+
+N.B.: Avoid using `judge` with strings that are already in `auto-judges`, as this can lead to superscript doubling.
+
 = Abbreviations
 
 Eggs provides the whole set of #link("https://www.eva.mpg.de/lingua/resources/glossing-rules.php")[Leipzig Standard Abbreviations] as commands, in the style of TeX's `leipzig`. They are imported from a subpackage `abbreviations`.
@@ -186,10 +206,9 @@ All abbreviations are in lowercase. All abbreviations' names are as they appear,
 
   Note that the famous temperature examples forbid Instrumental in Russian.
   #example[
-    - #judge[\*]Temperatur-oj  byl-o        10~gradusov.
+    - \*Temperatur-oj  byl-o        10~gradusov.
     - weather-#ins             be-#pst\-#n  10~degrees
   ]
-  $n$ #n
   ```
 )
 
@@ -228,12 +247,12 @@ If a subexample doesn't have a label but its parent does, an automatic #link("ht
   The curious minimal pair in terms of scope in (@pair) is taken Arregi et al. (2021). Only (@pred) has a narrow scope reading of the indefinite.
   #example[
     #ex-label(<pair>)
-    + #judge(super[OK])Kim is not one of the judges. #ex-label(<pred>)
-    + #judge[\#]One of the judges is not Kim.
+    + OK Kim is not one of the judges. #ex-label(<pred>)
+    + \#One of the judges is not Kim.
   ]
   (@pair:b) is pragmatically odd, but becomes better if Kim is replaced with something that can exist in multiple places at once (@ok). The argument loses in convincibility, though.
   #example(label: <ok>)[
-    #judge(super[OK])One of the judges is not "OK".
+    OK One of the judges is not "OK".
   ]
   ```
 )
