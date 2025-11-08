@@ -15,7 +15,7 @@ Below is an example of how to typeset an example.
   + - primer   s     gloss-ami
     - example  with  gloss-#pl.#ins
     'an/the example with glosses' #ex-label(<gl>)
-  + #judge[\*]example without glosses
+  + \*example without glosses
   #ex-label(<pex>)
 ]
 ```
@@ -53,7 +53,7 @@ For cool smart references, use `#ex-ref()` (`ref` and `@`-refs work too, though)
 
 `#judge()` typesets text without taking up space.
 
-The `abbreviations` submodule provides `leipzig`-style abbreviation commands. They are kept track of and can be printed with `#print-abbreviations()`
+The `abbreviations` submodule provides `leipzig`-style abbreviation commands. They are kept track of and can be printed with `#print-abbreviations()`.
 
 Customization is done via the global show rule: `#show eggs.with()`.
 
