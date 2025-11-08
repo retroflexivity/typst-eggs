@@ -10,6 +10,13 @@
   auto-glosses: true,
   /// Whether to insert subexample labels of the form ex-label:a. -> bool
   auto-labels: true,
+  /// A dictionary of characters to convert into judges (keys) and whether to superscript them (values). -> array
+  auto-judges: (
+    "\*": false,
+    "\#": true,
+    "?": true,
+    "OK": true,
+  ),
   /// Distance between the left margin and the left edge of the example number. -> length
   indent: 0em,
   /// Distance between the left edge of the example marker and the left edge of the example body. -> length
@@ -66,6 +73,7 @@
         auto-subexamples: auto-subexamples,
         auto-glosses: auto-glosses,
         auto-labels: false,
+        auto-judges: auto-judges,
         indent: indent,
         body-indent: body-indent,
         spacing: spacing,
@@ -76,6 +84,7 @@
         level: 0,
         sub: (
           auto-labels: auto-labels,
+          auto-judges: auto-judges,
           indent: sub-indent,
           body-indent: sub-body-indent,
           spacing: sub-spacing,

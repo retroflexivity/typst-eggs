@@ -1,6 +1,7 @@
 #import "gloss.typ": gloss
 #import "config.typ": auto-sub
 #import "ex-label.typ": ex-label, get-ex-label
+#import "judge.typ": judge
 
 #let example-count = counter("example")
 
@@ -14,6 +15,7 @@
   config: none,
   auto-subexamples: auto,
   auto-glosses: auto,
+  auto-judges: auto,
 ) = {
   if number == none {
     example-count.step(level: level + 1)
@@ -85,6 +87,16 @@
           it
         }
       }
+      // turn selected initial characters into corresponding judges
+      let aj = auto-sub(auto-judges, config.auto-judges)
+      // make passing an empty structure actually work
+      let aj = if aj.len() > 0 {aj} else {("emptydictionaryfiller": false)}
+      let get-regex-disj = a => a.map(s => s.replace(regex("[-\[\]{}()+?.,^$|\\s]"), it => "\\" + it.text)).join("|")
+      show regex("^(" + get-regex-disj(aj.keys()) + ")+ ?"): it => {
+        show " ": ""
+        show regex("^(" + get-regex-disj(aj.keys().filter(key => aj.at(key))) + ")+"): super
+        judge(it)
+      }
       it
     }
 
@@ -149,6 +161,8 @@
   auto-subexamples: auto,
   /// Override config preset for automatic bullet list conversion. -> bool
   auto-glosses: auto,
+  /// Override config preset for automatic judge conversion. -> array
+  auto-judges: auto,
 ) = context {
 
   let config = state("eggs-config").get()
@@ -160,6 +174,7 @@
     config: config,
     auto-subexamples: auto-subexamples,
     auto-glosses: auto-glosses,
+    auto-judges: auto-judges,
   )
 }
 
