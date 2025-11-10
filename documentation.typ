@@ -185,7 +185,7 @@ Again, a function `judge` is provided to typeset judges manually. Following spac
   The following pair shows the information-structural rigidity of specificational sentences.
   #example(auto-judges: ())[
     + #judge(super[OK])SMITH is the killer.
-    +  #judge[\*]THE KILLER is Smith.
+    + #judge[\*]THE KILLER is Smith.
   ]
   ```
 )
