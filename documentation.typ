@@ -91,7 +91,7 @@ Examples are automatically numbered continuously. To override automatic numberin
   ```
 )
 
-The counter can also be set explicitly with #raw("#counter(\"example\").update(n)", lang: "typst"). This way, following examples will be numbered starting with $n+1$. See #link("https://typst.app/docs/reference/introspection/counter/")[counter] for more info.
+The counter can also be set to an absolute value with ```typst "#counter("example").update(n)"``` or a relative one with ```typst #counter("example").update(it => it + n)```. Following examples will be numbered starting with the next number. See #link("https://typst.app/docs/reference/introspection/counter/")[counter] for more info.
 
 = Subexamples
 
@@ -141,7 +141,7 @@ Translations and preambles are written as lines below and above glosses, respect
   ```
 )
 
-Glosses can by typeset manually with `gloss`. It accepts either a content that it splits automatically or a list. Automatic bullet list conversion can be toggled off by setting ```typst auto-glosses: false``` in the config (see @customization). To suspend it for a single example, pass `auto-glosses: false` to the (sub)example directly.
+Glosses can by typeset manually with `gloss`. It accepts either a content, which it splits automatically, or a list. Automatic bullet list conversion can be toggled off by setting ```typst auto-glosses: false``` in the config (see @customization). To suspend it for a single example, pass `auto-glosses: false` to the (sub)example directly.
 
 #counter("example").update(it => it - 1)
 #code-ex(
@@ -244,7 +244,7 @@ If a subexample doesn't have a label but its parent does, an automatic #link("ht
 
 #code-ex(
   ```typst
-  The curious minimal pair in terms of scope in (@pair) is taken Arregi et al. (2021). Only (@pred) has a narrow scope reading of the indefinite.
+  The curious minimal pair in terms of scope in (@pair) is taken from Arregi et al. (2021). Only (@pred) has a narrow scope reading of the indefinite.
   #example[
     #ex-label(<pair>)
     + OK Kim is not one of the judges. #ex-label(<pred>)
@@ -281,7 +281,7 @@ Thus, modulo parentheses, #raw("#ex-ref(1)", lang: "typst") is #raw("\\nextx", l
 
 = Customization <customization>
 
-Eggs offers some layout and styling customization and several behaviour toggles. The complete list is given in @funcs. Customization is done via setting the parameters of `eggs` in a global show rule.
+Eggs offers some layout and styling customization and several behaviour options. The complete list is given in @funcs. Customization is done via setting the parameters of `eggs` in a global show rule.
 
 #code-ex(
   ```typst
@@ -316,13 +316,13 @@ To change Eggs' config temporarely, you can also simply pass the content to `egg
       + What John also is is enviable.
       + What John also is is also enviable.
     ]
-
     #example[
       What I am pointing at is a kangaroo.
     ]
   ] // this ends the scope of eggs
   Compare #ex-ref(0) with itself but in the default layout.
-  #example(number: 12)[
+  #counter("example").update(it => it - 1)
+  #example[
     What I am pointing at is a kangaroo.
   ]
   ```
