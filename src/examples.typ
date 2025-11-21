@@ -1,9 +1,7 @@
 #import "gloss.typ": gloss
-#import "config.typ": auto-sub
+#import "config.typ": auto-sub, example-count
 #import "ex-label.typ": ex-label, get-ex-label
 #import "judge.typ": judge
-
-#let example-count = counter("example")
 
 #let build-example(
   content,
@@ -104,7 +102,7 @@
     [
       #figure(
         kind: config.figure-kind,
-        numbering: it => [#example-count.display("1a")],
+        numbering: it => [#example-count.display(config.ref-pattern)],
         supplement: config.label-supplement,
         outlined: false,
         grid(

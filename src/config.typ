@@ -1,3 +1,5 @@
+#let example-count = counter("eggsample")
+
 /// Sets the default config with optional overrides.
 /// Primarily intended for use in a global show rule:
 /// ```typst #show: eggs()``` -> content
@@ -38,9 +40,26 @@
   /// Example number format.
   /// A numbering pattern. -> str | function
   num-pattern: "(1)",
+  /// Example number format inside footnotes.
+  /// A numbering pattern. -> str | function
+  footnote-num-pattern: "(i)",
   /// Subexample number format.
   /// A numbering pattern. -> str | function
   sub-num-pattern: "a.",
+  /// Example reference format.
+  /// A 2-level numbering pattern. -> str | function
+  ref-pattern: "1a",
+  /// Format to reference the second argument of `ex-ref` if it is a subexample.
+  /// A 1-level numbering pattern. -> str | function
+  second-sub-ref-pattern: "a",
+  /// Footnote example reference format.
+  /// A 2-level numbering pattern. -> str | function
+  footnote-ref-pattern: "ia",
+  /// Format to reference the second argument of `ex-ref` in a footnote if it is a subexample.
+  /// A 1-level numbering pattern. -> str | function
+  footnote-second-sub-ref-pattern: "a",
+  /// Whether examples in each footnote start from 1. -> bool
+  footnote-separate-numbering: true,
   /// The example figure supplement used in references. -> str | none
   label-supplement: none,
   /// The subexample figure supplement used in references. -> str | none
@@ -65,46 +84,75 @@
   /// `gloss-styles[1]` --- to the second, etc. -> array
   gloss-styles: (),
 ) = {
-  let config = state("eggs-config")
-  context {
-    let old-config = config.get()
-    config.update(
-      (
-        auto-subexamples: auto-subexamples,
-        auto-glosses: auto-glosses,
-        auto-labels: false,
+  let config = (
+    (
+      auto-subexamples: auto-subexamples,
+      auto-glosses: auto-glosses,
+      auto-labels: false,
+      auto-judges: auto-judges,
+      indent: indent,
+      body-indent: body-indent,
+      spacing: spacing,
+      num-pattern: num-pattern,
+      ref-pattern: ref-pattern,
+      second-sub-ref-pattern: second-sub-ref-pattern,
+      label-supplement: label-supplement,
+      breakable: breakable,
+      figure-kind: "example",
+      level: 0,
+      sub: (
+        auto-labels: auto-labels,
         auto-judges: auto-judges,
-        indent: indent,
-        body-indent: body-indent,
-        spacing: spacing,
-        num-pattern: num-pattern,
-        label-supplement: label-supplement,
-        breakable: breakable,
-        figure-kind: "example",
-        level: 0,
-        sub: (
-          auto-labels: auto-labels,
-          auto-judges: auto-judges,
-          indent: sub-indent,
-          body-indent: sub-body-indent,
-          spacing: sub-spacing,
-          num-pattern: sub-num-pattern,
-          label-supplement: sub-label-supplement,
-          breakable: sub-breakable,
-          figure-kind: "subexample",
-          level: 1,
-        ),
-        gloss: (
-          word-spacing: gloss-word-spacing,
-          line-spacing: gloss-line-spacing,
-          before-spacing: gloss-before-spacing,
-          after-spacing: gloss-after-spacing,
-          styles: gloss-styles,
-        ),
-      )
+        indent: sub-indent,
+        body-indent: sub-body-indent,
+        spacing: sub-spacing,
+        num-pattern: sub-num-pattern,
+        ref-pattern: ref-pattern,
+        second-sub-ref-pattern: second-sub-ref-pattern,
+        label-supplement: sub-label-supplement,
+        breakable: sub-breakable,
+        figure-kind: "subexample",
+        level: 1,
+      ),
+      gloss: (
+        word-spacing: gloss-word-spacing,
+        line-spacing: gloss-line-spacing,
+        before-spacing: gloss-before-spacing,
+        after-spacing: gloss-after-spacing,
+        styles: gloss-styles,
+      ),
     )
+  )
+  let config-state = state("eggs-config")
+  context {
+    let old-config = config-state.get()
+    config-state.update(config)
+
+    show footnote.entry: it => {
+      let pre-count
+      if footnote-separate-numbering {
+        pre-count = example-count.get()
+        example-count.update(0)
+      }
+
+      let fn-config = config
+      fn-config.num-pattern = footnote-num-pattern
+      fn-config.ref-pattern = footnote-ref-pattern
+      // fn-config.second-sub-ref-pattern = footnote-second-sub-ref-pattern
+      fn-config.sub.ref-pattern = footnote-ref-pattern
+      config-state.update(fn-config)
+
+      it
+
+      config-state.update(config)
+      if footnote-separate-numbering {
+        example-count.update(pre-count)
+      }
+    }
     it
-    config.update(old-config)
+
+    // restore previous config back
+    config-state.update(old-config)
   }
 }
 

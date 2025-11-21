@@ -28,13 +28,13 @@
 #v(6em)
 #align(center, par(spacing: 1.5em, text(size: 3em)[Eggs]))
 #align(center, text(size: 1.2em)[Linguistic examples with minimalist syntax])
-#align(center, text(size: 1em)[Version 0.2.0])
+#align(center, text(size: 1em)[Version 0.3.0])
 #v(1.5em)
 #align(center, text(size: 1.2em)[#datetime.today().display("[month repr:long] [year]")])
 #align(center, text(size: 1.2em)[https://github.com/retroflexivity/typst-eggs])
 #v(5em)
 
-Eggs (/ɛɡz/ or /ɪɡz/) is a Typst package for typesetting linguistic examples. Its aim is to provide a Typst analogue to LaTeX `gb4e`, `expex`, `linguex`, etc. Additionally, it ships with `leipzig`-style gloss abbreviations.
+Eggs is a Typst package for typesetting linguistic examples. Its aim is to provide a Typst analogue to LaTeX `gb4e`, `expex`, `linguex`, etc. Additionally, it ships with `leipzig`-style gloss abbreviations.
 
 This is a documentation on Eggs. It begins with a review of features, then provides an extensive list of functions and their arguments.
 
@@ -48,7 +48,7 @@ To use Eggs, first import it, and then set its config via a global show rule.
 
   #code-ex(
     ```typst
-    #import "@preview/eggs:0.1.0": example as ex, subexample as subex, judge as j, ex-label as el, ex-ref as er
+    #import "@preview/eggs:0.3.0": example as ex, subexample as subex, judge as j, ex-label as el, ex-ref as er
     ```,
     output: false
   )
@@ -56,7 +56,7 @@ To use Eggs, first import it, and then set its config via a global show rule.
 
 #code-ex(
   ```typst
-  #import "@preview/eggs:0.1.0"
+  #import "@preview/eggs:0.3.0"
   #show: eggs
   ```,
   output: false
@@ -78,9 +78,9 @@ The primary fuction of Eggs is `example`. It acceps any `content` and typesets i
   ```
 )
 
-Examples are automatically numbered continuously. To override automatic numbering, pass the `number` argument. Examples with a custom number do not increment the counter, so numbering continues where it was left off. Passing things that are not numbers is not supported yet.
-
+Examples are automatically numbered continuously. To override automatic numbering, pass the `number` argument. Examples with a custom number do not increment the counter, so numbering continues where it was left off.
 #code-ex(
+
   ```typst
   The idea of Predicate Inversion stems from the seeming parallelism of the following sentences.
   #example[
@@ -91,6 +91,24 @@ Examples are automatically numbered continuously. To override automatic numberin
   ]
   ```
 )
+
+#pagebreak()
+
+By default, examples in each footnote are numbered separately. They also use their own formatting. The following footnote#footnote[
+  In fact, the counter is set to 0 at the beginning of each footnote and reset back afterwards.
+  #code-ex(
+    ```typst
+    But note the contrast in availability of indefinites.
+
+    #example[
+      `example` is the/a function of Eggs.
+    ]
+    #example[
+      The/??a function of Eggs is `example`.
+    ]
+    ```
+  )
+] demonstrates this.
 
 The counter can also be set to an absolute value with ```typst "#counter("example").update(n)"``` or a relative one with ```typst #counter("example").update(it => it + n)```. Following examples will be numbered starting with the next number. See #link("https://typst.app/docs/reference/introspection/counter/")[counter] for more info.
 

@@ -1,7 +1,11 @@
-#let get-num(arg) = if type(arg) == label {
+#import "config.typ": example-count
+
+#let config = state("eggs-config")
+
+#let get-ref-or-num(arg) = if type(arg) == label {
     ref(arg)
   } else if type(arg) == int {
-    context counter("example").get().first() + arg
+    context numbering(config.get().ref-pattern, example-count.get().first() + arg)
   }
 
 /// Typesets an example reference in parentheses.
@@ -19,16 +23,20 @@
   /// Text on the right, e.g. " etc." -> content
   right: none,
   ) = {
+
   // first ref
-  [(#left#get-num(args.at(0))]
+  [(#left#get-ref-or-num(args.at(0))]
   // second ref
   if args.pos().len() > 1 {
-    // hide the digit part of a subexample ref
-    show regex("\d+[a-z]+"): m => {
-      show regex("\d+"): n => []
-      m
+    show ref: it => {
+      let val = counter("eggsample").at(it.element.location())
+      if val.len() > 1 {
+        context numbering(config.get().second-sub-ref-pattern, val.at(1))
+      } else {
+        numbering(config.get().ref-pattern, ..val)
+      }
     }
-    [\-#get-num(args.at(1))]
+    [\-#get-ref-or-num(args.at(1))]
   }
   [#right)]
 }
