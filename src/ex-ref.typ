@@ -29,7 +29,7 @@
   // second ref
   if args.pos().len() > 1 {
     show ref: it => {
-      let val = counter("eggsample").at(it.element.location())
+      let val = example-count.at(it.element.location())
       if val.len() > 1 {
         context numbering(config.get().second-sub-ref-pattern, val.at(1))
       } else {
