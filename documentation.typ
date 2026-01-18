@@ -110,7 +110,7 @@ By default, examples in each footnote are numbered separately. They also use the
   )
 ] demonstrates this.
 
-The counter can also be set to an absolute value with ```typst "#counter("example").update(n)"``` or a relative one with ```typst #counter("example").update(it => it + n)```. Following examples will be numbered starting with the next number. See #link("https://typst.app/docs/reference/introspection/counter/")[counter] for more info.
+The counter can also be set to an absolute value with ```typst "#counter("eggsample").update(n)"``` or a relative one with ```typst #counter("eggsample").update(it => it + n)```. Following examples will be numbered starting with the next number. See #link("https://typst.app/docs/reference/introspection/counter/")[counter] for more info.
 
 = Subexamples
 
@@ -128,7 +128,7 @@ Numbered lists inside examples (lines that begin with `+ `) are automatically ty
 
 In case you prefer it manual, the function `subexample` is defined. It is intended to only be used inside `example`. Automatic conversion of numbered lists can be toggled off by setting ```typst auto-subexamples: false``` in the config (see @customization). To suspend it for a single example, pass ```typst auto-subexamples: false``` to the subexample directly.
 
-#counter("example").update((..it) => it.at(0) - 1)
+#counter("eggsample").update((..it) => it.at(0) - 1)
 #code-ex(
   ```typst
   Compare the following two sentences, of which only the former exhibits the Definiteness Effect.
@@ -162,7 +162,7 @@ Translations and preambles are written as lines below and above glosses, respect
 
 Glosses can by typeset manually with `gloss`. It accepts either a content, which it splits automatically, or a list. Automatic bullet list conversion can be toggled off by setting ```typst auto-glosses: false``` in the config (see @customization). To suspend it for a single example, pass `auto-glosses: false` to the (sub)example directly.
 
-#counter("example").update(it => it - 1)
+#counter("eggsample").update(it => it - 1)
 #code-ex(
   ```typst
   The following example presents the Russian _eto_-construction.
@@ -198,7 +198,7 @@ This can be modified by tweaking `auto-judges` in the config (see @customization
 
 Again, a function `judge` is provided to typeset judges manually. Following spaces are *not* omitted.
 
-#counter("example").update(4)
+#counter("eggsample").update(4)
 #code-ex(
   ```typst
   The following pair shows the information-structural rigidity of specificational sentences.
@@ -325,7 +325,7 @@ Eggs offers some layout and styling customization and several behaviour options.
 
 To change Eggs' config temporarely, you can also simply pass the content to `eggs`. Note, however, that all parameters not passed are set to default. If you change your config frequently, you may want to store your defaults in a separate variable.
 
-#counter("example").update(it => it - 2)
+#counter("eggsample").update(it => it - 2)
 
 #code-ex(
   ```typst
@@ -340,7 +340,7 @@ To change Eggs' config temporarely, you can also simply pass the content to `egg
     ]
   ] // this ends the scope of eggs
   Compare #ex-ref(0) with itself but in the default layout.
-  #counter("example").update(it => it - 1)
+  #counter("eggsample").update(it => it - 1)
   #example[
     What I am pointing at is a kangaroo.
   ]
