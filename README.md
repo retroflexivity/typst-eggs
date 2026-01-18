@@ -9,7 +9,7 @@ See it on [Typst Universe](https://typst.app/universe/package/eggs).
 Below is an example of how to typeset an example.
 
 ```typst
-#import "@preview/eggs:0.2.0": *
+#import "@preview/eggs:0.3.0": *
 #import abbreviations: pl, ins
 #show: eggs
 
@@ -68,8 +68,6 @@ Please submit an issue for any bug you find and any suggestion you have.
 Contributions are much welcome, too.
 
 TODO:
-- Automatic numbering in footnotes;
-- Subex refs via [itemize](https://github.com/tianyi-smile/itemize);
 - Smarter gloss line styling;
 - Figure out how to modify spacing between examples specifically;
 - `\trailingcitation`.
