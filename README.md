@@ -9,7 +9,7 @@ See it on [Typst Universe](https://typst.app/universe/package/eggs).
 Below is an example of how to typeset an example.
 
 ```typst
-#import "@preview/eggs:0.3.0": *
+#import "@preview/eggs:0.4.0": *
 #import abbreviations: pl, ins
 #show: eggs
 
