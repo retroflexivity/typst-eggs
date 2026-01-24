@@ -1,6 +1,5 @@
 #set document(title: "typst eggs documentation")
 #import "eggs.typ": abbreviations, example, gloss, judge, subexample, eggs, abbreviation, print-abbreviations, ex-label, ex-ref
-#import "eggs.typ": judge as j
 #import "@preview/tidy:0.4.3"
 
 #show: eggs
@@ -28,7 +27,7 @@
 #v(6em)
 #align(center, par(spacing: 1.5em, text(size: 3em)[Eggs]))
 #align(center, text(size: 1.2em)[Linguistic examples with minimalist syntax])
-#align(center, text(size: 1em)[Version 0.3.0])
+#align(center, text(size: 1em)[Version 0.4.1])
 #v(1.5em)
 #align(center, text(size: 1.2em)[#datetime.today().display("[month repr:long] [year]")])
 #align(center, text(size: 1.2em)[https://github.com/retroflexivity/typst-eggs])
@@ -94,8 +93,10 @@ Examples are automatically numbered continuously. To override automatic numberin
 
 #pagebreak()
 
+The counter can also be set to an absolute value with ```typst "#counter("eggsample").update(n)"``` or a relative one with ```typst #counter("eggsample").update(it => it + n)```. Following examples will be numbered starting with the next number. See #link("https://typst.app/docs/reference/introspection/counter/")[counter] for more info.
+
 By default, examples in each footnote are numbered separately. They also use their own formatting. The following footnote#footnote[
-  In fact, the counter is set to 0 at the beginning of each footnote and reset back afterwards.
+  Examples in footnotes use a separate counter, named `fn-eggsample`, which is set to 0 at the beginning of each footnote.
   #code-ex(
     ```typst
     But note the contrast in availability of indefinites.
@@ -109,8 +110,6 @@ By default, examples in each footnote are numbered separately. They also use the
     ```
   )
 ] demonstrates this.
-
-The counter can also be set to an absolute value with ```typst "#counter("eggsample").update(n)"``` or a relative one with ```typst #counter("eggsample").update(it => it + n)```. Following examples will be numbered starting with the next number. See #link("https://typst.app/docs/reference/introspection/counter/")[counter] for more info.
 
 = Subexamples
 

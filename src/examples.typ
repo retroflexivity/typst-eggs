@@ -1,5 +1,5 @@
 #import "gloss.typ": gloss
-#import "config.typ": auto-sub, example-count
+#import "config.typ": auto-sub
 #import "ex-label.typ": ex-label, get-ex-label
 #import "judge.typ": judge
 
@@ -16,10 +16,11 @@
   auto-judges: auto,
 ) = {
   if number == none {
-    example-count.step(level: level + 1)
+    context counter(config.counter-name).step(level: level + 1)
   }
 
   context {
+    let example-count = counter(config.counter-name)
     let label = label
     if label == none {
       label = get-ex-label(content)

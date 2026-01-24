@@ -1,5 +1,3 @@
-#let example-count = counter("eggsample")
-
 /// Sets the default config with optional overrides.
 /// Primarily intended for use in a global show rule:
 /// ```typst #show: eggs()``` -> content
@@ -99,6 +97,7 @@
       label-supplement: label-supplement,
       breakable: breakable,
       figure-kind: "example",
+      counter-name: "eggsample",
       level: 0,
       sub: (
         auto-labels: auto-labels,
@@ -112,6 +111,7 @@
         label-supplement: sub-label-supplement,
         breakable: sub-breakable,
         figure-kind: "subexample",
+        counter-name: "eggsample",
         level: 1,
       ),
       gloss: (
@@ -130,24 +130,23 @@
 
     show footnote.entry: it => {
       let pre-count
-      if footnote-separate-numbering {
-        pre-count = example-count.get()
-        example-count.update(0)
-      }
 
       let fn-config = config
       fn-config.num-pattern = footnote-num-pattern
       fn-config.ref-pattern = footnote-ref-pattern
-      // fn-config.second-sub-ref-pattern = footnote-second-sub-ref-pattern
       fn-config.sub.ref-pattern = footnote-ref-pattern
+
+      // footnote examples use another counter
+      // which is updated at the beginning of each footnote
+      if footnote-separate-numbering {
+        fn-config.counter-name = "fn-eggsample"
+        counter("fn-eggsample").update(0)
+      }
       config-state.update(fn-config)
 
       it
 
       config-state.update(config)
-      if footnote-separate-numbering {
-        example-count.update(pre-count)
-      }
     }
     it
 
