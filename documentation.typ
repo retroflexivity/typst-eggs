@@ -47,7 +47,7 @@ To use Eggs, first import it, and then set its config via a global show rule.
 
   #code-ex(
     ```typst
-    #import "@preview/eggs:0.3.0": example as ex, subexample as subex, judge as j, ex-label as el, ex-ref as er
+    #import "@preview/eggs:0.4.1": example as ex, subexample as subex, judge as j, ex-label as el, ex-ref as er
     ```,
     output: false
   )
@@ -55,7 +55,7 @@ To use Eggs, first import it, and then set its config via a global show rule.
 
 #code-ex(
   ```typst
-  #import "@preview/eggs:0.3.0"
+  #import "@preview/eggs:0.4.1"
   #show: eggs
   ```,
   output: false
