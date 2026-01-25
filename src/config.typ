@@ -79,7 +79,9 @@
   gloss-after-spacing: auto,
   /// List of functions to be applied to each line of glosses.
   /// Can be of any length. `gloss-styles[0]` is applied to the first line,
-  /// `gloss-styles[1]` --- to the second, etc. -> array
+  /// `gloss-styles[1]` --- to the second, etc.
+  /// E.g. (emph, it => it + [.]) makes the first line italicized
+  /// and adds a period to the second line. -> array
   gloss-styles: (),
 ) = {
   let config = (
