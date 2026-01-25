@@ -61,6 +61,10 @@ Customization is done via the global show rule: `#show eggs.with()`.
 
 See [documentation.pdf](https://github.com/retroflexivity/typst-eggs/blob/main/documentation.pdf) for more info.
 
+<!-- exclude -->
+## Installing locally
+On Linux, run `just` in the directory to install the package to ~/.local/typst/packages/local.
+
 ## Contributing
 
 Please submit an issue for any bug you find and any suggestion you have.
