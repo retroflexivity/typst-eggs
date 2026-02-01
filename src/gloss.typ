@@ -69,7 +69,13 @@
 
   let lines-split = lines.map(split-if)
 
-  _ = lines-split.map(line => assert(line.len() == lines-split.at(0).len(), message: "gloss lines have different lengths: " + repr(line.join()) + " and " + repr(lines-split.at(0).join())))
+  // check for line lengths
+  for line in lines-split {
+    // don't generate the error message until the error is confirmed
+    if line.len() != lines-split.at(0).len() {
+      assert(line.len() == lines-split.at(0).len(), message: "gloss lines have different lengths: " + repr(line.join()) + " and " + repr(lines-split.at(0).join()))
+    }
+  }
 
   // fill missing styles with defaults
   let styles = config.styles
