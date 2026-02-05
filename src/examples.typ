@@ -15,8 +15,21 @@
   auto-glosses: auto,
   auto-judges: auto,
 ) = {
+  let reset-at(..args, level: 0) = {
+    let counter = args.pos()
+    if counter.len() > level + 1 {
+      counter.at(level + 1) = 0
+    }
+    return counter
+  }
+
   if number == none {
+    // increment only if no custom number is sent
     context counter(config.counter-name).step(level: level + 1)
+  } else {
+    // since the counter is not stepped,
+    // prevent subexample numbering from being continued from the previous example
+    counter(config.counter-name).update(reset-at.with(level: level))
   }
 
   context {
