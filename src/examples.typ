@@ -66,7 +66,6 @@
                 item.body,
                 level: 1,
                 parent-label: label,
-                number: number,
                 config: config.sub,
                 auto-glosses: auto-sub(auto-glosses, config.auto-glosses)
               )
@@ -176,5 +175,3 @@
     auto-judges: auto-judges,
   )
 }
-
-
