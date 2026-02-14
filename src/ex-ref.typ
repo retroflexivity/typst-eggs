@@ -1,11 +1,3 @@
-#let config = state("eggs-config")
-
-#let get-ref-or-num(arg) = if type(arg) == label {
-    ref(arg)
-  } else if type(arg) == int {
-    context numbering(config.get().ref-pattern, counter(config.get().counter-name).get().first() + arg)
-  }
-
 /// Typesets an example reference in parentheses.
 /// Accepts labels and integers for relative references.
 /// Automatically handles plural references
@@ -20,18 +12,28 @@
   left: none,
   /// Text on the right, e.g. " etc." -> content
   right: none,
-  ) = {
+) = context {
+  let config = state("eggs-config").get()
+  assert(config != none, message: "`show: eggs` must be called before `ex-ref`")
+
+  let get-ref-or-num(arg) = {
+    if type(arg) == label {
+      ref(arg)
+    } else if type(arg) == int {
+      numbering(config.ref-pattern, counter(config.counter-name).get().first() + arg)
+    }
+  }
 
   // first ref
   [(#left#get-ref-or-num(args.at(0))]
   // second ref
   if args.pos().len() > 1 {
     show ref: it => {
-      let val = counter(config.get().counter-name).at(it.element.location())
+      let val = counter(config.counter-name).at(it.element.location())
       if val.len() > 1 {
-        numbering(config.get().second-sub-ref-pattern, val.at(1))
+        numbering(config.second-sub-ref-pattern, val.at(1))
       } else {
-        numbering(config.get().ref-pattern, ..val)
+        numbering(config.ref-pattern, ..val)
       }
     }
     [\-#get-ref-or-num(args.at(1))]
