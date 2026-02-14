@@ -62,7 +62,8 @@
   /// by more than one space or lists. -> content | array
   ..args,
 ) = context {
-  let config = state("eggs-config").get().gloss
+  let config = state("eggs-config").get()
+  assert(config != none, message: "`show: eggs` must be called before `gloss`")
 
   let lines = args.pos()
   assert(lines.len() > 0, message: "at least one gloss line must be present")
@@ -78,18 +79,18 @@
   }
 
   // fill missing styles with defaults
-  let styles = config.styles
+  let styles = config.gloss.styles
   if styles.len() < lines.len() {
     styles += (x => x,) * (lines.len() - styles.len())
   }
   block(
-    above: auto-sub(config.before-spacing, par.leading),
-    below: auto-sub(config.after-spacing, par.leading),
+    above: auto-sub(config.gloss.before-spacing, par.leading),
+    below: auto-sub(config.gloss.after-spacing, par.leading),
     build-gloss(
       lines-split,
       styles,
-      config.word-spacing,
-      auto-sub(config.line-spacing, par.leading),
+      config.gloss.word-spacing,
+      auto-sub(config.gloss.line-spacing, par.leading),
     )
   )
 }
