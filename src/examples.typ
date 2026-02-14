@@ -91,7 +91,7 @@
       // turn -'s into glosses
       show list: it => {
         if auto-sub(auto-glosses, config.auto-glosses) {
-          gloss(
+          gloss(example-number: example-number,
             ..it.children.map(it => it.body),
          )
         } else {

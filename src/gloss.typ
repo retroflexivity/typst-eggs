@@ -57,6 +57,9 @@
 
 /// Typesets a block of interlinear glosses.
 #let gloss(
+  /// The number of the containing example, if present.
+  /// Used for error reporting.
+  example-number: none,
   /// Any number of rows of equal length.
   /// Rows can be either contents where elements are separated
   /// by more than one space or lists. -> content | array
@@ -67,13 +70,18 @@
   let lines = args.pos()
   assert(lines.len() > 0, message: "at least one gloss line must be present")
 
+  // guard against invalid line lengths
   let lines-split = lines.map(split-if)
-
-  // check for line lengths
+  let first-line = lines-split.at(0)
   for line in lines-split {
     // don't generate the error message until the error is confirmed
-    if line.len() != lines-split.at(0).len() {
-      assert(line.len() == lines-split.at(0).len(), message: "gloss lines have different lengths: " + repr(line.join()) + " and " + repr(lines-split.at(0).join()))
+    // (assert's `message` is not lazy)
+    if line.len() != first-line.len() {
+      assert(line.len() == first-line.len(), message: {
+        if example-number != none {
+          "at example " + str(example-number) + ": "
+        } + "gloss lines have different lengths: " + repr(line.join()) + " and " + repr(first-line.join())
+      })
     }
   }
 
