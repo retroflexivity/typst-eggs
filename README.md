@@ -9,7 +9,7 @@ See it on [Typst Universe](https://typst.app/universe/package/eggs).
 Below is an example of how to typeset an example.
 
 ```typst
-#import "@preview/eggs:0.4.3": *
+#import "@preview/eggs:0.5.0": *
 #import abbreviations: pl, ins
 #show: eggs
 
@@ -53,7 +53,7 @@ For cool smart references, use `#ex-ref()` (`ref` and `@`-refs work too, though)
 
 ### Misc stuff
 
-`#judge()` typesets text without taking up space.
+Common judges are recognized automatically. `#judge()` typesets text without taking up space.
 
 The `abbreviations` submodule provides `leipzig`-style abbreviation commands. They are kept track of and can be printed with `#print-abbreviations()`.
 
