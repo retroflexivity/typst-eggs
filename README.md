@@ -84,3 +84,4 @@ MIT License.
 
 - [Thumus](https://github.com/Thumuss), [bluss](https://github.com/bluss), and especially [Laurenz](https://github.com/laurmaedje) for an important discussion on row splitting functionality.
 - [Greg Shuflin](https://github.com/neunenak) and contributors for creating the original leipzig-glossing.
+- [JJ](https://github.com/omentic) for various improvements.
