@@ -14,7 +14,7 @@
   right: none,
 ) = context {
   let config = state("eggs-config").get()
-  assert(config != none, message: "`show: eggs` must be called before `ex-ref`")
+  assert(config != none, message: "`show: eggs` must be used before `ex-ref`")
 
   let get-ref-or-num(arg) = {
     if type(arg) == label {

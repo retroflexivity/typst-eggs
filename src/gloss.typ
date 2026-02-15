@@ -63,7 +63,7 @@
   ..args,
 ) = context {
   let config = state("eggs-config").get()
-  assert(config != none, message: "`show: eggs` must be called before `gloss`")
+  assert(config != none, message: "`show: eggs` must be used before `gloss`")
 
   let lines = args.pos()
   assert(lines.len() > 0, message: "at least one gloss line must be present")

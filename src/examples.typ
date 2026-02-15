@@ -15,7 +15,7 @@
   auto-glosses: auto,
   auto-judges: auto,
 ) = {
-  assert(config != none, message: "`show: eggs` must be called before `example`")
+  assert(config != none, message: "`show: eggs` must be used before `example`")
 
   let reset-at(..args, level: 0) = {
     let counter = args.pos()
