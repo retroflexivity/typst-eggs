@@ -93,7 +93,7 @@ Examples are automatically numbered continuously. To override automatic numberin
 
 #pagebreak()
 
-The counter can also be set to an absolute value with ```typst "#counter("eggsample").update(n)"``` or a relative one with ```typst #counter("eggsample").update(it => it + n)```. Following examples will be numbered starting with the next number. See #link("https://typst.app/docs/reference/introspection/counter/")[counter] for more info.
+The counter can also be set to an absolute value with ```typst #counter("eggsample").update(n)``` or a relative one with ```typst #counter("eggsample").update(it => it + n)```. Following examples will be numbered starting with the next number. See #link("https://typst.app/docs/reference/introspection/counter/")[counter] for more info.
 
 By default, examples in each footnote are numbered separately. They also use their own formatting. The following footnote#footnote[
   Examples in footnotes use a separate counter, named `fn-eggsample`, which is set to 0 at the beginning of each footnote.
@@ -294,7 +294,7 @@ Until Typst's reference customization is more powerful (read: existent), Eggs pr
 )
 
 
-Thus, modulo parentheses, #raw("#ex-ref(1)", lang: "typst") is #raw("\\nextx", lang: "latex"), #raw("#ex-ref(0)", lang: "typst") is #raw("\\lastx", lang: "latex"), etc.
+Thus, modulo parentheses, ```typst #ex-ref(1)``` is ```latex \nextx```, ```typst #ex-ref(0)``` is ```latex \lastx```, etc.
 
 
 = Customization <customization>
