@@ -57,8 +57,7 @@
 
 /// Typesets a block of interlinear glosses.
 #let gloss(
-  /// The number of the containing example, if present.
-  /// Used for error reporting.
+  /// The number used to refer to the example in error messages. -> string
   example-number: none,
   /// Any number of rows of equal length.
   /// Rows can be either contents where elements are separated
