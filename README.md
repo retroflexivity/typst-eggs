@@ -26,7 +26,7 @@ Below is an example of how to typeset an example.
 
 ### Basic
 
-Start with applying the global show rule. The central function is `#example()`, which typesets an example. Inside it, numbered lists are treated as subexamples, and bullet lists — as glosses. Separate words in glosses with **two or more** spaces.
+Start with applying the global show rule. The central function is `example`, which typesets an example. Inside it, numbered lists are treated as subexamples, and bullet lists — as glosses. Separate words in glosses with **two or more** spaces.
 
 This automatic conversion can be toggled off by passing `auto-subexamples: false` and `auto-glosses: false` to `example`, like this:
 
@@ -37,13 +37,13 @@ This automatic conversion can be toggled off by passing `auto-subexamples: false
 ]
 ```
 
-Additionally, `#subexample()` typesets a subexample and `#gloss()` typesets glosses.
+Additionally, `subexample` typesets a subexample and `gloss` typesets glosses.
 
 ### Labels and refs
 
 Examples (and subexamples) can be labeled by putting `#ex-label(<label-name>)` somewhere inside them or passing a `label: <label-name>` argument. Automatic codly-style labels are added to subexamples, too.
 
-For cool smart references, use `#ex-ref()` (`ref` and `@`-refs work too, though).
+For cool smart references, use `ex-ref` (`ref` and `@`-refs work too, though).
 
 ```typst
 #ex-ref(<gl>, <pex:b>) // (1a-b)
@@ -53,9 +53,9 @@ For cool smart references, use `#ex-ref()` (`ref` and `@`-refs work too, though)
 
 ### Misc stuff
 
-Common judges are recognized automatically. `#judge()` typesets text without taking up space.
+Common judges are recognized automatically. `judge` typesets text without taking up space.
 
-The `abbreviations` submodule provides `leipzig`-style abbreviation commands. They are kept track of and can be printed with `#print-abbreviations()`.
+The `abbreviations` submodule provides `leipzig`-style abbreviation commands. They are kept track of and can be printed with `print-abbreviations`.
 
 Customization is done via the global show rule: `#show eggs.with()`.
 
