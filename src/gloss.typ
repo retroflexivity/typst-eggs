@@ -57,16 +57,11 @@
 
 /// Typesets a block of interlinear glosses.
 #let gloss(
-  /// The number used to refer to the example in error messages. -> string
-  example-number: none,
   /// Any number of rows of equal length.
   /// Rows can be either contents where elements are separated
   /// by more than one space or lists. -> content | array
   ..args,
-) = context {
-  let config = state("eggs-config").get()
-  assert(config != none, message: "`show: eggs` must be used before `gloss`")
-
+) = {
   let lines = args.pos()
   assert(lines.len() > 0, message: "at least one gloss line must be present")
 
@@ -74,30 +69,27 @@
   let lines-split = lines.map(split-if)
   let first-line = lines-split.at(0)
   for line in lines-split {
-    // don't generate the error message until the error is confirmed
-    // (assert's `message` is not lazy)
-    if line.len() != first-line.len() {
-      assert(line.len() == first-line.len(), message: {
-        if example-number != none {
-          "at example " + str(example-number) + ": "
-        } + "gloss lines have different lengths: " + repr(line.join()) + " and " + repr(first-line.join())
-      })
-    }
+    assert(line.len() == first-line.len(), message: "gloss lines have different lengths")
   }
 
-  // fill missing styles with defaults
-  let styles = config.gloss.styles
-  if styles.len() < lines.len() {
-    styles += (x => x,) * (lines.len() - styles.len())
-  }
-  block(
-    above: auto-sub(config.gloss.before-spacing, par.leading),
-    below: auto-sub(config.gloss.after-spacing, par.leading),
-    build-gloss(
-      lines-split,
-      styles,
-      config.gloss.word-spacing,
-      auto-sub(config.gloss.line-spacing, par.leading),
+  context {
+    let config = state("eggs-config").get()
+    assert(config != none, message: "`show: eggs` must be used before `gloss`")
+
+    // fill missing styles with defaults
+    let styles = config.gloss.styles
+    if styles.len() < lines.len() {
+      styles += (x => x,) * (lines.len() - styles.len())
+    }
+    block(
+      above: auto-sub(config.gloss.before-spacing, par.leading),
+      below: auto-sub(config.gloss.after-spacing, par.leading),
+      build-gloss(
+        lines-split,
+        styles,
+        config.gloss.word-spacing,
+        auto-sub(config.gloss.line-spacing, par.leading),
+      )
     )
-  )
+  }
 }
