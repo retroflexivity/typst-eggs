@@ -1,23 +1,23 @@
 #import "config.typ": auto-sub
 
-#let build-gloss(lines, styles, word-spacing, line-spacing,) = {
-    let make-word-box(..args) = {
-        context{
-          box(grid(row-gutter: line-spacing, ..args))
-        }
+#let build-gloss(lines, styles, word-spacing, line-spacing) = {
+  let make-word-box(..args) = {
+    context {
+      box(grid(row-gutter: line-spacing, ..args))
     }
+  }
 
-    let len = lines.at(0).len()
+  let len = lines.at(0).len()
 
-    for word-index in range(0, len) {
-        let args = ()
-        for (line, style) in lines.zip(styles) {
-            let word = line.at(word-index)
-            args.push(style(word))
-        }
-        make-word-box(..args)
-        h(word-spacing)
+  for word-index in range(0, len) {
+    let args = ()
+    for (line, style) in lines.zip(styles) {
+      let word = line.at(word-index)
+      args.push(style(word))
     }
+    make-word-box(..args)
+    h(word-spacing)
+  }
 }
 
 // content -> array
