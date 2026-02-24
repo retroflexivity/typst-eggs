@@ -97,8 +97,11 @@
       }
       // turn selected initial characters into corresponding judges
       let aj = auto-sub(auto-judges, config.auto-judges)
-      // make passing an empty structure actually work
-      let aj = if aj.len() > 0 {aj} else {("emptydictionaryfiller": false)}
+      assert(type(aj) == dictionary, message: "`auto-judges` must be a dictionary")
+      if aj.len() == 0 {
+        // make passing an empty structure actually work
+        aj = ("emptydictionaryfiller": false)
+      }
       let get-regex-disj = a => a.map(s => s.replace(regex("[-\[\]{}()+?.,^$|\\s]"), it => "\\" + it.text)).join("|")
       show regex("^(" + get-regex-disj(aj.keys()) + ")+ ?"): it => {
         show " ": ""
