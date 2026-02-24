@@ -53,6 +53,7 @@
     }
 
     // override auto centering in figures
+    show figure.where(kind: "example"): set align(start)
     show figure.where(kind: "subexample"): set align(start)
 
     show figure.where(kind: "subexample"): set block(
@@ -65,8 +66,6 @@
         spacing: auto-sub(config.spacing, par.spacing),
         breakable: config.breakable,
       )
-      // override auto centering in figures
-      set align(start)
       set par(
         first-line-indent: 0em,
         spacing: par.leading,
