@@ -1,11 +1,7 @@
 #import "config.typ": auto-sub
 
 #let build-gloss(lines, styles, word-spacing, line-spacing) = {
-  let make-word-box(..args) = {
-    context {
-      box(grid(row-gutter: line-spacing, ..args))
-    }
-  }
+  let make-word-box(..args) = box(grid(row-gutter: line-spacing, ..args))
 
   let len = lines.at(0).len()
 
