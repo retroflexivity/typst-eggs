@@ -27,7 +27,7 @@
 
   if number == none {
     // increment only if no custom number is sent
-    context counter(config.counter-name).step(level: level + 1)
+    counter(config.counter-name).step(level: level + 1)
   } else {
     // since the counter is not stepped,
     // prevent subexample numbering from being continued from the previous example
@@ -73,7 +73,7 @@
       )
 
       // turn +'s into subexamples
-      show enum: it => context {
+      show enum: it => {
         if auto-sub(auto-subexamples, config.auto-subexamples) {
           for item in it.children {
             {
