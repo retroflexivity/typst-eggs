@@ -11,41 +11,6 @@
   }
 }
 
-// content -> array
-#let split(line, separator: [ ]) = {
-
-  // one-word lines
-  if "children" not in line.fields() {
-    return (line,)
-  }
-
-  let res = ()
-  let accum = ()
-  for child in line.children {
-    if child == [ ] and accum != () {
-      res.push(accum)
-      accum = ()
-    }
-    else {
-      accum.push(child)
-    }
-  }
-  if accum != () {
-    res.push(accum)
-  }
-  return res.map([].func())
-}
-
-// (content | array) -> array
-#let split-if(line, separator: [ ]) = {
-  if type(line) == content {
-    return split(line)
-  } else {
-    assert(type(line) == array, message: "lines must be either arrays or contents, but " + repr(line) + " is " + str(type(line)))
-    return line
-  }
-}
-
 /// Typesets a block of interlinear glosses.
 #let gloss(
   /// Any number of rows of equal length.
@@ -53,14 +18,24 @@
   /// by more than one space or lists. -> content | array
   ..args,
 ) = {
-  let lines = args.pos()
+  let split-line(line, separator: [ ]) = {
+    if type(line) == array {
+      return line
+    }
+    assert(type(line) == content)
+    // one-word line
+    if "children" not in line.fields() {
+      return (line,)
+    }
+    line.children.split(separator).map([].func())
+  }
+
+  let lines = args.pos().map(split-line)
   assert(lines.len() > 0, message: "at least one gloss line must be present")
 
   // guard against invalid line lengths
-  let lines-split = lines.map(split-if)
-  let first-line = lines-split.at(0)
-  for line in lines-split {
-    assert(line.len() == first-line.len(), message: "gloss lines have different lengths")
+  for line in lines {
+    assert(line.len() == lines.at(0).len(), message: "gloss lines have different lengths")
   }
 
   context {
