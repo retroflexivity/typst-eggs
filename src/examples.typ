@@ -76,15 +76,13 @@
       show enum: it => {
         if auto-sub(auto-subexamples, config.auto-subexamples) {
           for item in it.children {
-            {
-              build-example(
-                item.body,
-                level: 1,
-                parent-label: label,
-                config: config.sub,
-                auto-glosses: auto-sub(auto-glosses, config.auto-glosses)
-              )
-            }
+            build-example(
+              item.body,
+              level: 1,
+              parent-label: label,
+              config: config.sub,
+              auto-glosses: auto-sub(auto-glosses, config.auto-glosses)
+            )
           }
         } else {
           it
@@ -115,7 +113,7 @@
     [
       #figure(
         kind: config.figure-kind,
-        numbering: it => numbering(config.ref-pattern, ..example-count),
+        numbering: _ => numbering(config.ref-pattern, ..example-count),
         supplement: config.label-supplement,
         outlined: false,
         grid(
@@ -124,9 +122,8 @@
           numbering(config.num-pattern, example-count.at(level)),
           grid.cell(content, breakable: config.breakable),
         )
-      ) #if label != none {label}
+      ) #label
     ]
-    // [#repr(label)]
   }
 }
 

@@ -131,8 +131,6 @@
     config-state.update(config)
 
     show footnote.entry: it => {
-      let pre-count
-
       let fn-config = config
       fn-config.num-pattern = footnote-num-pattern
       fn-config.ref-pattern = footnote-ref-pattern
