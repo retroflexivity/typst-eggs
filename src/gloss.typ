@@ -51,7 +51,7 @@
       above: auto-sub(config.gloss.before-spacing, par.leading),
       below: auto-sub(config.gloss.after-spacing, par.leading),
       build-gloss(
-        lines-split,
+        lines,
         styles,
         config.gloss.word-spacing,
         auto-sub(config.gloss.line-spacing, par.leading),
