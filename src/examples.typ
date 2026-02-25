@@ -20,7 +20,7 @@
   let reset-at(..args, level: 0) = {
     let counter = args.pos()
     if counter.len() > level + 1 {
-      return counter.slice(0, level)
+      return counter.slice(0, level + 1)
     }
     return counter
   }
@@ -37,7 +37,11 @@
   context {
     let example-count = counter(config.counter-name).get()
     if number != none {
-      example-count.at(level) = number
+      if example-count.len() >= level + 1 {
+        example-count.at(level) = number
+      } else {
+        example-count.insert(level, number)
+      }
     }
 
     let label = label
