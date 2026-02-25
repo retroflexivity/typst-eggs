@@ -20,7 +20,7 @@
   let reset-at(..args, level: 0) = {
     let counter = args.pos()
     if counter.len() > level + 1 {
-      counter.at(level + 1) = 0
+      return counter.slice(0, level)
     }
     return counter
   }
