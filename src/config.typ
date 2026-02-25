@@ -142,6 +142,7 @@
       // which is updated at the beginning of each footnote
       if footnote-separate-numbering {
         fn-config.counter-name = "fn-eggsample"
+        fn-config.sub.counter-name = "fn-eggsample"
         counter("fn-eggsample").update(0)
       }
       config-state.update(fn-config)
