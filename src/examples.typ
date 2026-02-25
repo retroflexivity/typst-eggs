@@ -35,21 +35,17 @@
   }
 
   context {
-    let example-count = counter(config.counter-name)
+    let example-count = counter(config.counter-name).get()
+    if number != none {
+      example-count.at(level) = number
+    }
+
     let label = label
     if label == none {
       label = get-ex-label(content)
     }
     if config.auto-labels and label == none and parent-label != none {
-      label = std.label(str(parent-label) + ":" + (numbering("a", example-count.get().at(level))))
-    }
-
-    let example-number
-    if number != none {
-      // if custom number is sent, override example number and don't increment
-      example-number = numbering(config.num-pattern, number)
-    } else {
-      example-number = numbering(config.num-pattern, example-count.get().at(level))
+      label = std.label(str(parent-label) + ":" + (numbering("a", example-count.at(level))))
     }
 
     // override auto centering in figures
@@ -93,9 +89,7 @@
       // turn -'s into glosses
       show list: it => {
         if auto-sub(auto-glosses, config.auto-glosses) {
-          gloss(example-number: example-number,
-            ..it.children.map(it => it.body),
-         )
+          gloss(..it.children.map(it => it.body))
         } else {
           it
         }
@@ -117,13 +111,13 @@
     [
       #figure(
         kind: config.figure-kind,
-        numbering: it => [#example-count.display(config.ref-pattern)],
+        numbering: it => numbering(config.ref-pattern, ..example-count),
         supplement: config.label-supplement,
         outlined: false,
         grid(
           columns: (config.indent, config.body-indent, 1fr),
           [],
-          example-number,
+          numbering(config.num-pattern, example-count.at(level)),
           grid.cell(content, breakable: config.breakable),
         )
       ) #if label != none {label}
