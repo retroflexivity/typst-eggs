@@ -16,6 +16,12 @@
   let config = state("eggs-config").get()
   assert(config != none, message: "`show: eggs` must be used before `ex-ref`")
 
+  // validate references
+  show ref: it => {
+    assert(it.element != none, message: "label " + repr(it.target) + " does not exist in the document")
+    it
+  }
+
   let get-ref-or-num(arg) = {
     if type(arg) == label {
       ref(arg)
