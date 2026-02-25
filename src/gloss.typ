@@ -27,7 +27,7 @@
     if "children" not in line.fields() {
       return (line,)
     }
-    line.children.split(separator).map([].func())
+    line.children.split(separator).filter(it => it != ()).map([].func())
   }
 
   let lines = args.pos().map(split-line)
