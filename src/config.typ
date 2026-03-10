@@ -98,7 +98,7 @@
       second-sub-ref-pattern: second-sub-ref-pattern,
       label-supplement: label-supplement,
       breakable: breakable,
-      figure-kind: "example",
+      figure-kind: "eggsample",
       counter-name: "eggsample",
       level: 0,
       sub: (
@@ -112,7 +112,7 @@
         second-sub-ref-pattern: second-sub-ref-pattern,
         label-supplement: sub-label-supplement,
         breakable: sub-breakable,
-        figure-kind: "subexample",
+        figure-kind: "subeggsample",
         counter-name: "eggsample",
         level: 1,
       ),

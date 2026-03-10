@@ -53,15 +53,15 @@
     }
 
     // override auto centering in figures
-    show figure.where(kind: "example"): set align(start)
-    show figure.where(kind: "subexample"): set align(start)
+    show figure.where(kind: "eggsample"): set align(start)
+    show figure.where(kind: "subeggsample"): set align(start)
 
-    show figure.where(kind: "subexample"): set block(
+    show figure.where(kind: "subeggsample"): set block(
       spacing: auto-sub(config.spacing, par.leading),
       breakable: config.breakable,
     )
 
-    show figure.where(kind: "example"): it => {
+    show figure.where(kind: "eggsample"): it => {
       set block(
         spacing: auto-sub(config.spacing, par.spacing),
         breakable: config.breakable,
@@ -134,7 +134,7 @@
 
 
 /// Explicitly typesets a subexample
-/// as a figure of type "subexample".
+/// as a figure of type "subeggsample".
 /// Only intended for use inside an example. -> content
 #let subexample(
   /// The body of the subexample. -> content
@@ -161,7 +161,7 @@
 
 
 /// Typesets a top-level example
-/// as a figure of kind "example". -> content
+/// as a figure of kind "eggsample". -> content
 #let example(
   /// The body of the example. -> content
   content,
