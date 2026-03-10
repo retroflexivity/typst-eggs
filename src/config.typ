@@ -46,7 +46,7 @@
   /// Subexample number format.
   /// A numbering pattern. -> str | function
   sub-num-pattern: "a.",
-  /// Whether to format @-references and `ref`-references to examples
+  /// Whether to format `@`-references and `ref`-references to examples
   /// Adding parenthesis and parsing the supplement. -> bool
   smart-refs: true,
   /// Example reference format.
