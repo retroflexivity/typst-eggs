@@ -1,6 +1,8 @@
 #import "/eggs.typ": *
 
-#show: eggs
+#show: eggs.with(
+  smart-refs: false
+)
 
 #example(label: <one>)[
   example

@@ -22,27 +22,72 @@
     it
   }
 
-  let get-ref-or-num(arg) = {
+  // apply `ref-pattern` numbering to a list of numbers
+  // if trim-start, only use the lowest-level number
+  let format-num(nums, pattern, trim-start: false) = {
+    if trim-start and nums.len() > 1 {
+      numbering(pattern, nums.at(-1))
+    } else {
+      numbering(pattern, ..nums)
+    }
+  }
+
+  // format a reference or a number
+  // if reference, with the config at its element
+  // either for a label or for a relative integer
+  // if last, only use the lowest-level number, and `sub-ref-pattern`
+  let format-ref-or-num(arg, last: false) = {
+
     if type(arg) == label {
-      ref(arg)
+      let elem = query(arg).at(0)
+      let loc = elem.location()
+      let config = state("eggs-config").at(loc)
+
+      let pattern = if last and elem.kind == config.sub.figure-kind {
+        config.second-sub-ref-pattern
+      } else {
+        config.ref-pattern
+      }
+
+      format-num(counter(config.counter-name).at(loc), pattern, trim-start: last)
+
     } else if type(arg) == int {
-      numbering(config.ref-pattern, counter(config.counter-name).get().first() + arg)
+      let pattern = if last {
+        config.second-sub-ref-pattern
+      } else {
+        config.ref-pattern
+      }
+
+      counter(config.counter-name).get().first() + arg
     }
   }
 
   // first ref
-  [(#left#get-ref-or-num(args.at(0))]
+  [(#left#format-ref-or-num(args.at(0))]
   // second ref
   if args.pos().len() > 1 {
-    show ref: it => {
-      let val = counter(config.counter-name).at(it.element.location())
-      if val.len() > 1 {
-        numbering(config.second-sub-ref-pattern, val.at(1))
-      } else {
-        numbering(config.ref-pattern, ..val)
-      }
-    }
-    [\-#get-ref-or-num(args.at(1))]
+    [\-#format-ref-or-num(args.at(1), last: true)]
   }
   [#right)]
+}
+
+#let parse-ref(it) = {
+  if (
+    type(it.element) == content
+    and "kind" in it.element.fields()
+    and (
+      it.element.kind == "eggsample"
+      or it.element.kind == "subeggsample"
+    )
+  ) {
+    let suppl = it.supplement
+    // TODO (maybe): implement left and right
+    if suppl != auto and "target" in suppl.fields() {
+      return ex-ref(it.target, suppl.target)
+    }
+    return ex-ref(it.target)
+  } else {
+    it
+  }
+  
 }

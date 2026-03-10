@@ -1,3 +1,5 @@
+#import("ex-ref.typ"): parse-ref
+
 /// Sets the default config with optional overrides.
 /// Primarily intended for use in a global show rule:
 /// ```typst #show: eggs()``` -> content
@@ -44,6 +46,9 @@
   /// Subexample number format.
   /// A numbering pattern. -> str | function
   sub-num-pattern: "a.",
+  /// Whether to format @-references and `ref`-references to examples
+  /// Adding parenthesis and parsing the supplement. -> bool
+  smart-refs: true,
   /// Example reference format.
   /// A 2-level numbering pattern. -> str | function
   ref-pattern: "1a",
@@ -152,6 +157,15 @@
 
       config-state.update(config)
     }
+
+    show ref: {
+      if smart-refs {
+        parse-ref
+      } else {
+        it => it
+      }
+    }
+
     it
 
     // restore previous config back
