@@ -96,7 +96,7 @@ Examples are automatically numbered continuously. To override automatic numberin
 The counter can also be set to an absolute value with ```typst #counter("eggsample").update(n)``` or a relative one with ```typst #counter("eggsample").update(it => it + n)```. Following examples will be numbered starting with the next number. See #link("https://typst.app/docs/reference/introspection/counter/")[counter] for more info.
 
 By default, examples in each footnote are numbered separately. They also use their own formatting. The following footnote#footnote[
-  Examples in footnotes use a separate counter, named `fn-eggsample`, which is set to 0 at the beginning of each footnote.
+  Examples in footnotes use a separate counter, `fn-eggsample`, which is set to 0 at the beginning of each footnote.
   #code-ex(
     ```typst
     But note the contrast in availability of indefinites.
@@ -143,7 +143,7 @@ In case you prefer it manual, the function `subexample` is defined. It is intend
 
 Bullet lists in examples (lines that begin with `- `) are automatically treated as gloss lines.
 
-For words to split, you need to ensure that there is a `space` element between. The easiest way to do it is to separate words with *more than one* space (e.g. by pressing #smallcaps[tab] in most editors). There are exceptions, so use `~` (non-breaking space) for spaces you don't want to be treated as separators.
+For words to split, you need to ensure that there is a `space` element between them. The easiest way to do it is to separate words with *more than one* space. There are exceptions, so use `~` (non-breaking space) for spaces you don't want to be treated as separators.
 
 Translations and preambles are written as lines below and above glosses, respectively.
 
@@ -193,7 +193,7 @@ By default, such strings are `*`, `#`, `?`, `OK`, and all combinations of these.
   ```
 )
 
-This can be modified by tweaking `auto-judges` in the config (see @customization) or by passing the `auto-judges` argument to an example directly. `auto-judges` takes a dictionary where keys are the strings and values indicate whether to additionally superscript them. For instance, if you would like to make hashes and question marks non-superscripted, try ```typst auto-judges: ("\*": false, "\#": false, "?": false, "OK": true)```. Use `auto-judges: ()` to disable the automatic conversion completely.
+This can be modified by tweaking `auto-judges` in the config (see @customization) or by passing the `auto-judges` argument to an example directly. `auto-judges` takes a dictionary where keys are the strings to treat as judges and values indicate whether to additionally superscript them. For instance, if you would like to make hashes and question marks non-superscripted, try ```typst auto-judges: ("\*": false, "\#": false, "?": false, "OK": true)```. Use `auto-judges: ()` to disable the automatic conversion completely.
 
 Again, a function `judge` is provided to typeset judges manually. Following spaces are *not* omitted.
 
@@ -245,7 +245,7 @@ Custom abbreviations can be created by defining a new `abbreviation`.
   ```
 )
 
-The list of currently used abbreviations is stored as a dictionary of the form `abbr: description` inside the `used-abbreviations` state. The final list of abbreviations can be accessed as #raw("#context state(\"used-abbreviations\").final()", lang: "typst"). Additionally, there is a convenient function to print it as a #link("https://typst.app/docs/reference/model/terms/")[term~list].
+The list of currently used abbreviations is stored as a dictionary of the form `abbr: description` inside the `used-abbreviations` state. The final list of abbreviations can be accessed as #raw("#context state(\"used-abbreviations\").final()", lang: "typst"). There is also a function to print it as a #link("https://typst.app/docs/reference/model/terms/")[term~list].
 
 #code-ex(
   ```typst
@@ -256,35 +256,40 @@ The list of currently used abbreviations is stored as a dictionary of the form `
 
 = Labels and refs
 
-There are two ways of labelling an example (or a subexample). The first is passing the `label` argument to `example` (or `subexample`). The second is placing an `ex-ref` anywhere in the body of the example (or a subexample), preferably the beginning or the end. Typst's built-in `ref` does not work for now.
+There are two ways of labelling an example (or a subexample). The first is passing the `label` argument to `example` (or `subexample`). The second is placing an `ex-label` anywhere in the body of the example (or a subexample), preferably at the beginning or at the end. Typst's built-in `label` does not work for now.
 
 If a subexample doesn't have a label but its parent does, an automatic #link("https://typst.app/universe/package/codly")[codly]-style label of the form `<top-label:subex-letter>` is added automatically.
 
 #code-ex(
   ```typst
-  The curious minimal pair in terms of scope in (@pair) is taken from Arregi et al. (2021). Only (@pred) has a narrow scope reading of the indefinite.
+  The curious minimal pair in terms of scope in @pair is taken from Arregi et al. (2021). Only @pred has a narrow scope reading of the indefinite.
   #example[
     #ex-label(<pair>)
     + OK Kim is not one of the judges. #ex-label(<pred>)
     + \#One of the judges is not Kim.
   ]
-  (@pair:b) is pragmatically odd, but becomes better if Kim is replaced with something that can exist in multiple places at once (@ok). The argument loses in convincibility, though.
+  @pair:b is pragmatically odd, but becomes better if Kim is replaced with something that can exist in multiple places at once @ok. The argument loses in convincibility, though.
   #example(label: <ok>)[
     OK One of the judges is not "OK".
   ]
   ```
 )
 
-Until Typst's reference customization is more powerful (read: existent), Eggs provides a custom function `ex-ref`. It
-- accepts from one to two arguments;
-- accepts example labels and integers: integers are used for relative references;
-- collapses the number of the second argument if it refers to a subexample;
-- additionally accepts `left` and `right`, which it prints to the left and to the right of the number;
-- encloses this all in parentheses.
+References to examples are automatically enclosed in parentheses. Citing two examples together is possible by inserting the second reference as the supplement, in square brackets after the first one. When the second reference is to a subexample, the superexample number is collapsed.
 
 #code-ex(
   ```typst
-  Recall the discussion concerning examples #ex-ref(<pair>, <ok>). Despite the Russian data, we should not ignore the minimal pair in #ex-ref(<pred>, <pair:b>). There is much more to the story #ex-ref(left: "e.g. ", 1, right: " etc.").
+  Recall the discussion concerning examples @pair[@ok]. Despite the Russian data, we should not ignore the minimal pair in @pred[@pair:b].
+  ```
+)
+
+A dedicated function, `ex-ref`, is also provided. It accepts references and additionally allows
+- sending integers for relative numbering, with `0` referring to the last example, `1` to the next, etc.
+- supplementing content to appear in the parenthesis before and after example numbers.
+
+#code-ex(
+  ```typst
+  Despite the Russian data, we should not ignore the minimal pair in #ex-ref(<pred>, <pair:b>). There is much more to the story #ex-ref(left: "e.g. ", 1, right: " etc.").
 
   #example[
     + Only "?" is one of the judges.
@@ -293,9 +298,7 @@ Until Typst's reference customization is more powerful (read: existent), Eggs pr
   ```
 )
 
-
-Thus, modulo parentheses, ```typst #ex-ref(1)``` is ```latex \nextx```, ```typst #ex-ref(0)``` is ```latex \lastx```, etc.
-
+`smart-refs: false` can be passed to the configuration to disable automatic reference decoration.
 
 = Customization <customization>
 
