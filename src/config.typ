@@ -84,6 +84,9 @@
   /// and adds a period to the second line. -> array
   gloss-styles: (),
 ) = {
+  let figure-kind = "eggsample"
+  let sub-figure-kind = "subeggsample"
+  let counter-name = "eggsample"
   let config = (
     (
       auto-subexamples: auto-subexamples,
@@ -98,8 +101,8 @@
       second-sub-ref-pattern: second-sub-ref-pattern,
       label-supplement: label-supplement,
       breakable: breakable,
-      figure-kind: "eggsample",
-      counter-name: "eggsample",
+      figure-kind: figure-kind,
+      counter-name: counter-name,
       level: 0,
       sub: (
         auto-labels: auto-labels,
@@ -112,8 +115,8 @@
         second-sub-ref-pattern: second-sub-ref-pattern,
         label-supplement: sub-label-supplement,
         breakable: sub-breakable,
-        figure-kind: "subeggsample",
-        counter-name: "eggsample",
+        figure-kind: sub-figure-kind,
+        counter-name: counter-name,
         level: 1,
       ),
       gloss: (
