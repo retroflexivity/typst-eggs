@@ -58,7 +58,7 @@
         config.ref-pattern
       }
 
-      counter(config.counter-name).get().first() + arg
+      format-num((counter(config.counter-name).get().first() + arg,), pattern, trim-start: false)
     }
   }
 
