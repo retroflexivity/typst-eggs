@@ -43,10 +43,11 @@ Additionally, `subexample` typesets a subexample and `gloss` typesets glosses.
 
 Examples (and subexamples) can be labeled by putting `#ex-label(<label-name>)` somewhere inside them or passing a `label: <label-name>` argument. Automatic codly-style labels are added to subexamples, too.
 
-For cool smart references, use `ex-ref` (`ref` and `@`-refs work too, though).
+References are clever, bracketed and with support for two-example references via supplements. `ex-ref` is even more powerful.
 
 ```typst
-#ex-ref(<gl>, <pex:b>) // (1a-b)
+@gl[@pex:b] // (1a-b)
+#ex-ref(<gl>, <pex:b>) // same
 #ex-ref(left: "e.g. ", <pex>, right: " etc.") // (e.g. 1 etc.)
 #ex-ref(1) // (2) --- relative numbering like expex's nextx
 ```
