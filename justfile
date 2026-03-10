@@ -5,18 +5,18 @@ pkgdir := name / version
 localdir := "$HOME/.local/share/typst/packages/local"
 fulldir := localdir / pkgdir
 
-ignore := '{"test*","justfile","assets","*.pdf"}'
-
 install:
     @rm -rf .temp
-    @mkdir .temp
-    @for file in `ls --ignore={{ ignore }}`; do \
-        cp -r $file .temp; \
-    done
+    @rsync -a . .temp \
+        --filter=':- .gitignore' \
+        --exclude='tests' \
+        --exclude='.*' \
+        --exclude='justfile' \
+        --exclude='assets' \
+        --exclude='*.pdf' \
 
     @sed -i '/<!-- exclude -->/Q' .temp/README.md
-    
+
     @rm -rf {{ fulldir }}
     @mv -Tf .temp {{ fulldir }}
     @echo "installed to {{ fulldir }}"
-   
