@@ -12,9 +12,8 @@
   left: none,
   /// Text on the right, e.g. " etc." -> content
   right: none,
-) = context {
-  let config = state("eggs-config").get()
-  assert(config != none, message: "`show: eggs` must be used before `ex-ref`")
+) = {
+  let config-state = state("eggs-config")
 
   // validate references
   show ref: it => {
@@ -36,12 +35,13 @@
   // if reference, with the config at its element
   // either for a label or for a relative integer
   // if last, only use the lowest-level number, and `sub-ref-pattern`
-  let format-ref-or-num(arg, last: false) = {
+  let format-ref-or-num(arg, last: false) = context {
 
     if type(arg) == label {
       let elem = query(arg).at(0)
       let loc = elem.location()
-      let config = state("eggs-config").at(loc)
+      let config = config-state.at(loc)
+      assert(config != none, message: "`show: eggs` must be used before `ex-ref`")
 
       let pattern = if last and elem.kind == config.sub.figure-kind {
         config.second-sub-ref-pattern
@@ -52,6 +52,9 @@
       format-num(counter(config.counter-name).at(loc), pattern, trim-start: last)
 
     } else if type(arg) == int {
+      let config = config-state.get()
+      assert(config != none, message: "`show: eggs` must be used before `ex-ref`")
+
       let pattern = if last {
         config.second-sub-ref-pattern
       } else {
