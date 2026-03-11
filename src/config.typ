@@ -63,9 +63,11 @@
   footnote-second-sub-ref-pattern: "a",
   /// Whether examples in each footnote start from 1. -> bool
   footnote-separate-numbering: true,
-  /// The example figure supplement used in references. -> str | none
+  /// The example figure supplement used in references.
+  /// Has no effect when `smart-ref` is `true`. -> str | none
   label-supplement: none,
-  /// The subexample figure supplement used in references. -> str | none
+  /// The subexample figure supplement used in references.
+  /// Has no effect when `smart-ref` is `true`. -> str | none
   sub-label-supplement: none,
   /// Whether the example figure is breakable. -> bool
   breakable: false,
