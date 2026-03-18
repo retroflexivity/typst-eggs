@@ -12,7 +12,7 @@
   auto-glosses: true,
   /// Whether to insert subexample labels of the form ex-label:a. -> bool
   auto-labels: true,
-  /// A dictionary of characters to convert into judges (keys) and whether to superscript them (values). -> array
+  /// A dictionary of characters to convert into judges (keys) and whether to superscript them (values). -> dictionary
   auto-judges: (
     "\*": false,
     "\#": true,
