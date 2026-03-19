@@ -1,12 +1,13 @@
 name := `grep name typst.toml | grep -Po '(?<== ).*'`
 version := `grep version typst.toml | grep -Po '(?<== ).*'`
 
-pkgdir := name / version
 localdir := "$HOME/.local/share/typst/packages/local"
-fulldir := localdir / pkgdir
+pkgdir := localdir / name
+fulldir := pkgdir / version
 
 install:
     @rm -rf .temp
+    @mkdir -p {{ pkgdir }}
     @rsync -a . .temp \
         --filter=':- .gitignore' \
         --exclude='tests' \
