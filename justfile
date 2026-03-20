@@ -13,8 +13,6 @@ install:
         --exclude='tests' \
         --exclude='.*' \
         --exclude='justfile' \
-        --exclude='assets' \
-        --exclude='*.pdf' \
 
     @sed -i '/<!-- exclude -->/Q' .temp/README.md
 
