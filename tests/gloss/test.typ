@@ -40,6 +40,7 @@
 ]
 
 #show: eggs.with(
+  auto-glosses: true,
   gloss-before-spacing: 2em,
   gloss-after-spacing: 0em,
   gloss-line-spacing: 4em,
