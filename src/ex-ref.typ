@@ -1,7 +1,7 @@
 #import "@preview/elembic:1.1.1" as e
 
 #import "utils.typ": prefix
-#import "examples.typ": example, subexample
+#import "example.typ": example, subexample
 
 // apply `ref-pattern` numbering to a list of numbers
 // if trim-start, only use the lowest-level number

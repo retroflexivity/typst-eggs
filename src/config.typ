@@ -1,7 +1,7 @@
 #import "@preview/elembic:1.1.1" as e
 
 #import("ex-ref.typ"): parse-ref
-#import("examples.typ"): example, subexample, fn-ctr
+#import("example.typ"): example, subexample, fn-ctr
 #import("gloss.typ"): gloss
 
 #let get-dict-without-autos(pairs) = pairs.filter(it => {

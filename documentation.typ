@@ -359,7 +359,7 @@ To change Eggs' config temporarely, you can also simply pass the content to `egg
 
 #for file in (
   "src/config.typ",
-  "src/examples.typ",
+  "src/example.typ",
   "src/judge.typ",
   "src/gloss.typ",
   "src/abbreviations.typ",
