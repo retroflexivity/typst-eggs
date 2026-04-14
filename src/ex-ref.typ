@@ -1,10 +1,98 @@
+#import "@preview/elembic:1.1.1" as e
+
+#import "utils.typ": prefix
+#import "examples.typ": example, subexample
+
+// apply `ref-pattern` numbering to a list of numbers
+// if trim-start, only use the lowest-level number
+#let format-num(nums, pattern, trim-start: false) = {
+  if trim-start and nums.len() > 1 {
+    numbering(pattern, nums.at(-1))
+  } else {
+    numbering(pattern, ..nums)
+  }
+}
+
+// return the formatted number of a single example
+// from a label, element, or relative number
+#let format-ref-or-num(it, is-second: false) = context {
+
+  if type(it) == int {
+    e.get(get => {
+      let ex = get(example)
+
+      // format relative number
+      let pattern = if is-second {
+        ex.second-sub-ref-pattern
+      } else {
+        ex.ref-pattern
+      }
+      format-num((ex._counter.get().first() + it,), pattern, trim-start: false)
+    })
+
+  } else {
+    // format reference, either as a label or as an element
+    let elem = if type(it) == label {
+      query(it).at(0)
+    } else {
+      it
+    }
+    let loc = elem.location()
+    let fields = e.fields(elem)
+
+    let pattern = if is-second and e.func(elem) == subexample {
+      fields.second-sub-ref-pattern
+    } else {
+      fields.ref-pattern
+    }
+
+    format-num(fields._counter.at(loc), pattern, trim-start: is-second)
+
+  }
+}
+
+
+#let ex-ref = e.element.declare(
+  "ex-ref",
+  prefix: prefix,
+  doc: "An example reference in parentheses. Accepts labels and integers for relative references. Automatically handles plural references such as (1-3) and (1a-c).",
+
+  fields: (
+    e.field("first", e.types.union(int, label, example, subexample), required: true),
+    e.field("second", e.types.option(e.types.union(int, label, example, subexample))),
+    e.field("left", content, doc: "Text on the left, e.g. \"e.g. \"."),
+    e.field("right", content, doc: "Text on the right, e.g. \" etc.\"."),
+
+    e.field("ref-pattern", str, default: "1a", doc: "Format for relative references. A 2-level numbering pattern."),
+  ),
+  
+  parse-args: (default-parser, fields: none, typecheck: none) => (args, include-required: false) => {
+    if args.pos().len() > 2 or args.pos().len() < 0 {
+      return (false, "ex-ref takes from 1 to 2 positional arguments.")
+    }
+
+    let args = if include-required {
+      arguments(args.pos().at(0), second: args.pos().at(1, default: none), ..args.named())
+    } else if args.pos() == () {
+      args
+    } else {
+      return (false, "element 'sunk': unexpected positional arguments\n  hint: these can only be passed to the constructor")
+    }
+
+    default-parser(args, include-required: include-required)
+  },
+
+  display: it => [
+    
+  ]
+
+)
+
+
 /// Typesets an example reference in parentheses.
-/// Accepts labels and integers for relative references.
-/// Automatically handles plural references
-/// such as (1-3) and (1a-c) -> content
 #let ex-ref(
   /// One to two arguments.
-  /// Can be either labels or integers.
+  /// Can be labels, elements, or integers.
   /// Integers are used for relative reference:
   /// 0 means the last example, 1 means the next, etc. -> label | int
   ..args,
@@ -13,63 +101,22 @@
   /// Text on the right, e.g. " etc." -> content
   right: none,
 ) = {
-  let config-state = state("eggs-config")
-
   // validate references
   show ref: it => {
     assert(it.element != none, message: "label " + repr(it.target) + " does not exist in the document")
     it
   }
 
-  // apply `ref-pattern` numbering to a list of numbers
-  // if trim-start, only use the lowest-level number
-  let format-num(nums, pattern, trim-start: false) = {
-    if trim-start and nums.len() > 1 {
-      numbering(pattern, nums.at(-1))
-    } else {
-      numbering(pattern, ..nums)
-    }
-  }
-
   // format a reference or a number
   // if reference, with the config at its element
   // either for a label or for a relative integer
   // if last, only use the lowest-level number, and `sub-ref-pattern`
-  let format-ref-or-num(arg, last: false) = context {
-
-    if type(arg) == label {
-      let elem = query(arg).at(0)
-      let loc = elem.location()
-      let config = config-state.at(loc)
-      assert(config != none, message: "`show: eggs` must be used before `ex-ref`")
-
-      let pattern = if last and elem.kind == config.sub.figure-kind {
-        config.second-sub-ref-pattern
-      } else {
-        config.ref-pattern
-      }
-
-      format-num(counter(config.counter-name).at(loc), pattern, trim-start: last)
-
-    } else if type(arg) == int {
-      let config = config-state.get()
-      assert(config != none, message: "`show: eggs` must be used before `ex-ref`")
-
-      let pattern = if last {
-        config.second-sub-ref-pattern
-      } else {
-        config.ref-pattern
-      }
-
-      format-num((counter(config.counter-name).get().first() + arg,), pattern, trim-start: false)
-    }
-  }
 
   // first ref
   [(#left#format-ref-or-num(args.at(0))]
   // second ref
   if args.pos().len() > 1 {
-    [\-#format-ref-or-num(args.at(1), last: true)]
+    [\-#format-ref-or-num(args.at(1), is-second: true)]
   }
   [#right)]
 }
@@ -77,18 +124,14 @@
 #let parse-ref(it) = {
   if (
     type(it.element) == content
-    and "kind" in it.element.fields()
-    and (
-      it.element.kind == "eggsample"
-      or it.element.kind == "subeggsample"
-    )
+    and e.func(it.element) in (example, subexample)
   ) {
     let suppl = it.supplement
     // TODO (maybe): implement left and right
     if suppl != auto and "target" in suppl.fields() {
-      return ex-ref(it.target, suppl.target)
+      return ex-ref(it.element, suppl.target)
     }
-    return ex-ref(it.target)
+    return ex-ref(it.element)
   } else {
     it
   }
