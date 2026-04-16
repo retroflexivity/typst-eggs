@@ -3,6 +3,7 @@
 #import "utils.typ": prefix
 #import "example.typ": example, subexample
 
+
 // apply `ref-pattern` numbering to a list of numbers
 // if trim-start, only use the lowest-level number
 #let format-num(nums, pattern, trim-start: false) = {

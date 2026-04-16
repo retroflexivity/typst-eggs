@@ -4,9 +4,11 @@
 #import("example.typ"): example, subexample, fn-ctr
 #import("gloss.typ"): gloss
 
+
 #let get-dict-without-autos(pairs) = pairs.filter(it => {
   it.at(1) != auto
 }).map(it => (it.at(0): it.at(1))).join()
+
 
 /// Update the config with provided values, as well as run some necessary preparations.
 /// Primarily intended for use in a global show rule:
