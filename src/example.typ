@@ -138,7 +138,8 @@
     e.field("number", e.types.option(int), doc: "Overrides automatic numbering of the subexample. If not none, the counter does not increment."),
 
     e.field("auto-glosses", bool, default: true, doc: "Whether to treat bullet lists in examples as glosses."),
-    e.field("auto-judges", dictionary, default: (
+    // accept lists for legacy support of ()
+    e.field("auto-judges", e.types.union(dictionary, array), default: (
       "\*": false,
       "\#": true,
       "?": true,
@@ -229,7 +230,8 @@
     e.field("auto-subexamples", bool, default: true, doc: "Whether to treat numbered lists in examples as subexamples."),
     e.field("auto-glosses", bool, default: true, doc: "Whether to treat bullet lists in examples as glosses."),
     e.field("auto-labels", bool, default: true, doc: "Whether to insert subexample labels of the form ex-label:a."),
-    e.field("auto-judges", dictionary, default: (
+    // accept lists for legacy support of ()
+    e.field("auto-judges", e.types.union(dictionary, array), default: (
       "\*": false,
       "\#": true,
       "?": true,
