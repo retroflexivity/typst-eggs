@@ -256,7 +256,7 @@
     if args.named().at("label", default: none) != none {
       constructor(..args)
     } else {
-      constructor(..args, label: get-ex-label(args.pos().at(0)))
+      constructor(..args, label: get-ex-label(args.pos().at(0, default: [])))
     }
   },
 
