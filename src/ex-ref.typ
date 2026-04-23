@@ -24,7 +24,7 @@
 
       // format relative number
       let pattern = if is-second {
-        ex.second-sub-ref-pattern
+        ex.second-ref-pattern
       } else {
         ex.ref-pattern
       }
@@ -42,7 +42,7 @@
     let fields = e.fields(elem)
 
     let pattern = if is-second and e.func(elem) == subexample {
-      fields.second-sub-ref-pattern
+      fields.second-ref-pattern
     } else {
       fields.ref-pattern
     }

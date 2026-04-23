@@ -1,7 +1,7 @@
 #import "@preview/elembic:1.1.1" as e
 
 #import "gloss.typ": gloss
-#import "utils.typ": auto-length, gen-get-function, prefix
+#import "utils.typ": prefix, auto-length, gen-get-function, get-sub-fields
 #import "ex-label.typ": ex-label, get-ex-label
 #import "judge.typ": judge
 
@@ -153,7 +153,7 @@
     
     e.field("num-pattern", e.types.union(str, function), default: "a.", doc: "Subexample number format."),
     e.field("ref-pattern", str, default: "1a", doc: "Example reference format (without brackets). A 2-level numbering pattern."),
-    e.field("second-sub-ref-pattern", str, default: "a", doc: "Format to reference the second argument of `ex-ref` if it is a subexample. A 1-level numbering pattern."),
+    e.field("second-ref-pattern", str, default: "a", doc: "Format to reference the second argument of `ex-ref` if it is a subexample. A 1-level numbering pattern."),
     e.field("label-supplement", e.types.option(str), doc: "The subexample figure supplement used in references. Has no effect when `smart-ref` is `true`."),
 
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
@@ -218,6 +218,136 @@
 )
 
 
+/// Top-level linguistic example.
+///
+/// - it (content): The body of the example.
+///
+/// - auto-subexamples (bool): Whether to treat numbered lists in examples as subexamples.
+///
+///   *Default*: true
+///
+/// - auto-glosses (bool): Whether to treat bullet lists in examples as glosses.
+///
+///   *Default*: true
+///
+/// - auto-labels (bool): Whether to insert subexample labels of the form ex-label:a.
+///
+///   *Default*: true
+///
+/// - auto-judges (dictionary): A dictionary of characters to convert into judges (keys) and whether to superscript them (values).
+///
+///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
+///
+/// - indent (length): Distance between the left margin and the left edge of the example number.
+///
+///   *Default*: 0em
+///
+/// - body-indent (length): Distance between the left edge of the example marker and the left edge of the example body.
+///
+///   *Default*: 2.5em
+///
+/// - spacing (length): Vertical spacing around example.
+///   Currently, there is no way to modify spacing between two subexamples specifically.
+///
+///   *Default*: current `par.spacing`.
+///
+/// - breakable (bool): Whether the example figure is breakable.
+///
+///   *Default*: false
+///
+/// - num-pattern (str | function): Example number format.
+///   A numbering pattern.
+///
+///   *Default*: "(1)"
+///
+/// - footnote-num-pattern (str | function): Example number format inside footnotes.
+///   A numbering pattern.
+///
+///   *Default*: "(i)"
+///
+///   *Default*: 1.5em
+///
+/// - smart-refs (bool): Whether to format `@`-references and `ref`-references to examples
+///   Adding parenthesis and parsing the supplement.
+///
+///   *Default*: true
+///
+/// - ref-pattern (str | function): Example reference format.
+///   A 2-level numbering pattern.
+///
+///   *Default*: "1a"
+///
+/// - second-ref-pattern (str | function): Format to reference the second argument of `ex-ref` if it is a subexample.
+///   A 1-level numbering pattern.
+///
+///   *Default*: "a"
+///
+/// - footnote-separate-numbering (bool): Whether examples in each footnote start from 1.
+///
+///   *Default*: true
+///
+/// - footnote-ref-pattern (str | function): Footnote example reference format.
+///   A 2-level numbering pattern.
+///
+///   *Default*: "ia"
+///
+/// - label-supplement (str | none): The example figure supplement used in references.
+///   Has no effect when `smart-ref` is `true`.
+///
+///   *Default*: none
+///
+/// - sub-indent (length): Distance between the left edge of the top-level example body
+///   and the left edge of the subexample number.
+///   Can be negative.
+///
+///   *Default*: 0em
+///
+/// - sub-body-indent (length): Distance between the left edge of the subexample marker
+///   and the subexample body.
+///
+/// - sub-spacing (length): Vertical spacing around subexamples.
+///
+///   *Default*: current `par.leading`.
+///
+/// - sub-breakable (bool): Whether the subexample figure is breakable.
+///
+///   *Default*: false
+///
+/// - sub-num-pattern (str | function): Subexample number format.
+///   A numbering pattern.
+///
+///   *Default*: "a."
+///
+/// - sub-label-supplement (str | none): The subexample figure supplement used in references.
+///   Has no effect when `smart-ref` is `true`.
+///
+///   *Default*: none
+///
+/// - gloss-word-spacing (length): Horizontal spacing between words in glosses.
+///
+///   *Default*: 1em
+///
+/// - gloss-line-spacing (length): Vertical spacing between lines in glosses.
+///
+///   *Default*: current `par.leading`.
+///
+/// - gloss-before-spacing (length): Vertical spacing above glosses (i.e. after the preamble).
+///
+///   *Default*: current `par.leading`.
+///
+/// - gloss-after-spacing (length): Vertical spacing below glosses (i.e. before the translation).
+///
+///   *Default*: current `par.leading`.
+///
+/// - gloss-styles (array): List of functions to be applied to each line of glosses.
+///   Can be of any length. `gloss-styles[0]` is applied to the first line,
+///   `gloss-styles[1]` --- to the second, etc.
+///   E.g. ```typst (emph, it => it + [.])``` makes the first line italicized
+///   and adds a period to the second line.
+///
+///   *Default*: ()
+///
+/// -> content
 #let example = e.element.declare(
   "example",
   prefix: prefix,
@@ -248,6 +378,17 @@
     e.field("ref-pattern", str, default: "1a", doc: "Example reference format (without brackets). A 2-level numbering pattern."),
     e.field("label-supplement", e.types.option(str), default: none, doc: "The example figure supplement used in references. Has no effect when `smart-ref` is `true`."),
 
+    // fields to pass to subexample
+    e.field("sub-indent", length, default: 0em, doc: "Distance between the the left edge of the top-level example body and the left edge of the subexample number."),
+    e.field("sub-body-indent", length, default: 1.5em, doc: "Distance between the left edge of the subexample marker and the left edge of the subexample body."),
+    e.field("sub-spacing", auto-length, default: auto, doc: "Vertical spacing around the subexample. Currently, there is no way to modify spacing between two subexamples specifically."),
+    e.field("sub-breakable", bool, default: false, doc: "Whether the subexample figure is breakable."),
+    e.field("sub-num-pattern", e.types.union(str, function), default: "a.", doc: "Subexample number format."),
+    // duplicate this for consistency
+    e.field("sub-ref-pattern", str, synthesized: true, default: "1a"),
+    e.field("sub-second-ref-pattern", str, default: "a", doc: "Format to reference the second argument of `ex-ref` if it is a subexample. A 1-level numbering pattern."),
+    e.field("sub-label-supplement", e.types.option(str), doc: "The subexample figure supplement used in references. Has no effect when `smart-ref` is `true`."),
+
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
     e.field("get-spacing", function, synthesized: true, default: () => par.spacing)
   ),
@@ -260,7 +401,7 @@
     }
   },
 
-  synthesize: it => gen-get-function(it, ("spacing", par.spacing)),
+  synthesize: it => gen-get-function(it, ("spacing", par.spacing)) + (sub-ref-pattern: it.ref-pattern),
 
   // using custom counter
   count: _ => it => update-counter(it._counter, level: 0, increment: it.number == none),
@@ -274,9 +415,14 @@
     )
   ),
 
-  display: it => build-example(
-    subexample-func: subexample,
-    it,
-    level: 0,
-  )
+  display: it => {
+    show: e.set_(subexample,
+      ..get-sub-fields(it)
+    )
+    build-example(
+      subexample-func: subexample,
+      it,
+      level: 0,
+    )
+  }
 )

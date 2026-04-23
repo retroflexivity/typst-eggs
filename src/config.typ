@@ -14,7 +14,9 @@
 /// Primarily intended for use in a global show rule:
 /// ```typst #show: eggs()```
 ///
-/// - it (content): The content. -> content
+/// Default values for all parameters are technically auto, but the de facto default settings are provided below.
+///
+/// - it (content): The content.
 ///
 /// - auto-subexamples (bool): Whether to treat numbered lists in examples as subexamples.
 ///
@@ -93,7 +95,7 @@
 ///
 ///   *Default*: "1a"
 ///
-/// - second-sub-ref-pattern (str | function): Format to reference the second argument of `ex-ref` if it is a subexample.
+/// - sub-second-ref-pattern (str | function): Format to reference the second argument of `ex-ref` if it is a subexample.
 ///   A 1-level numbering pattern.
 ///
 ///   *Default*: "a"
@@ -161,7 +163,7 @@
   sub-num-pattern: auto,
   smart-refs: auto,
   ref-pattern: auto,
-  second-sub-ref-pattern: auto,
+  sub-second-ref-pattern: auto,
   footnote-separate-numbering: auto,
   footnote-ref-pattern: auto,
   label-supplement: auto,
@@ -213,7 +215,7 @@
 
     ("num-pattern", sub-num-pattern),
     ("ref-pattern", ref-pattern),
-    ("second-sub-ref-pattern", second-sub-ref-pattern),
+    ("sub-second-ref-pattern", sub-second-ref-pattern),
     ("label-supplement", sub-label-supplement),
   )
 

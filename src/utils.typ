@@ -1,5 +1,6 @@
 #import "@preview/elembic:1.1.1" as e
 
+#let prefix = "eggs07"
 
 #let auto-length = e.types.union(auto, length)
 
@@ -15,5 +16,11 @@
   it
 }
 
-#let prefix = "eggs07"
+// from a dictionary containing keys starting with "sub-",
+// get a dictionary of only those fields with "sub-" dropped
+#let get-sub-fields(dict) = {
+  dict.keys()
+  .filter(it => it.starts-with("sub-"))
+  .map(it => (it.slice(4): dict.at(it))).join()
+}
 
