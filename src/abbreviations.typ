@@ -16,13 +16,21 @@
 }
 
 /// Prints the symbol in smallcaps
-/// and adds it to the list of used abbreviations. -> content
+/// and adds it to the list of used abbreviations.
+///
+/// - symbol (str): The abbreviation
+///
+///   *Required*
+///
+/// - description (str): The abbreviation description for the list of used abbreviations.
+///
+///   *Required*
+///
+/// -> content
 #let abbreviation(
-  /// The abbreviation. -> str
   symbol,
-  /// The abbreviation description
-  /// for the list of used abbreviations. -> str
-  description) = {
+  description
+) = {
 
   used-abbreviations.update(it => {
     it.insert(symbol, description)

@@ -52,7 +52,7 @@
 ///   *Default*: 1.5em
 ///
 /// - spacing (length): Vertical spacing around example.
-///   Currently, there is no way to modify spacing between two subexamples specifically.
+///   Currently, there is no way to modify spacing between two examples specifically.
 ///
 ///   *Default*: current `par.spacing`.
 ///

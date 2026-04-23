@@ -91,15 +91,26 @@
 
 
 /// Typesets an example reference in parentheses.
+/// - ..args (label | int):
+///   One to two arguments.
+///   Can be labels or integers (or elements, but you probably won't need it).
+///   Integers are used for relative reference:
+///   0 means the last example, 1 means the next, etc.
+///
+///   *Required*
+///
+/// - left (content): Text on the left, e.g. "e.g. "
+///
+///   *Default*: none
+///
+/// - right (content): Text on the right, e.g. " etc."
+///
+///   *Default*: none
+/// 
+/// -> content
 #let ex-ref(
-  /// One to two arguments.
-  /// Can be labels, elements, or integers.
-  /// Integers are used for relative reference:
-  /// 0 means the last example, 1 means the next, etc. -> label | int
   ..args,
-  /// Text on the left, e.g. "e.g. " -> content
   left: none,
-  /// Text on the right, e.g. " etc." -> content
   right: none,
 ) = {
   // validate references

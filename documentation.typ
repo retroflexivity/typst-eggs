@@ -354,17 +354,37 @@ To change Eggs' config temporarely, you can also simply pass the content to `egg
 
 #set heading(numbering: none)
 #show heading.where(level: 2): set heading(numbering: "1.")
+// hide "parameters"
+#show heading.where(level: 3): none
+#show pad: none
 #show v.where(amount: 4.8em): v(2em)
 
-
-#for file in (
-  "src/config.typ",
-  "src/example.typ",
-  "src/judge.typ",
-  "src/gloss.typ",
-  "src/abbreviations.typ",
-  "src/ex-label.typ",
-  "src/ex-ref.typ",
-) {
-  tidy.show-module(tidy.parse-module(read(file)), style: tidy.styles.default, show-outline: false, first-heading-level: 1)
+#show list: it => {
+  set par(spacing: par.leading)
+  it
 }
+#set list(spacing: 1.5em, marker: rotate(90deg, "🥚"))
+
+#show regex("^[a-z\-.]+\s\((\w+(\s\|\s)?)+\)"): it => {
+  set text(font: "DejaVu Sans Mono", size: 0.8em)
+  show regex("[\(\)]"): none
+  show " ": h(0.3em)
+  show regex("\((\w+(\s\|\s)?)+\)"): it => {
+    show regex("(\w+(\s\|\s)?)+"): it => {
+      set text(fill: olive)
+      [[#it]]
+    }
+    it
+  }
+  it
+}
+
+#let show-tidy = file => tidy.show-module(tidy.parse-module(read(file)), style: tidy.styles.default, show-outline: false, first-heading-level: 1, sort-functions: auto)
+
+#show-tidy("src/config.typ")
+#show-tidy("src/example.typ")
+#show-tidy("src/gloss.typ")
+#show-tidy("src/judge.typ")
+#show-tidy("src/ex-label.typ")
+#show-tidy("src/ex-ref.typ")
+#show-tidy("src/abbreviations.typ")

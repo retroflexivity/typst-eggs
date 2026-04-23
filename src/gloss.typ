@@ -55,7 +55,38 @@
   )
 }
 
-
+/// Interlinear gloss grid.
+///
+/// - body (content): Any number of rows of equal length. Rows can be either contents where elements are separated by more than one space or lists.
+///
+///   *Required*
+///
+/// - word-spacing (length): Horizontal spacing between words in glosses.
+///
+///   *Default*: 1em
+///
+/// - line-spacing (length): Vertical spacing between lines in glosses.
+///
+///   *Default*: current `par.leading`.
+///
+/// - before-spacing (length): Vertical spacing above glosses (i.e. after the preamble).
+///
+///   *Default*: current `par.leading`.
+///
+/// - after-spacing (length): Vertical spacing below glosses (i.e. before the translation).
+///
+///   *Default*: current `par.leading`.
+///
+/// - styles (array): List of functions to be applied to each line of glosses.
+///   Can be of any length. `gloss-styles[0]` is applied to the first line,
+///   `gloss-styles[1]` --- to the second, etc.
+///   E.g. ```typst (emph, it => it + [.])``` makes the first line italicized
+///   and adds a period to the second line.
+///
+///   *Default*: ()
+///
+///
+/// -> content
 #let gloss = e.element.declare(
   "gloss",
   prefix: prefix,

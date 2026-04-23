@@ -127,17 +127,72 @@
   )
 }
 
-
+/// Second-level linguistic subexample. Only intended for use inside an example.
+///
+/// - body (content): The body of the subexample.
+///
+///   *Required*
+///
+/// - number (int | none): Overrides automatic numbering of the subexample. If not none, the counter does not increment.
+///
+///   *Default*: none
+///
+///
+/// - auto-glosses (bool): Whether to treat bullet lists as glosses.
+///
+///   *Default*: true
+///
+/// - auto-judges (dictionary): A dictionary of characters to convert into judges (keys) and whether to superscript them (values).
+///
+///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
+///
+/// - indent (length): Distance between the left edge of the top-level example and the left edge of the subexample number.
+///
+///   *Default*: 0em
+///
+/// - body-indent (length): Distance between the left edge of the subexample marker and the left edge of the subexample body.
+///
+///   *Default*: 1.5em
+///
+/// - spacing (length): Vertical spacing around the subexample.
+///
+///   *Default*: current `par.leading`.
+///
+/// - breakable (bool): Whether the subexample figure is breakable.
+///
+///   *Default*: false
+///
+/// - num-pattern (str | function): Subexample number format.
+///   A numbering pattern.
+///
+///   *Default*: "a."
+///
+/// - ref-pattern (str | function): Example reference format.
+///   A 2-level numbering pattern.
+///
+///   *Default*: "1a"
+///
+/// - second-sub-ref-pattern (str | function): Format to reference the second argument of `ex-ref` if it is a subexample.
+///   A 1-level numbering pattern.
+///
+///   *Default*: "a"
+///
+/// - label-supplement (str | none): The subexample figure supplement used in references.
+///   Has no effect when `smart-ref` is `true`.
+///
+///   *Default*: none
+///
+/// -> content
 #let subexample = e.element.declare(
   "subexample",
   prefix: prefix,
-  doc: "Explicitly typesets a subexample as a figure of type \"subeggsample\". Only intended for use inside an example.",
+  doc: "Second-level subexample. Only intended for use inside an example.",
 
   fields: (
     e.field("body", content, required: true, doc: "The body of the subexample"),
     e.field("number", e.types.option(int), doc: "Overrides automatic numbering of the subexample. If not none, the counter does not increment."),
 
-    e.field("auto-glosses", bool, default: true, doc: "Whether to treat bullet lists in examples as glosses."),
+    e.field("auto-glosses", bool, default: true, doc: "Whether to treat bullet lists as glosses."),
     // accept lists for legacy support of ()
     e.field("auto-judges", e.types.union(dictionary, array), default: (
       "\*": false,
@@ -218,6 +273,70 @@
 )
 
 
+/// Top-level linguistic example.
+///
+/// - body (content): The body of the example.
+///
+///   *Required*
+///
+/// - number (int | none): Overrides automatic numbering of the example. If not none, the counter does not increment.
+///
+///   *Default*: none
+///
+/// - auto-subexamples (bool): Whether to treat numbered lists in examples as subexamples.
+///
+///   *Default*: true
+///
+/// - auto-glosses (bool): Whether to treat bullet lists in examples as glosses.
+///
+///   *Default*: true
+///
+/// - auto-labels (bool): Whether to insert subexample labels of the form ex-label:a.
+///
+///   *Default*: true
+///
+/// - auto-judges (dictionary): A dictionary of characters to convert into judges (keys) and whether to superscript them (values).
+///
+///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
+///
+/// - indent (length): Distance between the left margin and the left edge of the example number.
+///
+///   *Default*: 0em
+///
+/// - body-indent (length): Distance between the left edge of the example marker and the left edge of the example body.
+///
+///   *Default*: 2.5em
+///
+/// - spacing (length): Vertical spacing around the example.
+///   Currently, there is no way to modify spacing between two examples specifically.
+///
+///   *Default*: current `par.spacing`.
+///
+/// - breakable (bool): Whether the example figure is breakable.
+///
+///   *Default*: false
+///
+/// - num-pattern (str | function): Example number format.
+///   A numbering pattern.
+///
+///   *Default*: "(1)"
+///
+/// - ref-pattern (str | function): Example reference format.
+///   A 2-level numbering pattern.
+///
+///   *Default*: "1a"
+///
+/// - label-supplement (str | none): The example figure supplement used in references.
+///   Has no effect when `smart-ref` is `true`.
+///
+///   *Default*: none
+///
+/// - smart-refs (bool): Whether to format `@`-references and `ref`-references to examples
+///   Adding parenthesis and parsing the supplement.
+///
+///   *Default*: true
+///
+/// -> content
 #let example = e.element.declare(
   "example",
   prefix: prefix,
@@ -240,13 +359,13 @@
 
     e.field("indent", length, default: 0em, doc: "Distance between the left margin and the left edge of the example number."),
     e.field("body-indent", length, default: 2.5em, doc: "Distance between the left edge of the example marker and the left edge of the example body."),
-    e.field("spacing", auto-length, default: auto, doc: "Vertical spacing around the example. Currently, there is no way to modify spacing between two subexamples specifically."),
+    e.field("spacing", auto-length, default: auto, doc: "Vertical spacing around the example. Currently, there is no way to modify spacing between two examples specifically."),
     e.field("breakable", bool, default: false, doc: "Whether the example figure is breakable."),
 
-    e.field("smart-refs", bool, default: true, doc: "Whether to format `@`-references and `ref`-references to examples Adding parenthesis and parsing the supplement."),
     e.field("num-pattern", e.types.union(str, function), default: "(1)", doc: "Example number format."),
     e.field("ref-pattern", str, default: "1a", doc: "Example reference format (without brackets). A 2-level numbering pattern."),
     e.field("label-supplement", e.types.option(str), default: none, doc: "The example figure supplement used in references. Has no effect when `smart-ref` is `true`."),
+    e.field("smart-refs", bool, default: true, doc: "Whether to format `@`-references and `ref`-references to examples Adding parenthesis and parsing the supplement."),
 
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
     e.field("get-spacing", function, synthesized: true, default: () => par.spacing)
