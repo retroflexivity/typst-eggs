@@ -73,6 +73,7 @@ Please submit an issue for any bug you find and any suggestion you have.
 Contributions are much welcome, too.
 
 TODO:
+- Subexample grids with alignment as in phonokit;
 - Smarter gloss line styling;
 - Figure out how to modify spacing between examples specifically;
 - `\trailingcitation`.
