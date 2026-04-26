@@ -125,7 +125,7 @@ Numbered lists inside examples (lines that begin with `+ `) are automatically ty
   ```
 )
 
-In case you prefer it manual, the function `subexample` is defined. It is intended to only be used inside `example`. Automatic conversion of numbered lists can be toggled off by setting ```typst auto-subexamples: false``` in the config (see @customization). To suspend it for a single example, pass ```typst auto-subexamples: false``` to the subexample directly.
+In case you prefer it manual, the function `subexample` is defined. It is intended to only be used inside `example`. Automatic conversion of numbered lists can be toggled off by setting ```typst auto-subexamples: false``` in the config (see @customization). To suspend it for a single example, pass ```typst auto-subexamples: false``` to the example directly.
 
 #counter("eggsample").update((..it) => it.at(0) - 1)
 #code-ex(
