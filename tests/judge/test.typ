@@ -15,3 +15,11 @@
   + #judge[?]question
   + #judge[\#]infelicitous
 ]
+
+#show: eggs.with(
+  auto-judges: (:)
+)
+
+#example[
+  ?question
+]

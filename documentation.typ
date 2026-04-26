@@ -302,7 +302,9 @@ A dedicated function, `ex-ref`, is also provided. It accepts references and addi
 
 = Customization <customization>
 
-Eggs offers some layout and styling customization and several behaviour options. The complete list is given in @funcs. Customization is done via setting the parameters of `eggs` in a global show rule.
+Eggs offers some layout and styling customization and several behaviour options. The complete list is given in @funcs.
+
+There are several ways of customizing the package options. The primary one is setting the parameters of `eggs` in a global show rule.
 
 #code-ex(
   ```typst
@@ -325,7 +327,7 @@ Eggs offers some layout and styling customization and several behaviour options.
   ```
 )
 
-To change Eggs' config temporarely, you can also simply pass the content to `eggs`. Note, however, that all parameters not passed are set to default. If you change your config frequently, you may want to store your defaults in a separate variable.
+To change Eggs' config temporarely, you can scope the show rule or simply pass the content to `eggs`. Passed parameters are applied on top of the old configuration, so the parameters you passed before that are not overriden are preserved.
 
 #counter("eggsample").update(it => it - 2)
 
@@ -349,22 +351,57 @@ To change Eggs' config temporarely, you can also simply pass the content to `egg
   ```
 )
 
+To override the configuration for a single example, you can pass the options to it directly. However, note that options are split among Eggs' functions: if you want to customize subexample or gloss options, you have to pass those to the functions directly (without prepending `sub-` or `gloss-`).
+
+#counter("eggsample").update(it => it - 2)
+
+#code-ex(
+  ```typst
+The following example imitates Higgins' (1973) original layout.
+#example(indent: 2.5em, body-indent: 2.5em)[
+  #subexample(indent: -0.3em, body-indent: 1.7em)[What John also is is enviable.]
+]
+  ```
+)
+
+Finally, since Eggs is powered by #link("https://typst.app/universe/package/elembic")[Elembic], you may apply #link("https://pgbiel.github.io/elembic/elements/styling/set-rules.html")[its set rules] to the elements `example`, `subexample`, and `gloss`. #link("https://pgbiel.github.io/elembic/elements/styling/show-rules.html")[Elembic's show rules] can also be used to style example contents in an arbitrary way.
+
 #show link: it => it.body
 = Complete function documentation <funcs>
 
 #set heading(numbering: none)
 #show heading.where(level: 2): set heading(numbering: "1.")
+// hide "parameters"
+#show heading.where(level: 3): none
+#show pad: none
 #show v.where(amount: 4.8em): v(2em)
 
-
-#for file in (
-  "src/config.typ",
-  "src/examples.typ",
-  "src/judge.typ",
-  "src/gloss.typ",
-  "src/abbreviations.typ",
-  "src/ex-label.typ",
-  "src/ex-ref.typ",
-) {
-  tidy.show-module(tidy.parse-module(read(file)), style: tidy.styles.default, show-outline: false, first-heading-level: 1)
+#show list: it => {
+  set par(spacing: par.leading)
+  it
 }
+#set list(spacing: 1.5em, marker: rotate(90deg, "🥚"))
+
+#show regex("^[a-z\-.]+\s\((\w+(\s\|\s)?)+\)"): it => {
+  set text(font: "DejaVu Sans Mono", size: 0.8em)
+  show regex("[\(\)]"): none
+  show " ": h(0.3em)
+  show regex("\((\w+(\s\|\s)?)+\)"): it => {
+    show regex("(\w+(\s\|\s)?)+"): it => {
+      set text(fill: olive)
+      [[#it]]
+    }
+    it
+  }
+  it
+}
+
+#let show-tidy = file => tidy.show-module(tidy.parse-module(read(file)), style: tidy.styles.default, show-outline: false, first-heading-level: 1, sort-functions: auto)
+
+#show-tidy("src/config.typ")
+#show-tidy("src/example.typ")
+#show-tidy("src/gloss.typ")
+#show-tidy("src/judge.typ")
+#show-tidy("src/ex-label.typ")
+#show-tidy("src/ex-ref.typ")
+#show-tidy("src/abbreviations.typ")

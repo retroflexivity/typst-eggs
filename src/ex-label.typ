@@ -1,7 +1,12 @@
 /// Used inside an example to give it a label.
-/// Effectively an alias of metadata. -> content
+/// Effectively an alias of metadata.
+///
+/// - l (label): The label.
+///
+///   *Required*
+///
+/// -> content
 #let ex-label(
-  /// The label. -> label
   l,
 ) = {
   assert(type(l) == label, message: "ex-label only accepts labels")
