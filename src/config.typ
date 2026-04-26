@@ -266,11 +266,9 @@
     if separate-numbering {
       fn-ctr.update(0)
     }
-  //   config-state.update(fn-config)
 
-  it
+    it
 
-  //   config-state.update(config)
   }
 
   show ref: {
