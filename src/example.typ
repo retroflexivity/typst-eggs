@@ -52,15 +52,17 @@
 ) = {
 
   // turn a list into subexamples
-  let into-subexamples(enabled, level: 0, parent-number: none, parent-label: none) = it => {
+  let into-subexamples(enabled, level: 0, subexample-wrapper: none, parent-number: none, parent-label: none) = it => {
     if enabled {
-      for item in it.children {
-        subexample-func(
-          item.body,
-          _parent-number: parent-number,
-          _parent-label: parent-label,
-        )
-      }
+      subexample-wrapper(
+        ..it.children.map(item => {
+          subexample-func(
+            item.body,
+            _parent-number: parent-number,
+            _parent-label: parent-label,
+          )
+        })
+      )
     } else {
       it
     }
@@ -97,6 +99,7 @@
     show enum: into-subexamples(
       elem.auto-subexamples,
       level: 0,
+      subexample-wrapper: elem.at("subexample-wrapper", default: "none"),
       parent-number: parent-number,
       parent-label: parent-label
     )
@@ -106,6 +109,8 @@
 
   show: it => {
     set block(spacing: (elem.get-spacing)())
+    // for wrapping examples in a grid
+    set grid(row-gutter: (elem.get-spacing)())
     it
   }
 
@@ -356,6 +361,8 @@
       "?": true,
       "OK": true,
     ), folds: false, doc: "A dictionary of characters to convert into judges (keys) and whether to superscript them (values)."),
+
+    e.field("subexample-wrapper", function, default: (..args) => {args.pos().join()}, doc: "A function to wrap the subexample list. Should accept any number of arguments and return content. E.g. to align your subexamples horizontally, pass `grid.with(columns: 5)`. Only works for automatic examples."),
 
     e.field("indent", length, default: 0em, doc: "Distance between the left margin and the left edge of the example number."),
     e.field("body-indent", length, default: 2.5em, doc: "Distance between the left edge of the example marker and the left edge of the example body."),

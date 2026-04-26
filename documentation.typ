@@ -138,7 +138,26 @@ In case you prefer it manual, the function `subexample` is defined. It is intend
   ```
 )
 
-#pagebreak()
+== Customizing how subexamples are displayed
+
+By default, automatic subexamples are simply placed one after another. This can be changed by passing or setting `subexample-wrapper`. A wrapper is a function that accepts any number of `content` elements and returns `content` constructed from them.
+
+A simple and common use case is to align subexamples horizontally using #link("https:typst.app/docs/reference/layout/grid")[a grid].
+
+#code-ex(
+  ```typst
+  Unfortunately, according to the conference guidelines, in this abstract, our space is limited to two pages. Consequently, to be able to fit everything included in our agenda, we will try to save as much space as possible by aligning subexamples horizontally instead of, how it is usually done in linguistic papers, vertically.
+
+  #show: eggs.with(subexample-wrapper: grid.with(columns: 5))
+
+  #example[
+    + This is also a subexample.
+    + This, too, is a subexample.
+    + This is a subexample, too.
+  ]
+  ```
+)
+
 = Glosses <glosses>
 
 Bullet lists in examples (lines that begin with `- `) are automatically treated as gloss lines.
@@ -176,7 +195,6 @@ Glosses can by typeset manually with `gloss`. It accepts either a content, which
   ```
 )
 
-#pagebreak()
 = Judges
 
 Certain strings at the beginning of a line or a gloss word (see @glosses) are automatically transformed into left judges.#footnote[In fact, due to the way show rules work, this happens at the beginning of any elements inside examples, including inline ones. This might overgenerate left judges in certain narrow cases like in ```typst this one _?here_```. Disable auto judges if it is a problem.] Left judges are negatively padded strings that take up no space.

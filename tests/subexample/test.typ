@@ -17,15 +17,27 @@
   + subexample
 ]
 
+#[
+  #show: eggs.with(
+    sub-body-indent: 10em,
+    sub-indent: 3em,
+    sub-num-pattern: "[a]",
+    sub-spacing: 10em,
+  )
+
+  #example[
+    + subexample
+    + subexample
+  ]
+]
+
 #show: eggs.with(
-  sub-body-indent: 10em,
-  sub-indent: 3em,
-  sub-num-pattern: "[a]",
-  sub-spacing: 10em,
+  subexample-wrapper: grid.with(columns: 2)
 )
 
 #example[
   + subexample
   + subexample
+  + subexample
+  + subexample
 ]
-
