@@ -73,7 +73,6 @@ Please submit an issue for any bug you find and any suggestion you have.
 Contributions are much welcome, too.
 
 TODO:
-- Subexample grids with alignment as in phonokit;
 - Smarter gloss line styling;
 - Figure out how to modify spacing between examples specifically;
 - `\trailingcitation`.
@@ -86,4 +85,5 @@ MIT License.
 
 - [Thumus](https://github.com/Thumuss), [bluss](https://github.com/bluss), and especially [Laurenz](https://github.com/laurmaedje) for an important discussion on row splitting functionality.
 - [Greg Shuflin](https://github.com/neunenak) and contributors for creating the original leipzig-glossing.
+- [PgBiel](https://github.com/PgBiel) for creating elembic.
 - [JJ](https://github.com/omentic) for various improvements.
