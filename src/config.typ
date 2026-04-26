@@ -32,6 +32,10 @@
 ///
 ///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
 ///
+/// - subexample-wrapper (function): A function to wrap the subexample list. Should accept any number of arguments and return content. E.g. to align your subexamples horizontally, pass `grid.with(columns: 5)`. Only works for automatic examples.
+///
+///  *Default*: (..args) => {args.pos().join()}
+///
 /// - indent (length): Distance between the left margin and the left edge of the example number.
 ///
 ///   *Default*: 0em
@@ -148,6 +152,7 @@
   auto-glosses: auto,
   auto-labels: auto,
   auto-judges: auto,
+  subexample-wrapper: auto,
   indent: auto,
   body-indent: auto,
   sub-indent: auto,
@@ -189,6 +194,7 @@
     ("auto-glosses", auto-glosses),
     ("auto-labels", auto-labels),
     ("auto-judges", auto-judges),
+    ("subexample-wrapper", subexample-wrapper),
 
     ("indent", indent),
     ("body-indent", body-indent),
