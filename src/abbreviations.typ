@@ -99,7 +99,6 @@
 #let neg   = abbreviation("neg",   "negation, negative")
 #let nmlz  = abbreviation("nmlz",  "nominalizer/nominalization")
 #let nom   = abbreviation("nom",   "nominative")
-#let non   = abbreviation("n",     [non- (e.g. #smallcaps[nsg] nonsingular, #smallcaps[npst] nonpast)])
 #let obj   = abbreviation("obj",   "object")
 #let obl   = abbreviation("obl",   "oblique")
 #let obv   = abbreviation("obv",   "obviative")
