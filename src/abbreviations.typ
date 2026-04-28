@@ -130,6 +130,7 @@
 #let sbj   = abbreviation("sbj",   "subject")
 #let sbjv  = abbreviation("sbjv",  "subjunctive")
 #let sg    = abbreviation("sg",    "singular")
-#let top   = abbreviation("top",   "topic")
+// The `top` binding conflicts with the built-in `top` alignment.
+#let top_  = abbreviation("top",   "topic")
 #let tr    = abbreviation("tr",    "transitive")
 #let voc   = abbreviation("voc",   "vocative")
