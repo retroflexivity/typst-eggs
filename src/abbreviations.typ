@@ -130,6 +130,5 @@
 #let sbj   = abbreviation("sbj",   "subject")
 #let sbjv  = abbreviation("sbjv",  "subjunctive")
 #let sg    = abbreviation("sg",    "singular")
-#let top   = abbreviation("top",   "topic")
 #let tr    = abbreviation("tr",    "transitive")
 #let voc   = abbreviation("voc",   "vocative")
