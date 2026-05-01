@@ -40,10 +40,10 @@
   smallcaps(symbol)
 }
 
-// The standard Leipzig glossing abbreviations.
-// https://www.eva.mpg.de/lingua/pdf/Glossing-Rules.pdf
-// Additionally, we add the following common abbreviations:
-//  an, inan, dir, inv, fam, obv, conj, cont, inch, int, mir, opt, pot, pro
+// The standard Leipzig glossing abbreviations
+// (https://www.eva.mpg.de/lingua/pdf/Glossing-Rules.pdf)
+// and several others:
+// an, inan, dir, inv, fam, obv, conj, cont, inch, int, mir, opt, pot, pro
 #let p1    = abbreviation("1",     "first person")
 #let p2    = abbreviation("2",     "second person")
 #let p3    = abbreviation("3",     "third person")
