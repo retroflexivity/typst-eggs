@@ -240,6 +240,8 @@ Eggs provides the whole set of #link("https://www.eva.mpg.de/lingua/resources/gl
 All abbreviations are in lowercase. All abbreviations' names are as they appear, except for:
 - *1, 2, 3* are `p1`, `p2`, `p3`
 - *#smallcaps[n]* (as the non- prefix) is `non`
+- *#smallcaps[top]* is `top_`, due to conflicting with Typst's built-in `top` alignment
+- *#smallcaps[int]* is `int_`, due to conflicting with Typst's built-in `int` type
 
 #code-ex(
   ```typst
