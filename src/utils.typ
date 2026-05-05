@@ -14,18 +14,37 @@
   it
 }
 
-#let split-content(it, separator: [ ]) = {
+// in all text-type children,
+// find `from` string and replace it with `to` content
+// returning an array of content 
+#let replace-text-with-content(it, from: " ", to: [ ]) = {
+  if it.has("text") {
+    it.text.split(from).map(text).intersperse(to)
+  } else {
+    it
+  }
+}
+
+// split content on `separator`s and `text-separator`s
+#let split-content(it, separator: [ ], text-separator: " ") = {
   if type(it) == array {
     return it
   }
   assert(type(it) == content)
 
-  // one-word line
-  if not it.has("children") {
-    return (it,)
+  // replace text separator with separator
+  let replace-text-with-content = replace-text-with-content.with(from: text-separator, to: separator)
+  let text-split = if text-separator == none {
+    it.at("children", default: (it,))
+  } else if it.has("children") {
+    it.children.map(replace-text-with-content)
+  } else {
+    // one-word line
+    replace-text-with-content(it)
   }
 
-  it.children.split(separator).filter(it => it != ()).map([].func())
+  // split on separator
+  text-split.flatten().split(separator).filter(it => it != ()).map([].func())
 }
 
 #let prefix = "eggs07"

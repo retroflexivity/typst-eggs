@@ -106,6 +106,9 @@
   // error traces do not go through context (https://github.com/PgBiel/elembic/issues/84),
   // so we must do all the validation here
   construct: constructor => (..args) => {
+    // ISSUE: we can't control whether split happens on single spaces
+    // using a show rule,
+    // because we do that in the constructor
     let lines = args.pos().map(split-content)
     assert(lines.len() > 0, message: "at least one gloss line must be present")
 
