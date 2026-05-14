@@ -1,6 +1,6 @@
 [package]
 name = "eggs"
-version = "0.7.1"
+version = "0.8.0"
 entrypoint = "eggs.typ"
 authors = "Arkady Shaldov"
 license = "MIT"
