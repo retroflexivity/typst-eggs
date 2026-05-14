@@ -4,8 +4,18 @@
 // a dictionary of the form "abbr: description"
 #let used-abbreviations = state("used-abbreviations", (:))
 
-/// Prints the list of abbreviations used in the document
-/// as a term list.
+/// Returns the dictionary of abbreviations and their descriptions
+/// used in the document.
+/// Requires context.
+///
+/// -> dictionary
+#let get-abbreviations() = {
+  used-abbreviations.final()
+}
+
+/// Prettily prints the list of abbreviations used in the document.
+/// Accesses the state, turns it into a list of pairs, sorts it on abbreviation names by `sorted-by`,
+/// wraps every pair in `wrapper`, then joins with `separator`.
 ///
 /// - sorted-by (function): A callback function to sort abbreviations by.
 ///   Takes in a left and a right abbreviation and returns a boolean.
@@ -13,13 +23,28 @@
 ///
 ///   *Default*: Alphabetical. `(l, r) => l <= r`
 ///
+/// - wrapper (function): A callback function to wrap every abbreviation.
+///   Takes an abbreviation and a description and returns content.
+///
+///   *Default*: A terms item with abbr in small caps. `(abbr, desc) => terms.item(smallcaps(abbr), desc)`
+///
+/// - separator (any | none): A separator to use when abbreviations are joined.
+///   Useful if you need an inline abbreviation list.
+///
+///   *Default*: none
+///
 /// -> content
-#let print-abbreviations(sorted-by: (l, r) => l <= r) = {
+#let print-abbreviations(
+  sorted-by: (l, r) => l <= r,
+  wrapper: (abbr, desc) => terms.item(smallcaps(abbr), desc),
+  separator: none,
+) = {
   context {
     let used = used-abbreviations.final()
-    for (abbr, desc) in used.pairs().sorted(key: k => k.at(0), by: sorted-by) {
-      [/ #smallcaps(abbr): #desc]
-    }
+    used.pairs()
+    .sorted(key: k => k.at(0), by: sorted-by)
+    .map(((abbr, desc)) => wrapper(abbr, desc))
+    .join(separator)
   }
 }
 
