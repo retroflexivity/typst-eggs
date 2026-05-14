@@ -242,13 +242,13 @@ Again, a function `judge` is provided to typeset judges manually. Following spac
 
 = Abbreviations
 
-Eggs provides the whole set of #link("https://www.eva.mpg.de/lingua/resources/glossing-rules.php")[Leipzig Standard Abbreviations] as commands, in the style of TeX's `leipzig`. They are imported from a subpackage `abbreviations`.
+Eggs provides the whole set of #link("https://www.eva.mpg.de/lingua/resources/glossing-rules.php")[Leipzig Standard Abbreviations] as commands, in the style of TeX's `leipzig`. They are imported from the `abbreviations` subpackage.
 
 All abbreviations are in lowercase. All abbreviations' names are as they appear, except for:
-- *1, 2, 3* are `p1`, `p2`, `p3`
-- *#smallcaps[n]* (as the non- prefix) is `non`
-- *#smallcaps[top]* is `top_`, due to conflicting with Typst's built-in `top` alignment
-- *#smallcaps[int]* is `int_`, due to conflicting with Typst's built-in `int` type
+- *1, 2, 3* are `p1`, `p2`, `p3`;
+- *#smallcaps[n]* (as the non- prefix) is `non`;
+- *#smallcaps[top]* is `top_`, due to conflicting with Typst's built-in `top` alignment;
+- *#smallcaps[int]* is `int_`, due to conflicting with Typst's built-in `int` type.
 
 #code-ex(
   ```typst
@@ -277,12 +277,27 @@ Custom abbreviations can be created by defining a new `abbreviation`.
   ```
 )
 
-The list of currently used abbreviations is stored as a dictionary of the form `abbr: description` inside the `used-abbreviations` state. The final list of abbreviations can be accessed as #raw("#context state(\"used-abbreviations\").final()", lang: "typst"). There is also a function to print it as a #link("https://typst.app/docs/reference/model/terms/")[term~list].
+The list of currently used abbreviations is stored as a dictionary of the form `abbr: description` inside the `used-abbreviations` state. Eggs exposes the function `get-abbreviations` to access the final list of abbreviations (must be used inside ```typc context```).
+
+There is also a convenient function to print the list. It is printed as an alphabetically sorted #link("https://typst.app/docs/reference/model/terms/")[term~list] by default.
 
 #code-ex(
   ```typst
   The list of glossing abbreviations used in this paper:
   #print-abbreviations()
+  ```
+)
+
+The formatting can be completely overriden by passing `sorted-by` (controls how abbreviations are sorted), `wrapper` (controls how every entry is printed), and `separator` (controls what is printed between the entries). The following example demonstrates an inline list, separated by a comma, sorted by the order of use.
+
+#code-ex(
+  ```typst
+  The list of glossing abbreviations used in this paper:
+  #print-abbreviations(
+    sorted-by: (_, _) => true,
+    wrapper: (abbr, desc) => [#smallcaps(abbr) = #desc],
+    separator: ", "
+  )
   ```
 )
 

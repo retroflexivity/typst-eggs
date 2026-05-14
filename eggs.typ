@@ -1,5 +1,5 @@
 #import "src/abbreviations.typ"
-#import abbreviations: abbreviation, print-abbreviations
+#import abbreviations: abbreviation, get-abbreviations, print-abbreviations
 #import "src/gloss.typ": gloss
 #import "src/example.typ": example, subexample
 #import "src/ex-label.typ": ex-label
