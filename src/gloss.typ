@@ -115,7 +115,7 @@
     // guard against invalid line lengths
     let length = lines.at(0).len()
     for line in lines {
-      assert(line.len() == length, message: "gloss lines have different lengths. make sure that\n- words are separated by two or more spaces\n- spaces around function calls and styled content that you don't want to split on are non-breakable (`~`)")
+      assert(line.len() == length, message: "gloss lines have different lengths.\ntip: make sure that spaces you don't want to split on are non-breakable (`~`)")
     }
 
     constructor(..lines, ..args.named())
