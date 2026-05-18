@@ -21,7 +21,7 @@
   if it.has("text") {
     it.text.split(from).map(text).intersperse(to)
   } else {
-    it
+    (it,)
   }
 }
 
