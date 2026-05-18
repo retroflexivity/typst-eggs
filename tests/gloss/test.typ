@@ -4,7 +4,7 @@
 
 #example[
   preamble
-  - some  text
+  - some text
   - sooooooome  text
   ft
 ]
@@ -15,8 +15,13 @@
 ]
 
 #example[
-  - some  #[multiple _words_]
-  - #smallcaps[several]~word  text
+  - some #[multiple _words_]
+  - #smallcaps[several]~word text
+]
+
+#example[
+  - word
+  - #smallcaps[actually one word]
 ]
 
 + #gloss[
