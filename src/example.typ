@@ -3,7 +3,7 @@
 #import "gloss.typ": gloss
 #import "utils.typ": auto-length, gen-get-function, prefix
 #import "ex-label.typ": ex-label, get-ex-label
-#import "judge.typ": judge
+#import "judge.typ": judge, format-judges
 
 
 #let ctr = counter("eggsample")
@@ -75,24 +75,6 @@
     } else {
       it
     }
-  }
-
-  // show selected initial characters as corresponding judges
-  let format-judges(body, auto-judges: (:)) = {
-    if auto-judges.len() == 0 {
-      // make passing an empty structure actually work
-      auto-judges = ("emptydictionaryfiller": false)
-    }
-    assert(type(auto-judges) == dictionary, message: "`auto-judges` must be a dictionary")
-
-    let escape-special-characters(s) = s.replace(regex("[-\[\]{}()+?.,^$|\\s]"), c => "\\" + c.text)
-    let judge-regex(a) = regex("^(" + a.map(escape-special-characters).join("|") + ")+ ?")
-    show judge-regex(auto-judges.keys()): it => {
-      show " ": ""
-      show judge-regex(auto-judges.keys().filter(key => auto-judges.at(key))): super
-      judge(it)
-    }
-    body
   }
 
   let show-with-autos(elem, level: 0, parent-number: none, parent-label: none) = {
