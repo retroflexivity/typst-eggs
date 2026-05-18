@@ -172,9 +172,9 @@ A simple and common use case is to align subexamples horizontally using a #link(
 
 = Glosses <glosses>
 
-Bullet lists in examples (lines that begin with `- `) are automatically treated as gloss lines.
+Bullet lists in examples (lines that begin with `- `) are automatically treated as interlinear gloss lines.
 
-For words to split, you need to ensure that there is a `space` element between them. The easiest way to do it is to separate words with *more than one* space. There are exceptions with function calls, so use `~` (non-breaking space) for spaces you don't want to be treated as separators.
+Lines are split into words on simple spaces (any number of them).#footnote[The exception is formatted content (e.g. _emph blocks_): it is never split.] For spaces you don't want to be treated as word separators, use `~` (non-breaking space).
 
 Translations and preambles are written as lines below and above the list, respectively.
 
@@ -183,7 +183,7 @@ Translations and preambles are written as lines below and above the list, respec
   The following example presents the Russian _eto_-construction.
   #example[
     Russian
-    - Jajca      eto   vkusno.
+    - Jajca eto   vkusno.
     - eggs  this            tasty
     'Eggs are tasty.'
   ]
@@ -199,7 +199,7 @@ Glosses can by typeset manually with `gloss`. It accepts either a content, which
   #example(auto-glosses: false)[
     Russian
     #gloss(
-      [Jajca      eto   vkusno.],
+      [Jajca eto vkusno.],
       ([eggs], [this], [tasty]),
     )
     'Eggs are tasty.'

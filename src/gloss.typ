@@ -34,7 +34,7 @@
 
 /// Interlinear gloss grid.
 ///
-/// - body (content): Any number of rows of equal length. Rows can be either contents where elements are separated by more than one space or lists.
+/// - body (content): Any number of rows of equal length. Rows can be either contents where elements are separated by one or more spaces, or lists.
 ///
 ///   *Required*
 ///
@@ -106,13 +106,16 @@
   // error traces do not go through context (https://github.com/PgBiel/elembic/issues/84),
   // so we must do all the validation here
   construct: constructor => (..args) => {
+    // ISSUE: we can't control whether split happens on single spaces
+    // using a show rule,
+    // because we do that in the constructor
     let lines = args.pos().map(split-content)
     assert(lines.len() > 0, message: "at least one gloss line must be present")
 
     // guard against invalid line lengths
     let length = lines.at(0).len()
     for line in lines {
-      assert(line.len() == length, message: "gloss lines have different lengths. make sure that\n- words are separated by two or more spaces\n- spaces around function calls and styled content that you don't want to split on are non-breakable (`~`)")
+      assert(line.len() == length, message: "gloss lines have different lengths.\ntip: make sure that spaces you don't want to split on are non-breakable (`~`)")
     }
 
     constructor(..lines, ..args.named())
