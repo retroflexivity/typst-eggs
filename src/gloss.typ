@@ -34,7 +34,7 @@
 
 /// Interlinear gloss grid.
 ///
-/// - body (content): Any number of rows of equal length. Rows can be either contents where elements are separated by more than one space or lists.
+/// - body (content): Any number of rows of equal length. Rows can be either contents where elements are separated by one or more spaces, or lists.
 ///
 ///   *Required*
 ///
