@@ -2,7 +2,7 @@
 name = "eggs"
 version = "0.7.1"
 entrypoint = "eggs.typ"
-authors = "Arkady Shaldov"
+authors = ["Arkady Shaldov"]
 license = "MIT"
 description = "Linguistic examples with minimalist syntax"
 repository = "https://github.com/retroflexivity/typst-eggs"
