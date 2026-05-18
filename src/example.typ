@@ -131,7 +131,7 @@
 ///
 /// - auto-judges (dictionary): A dictionary of characters to convert into judges (keys) and whether to superscript them (values).
 ///
-///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
+///   *Default*: ("*": false, "#": true, "?": true, "OK": true)
 ///
 /// - indent (length): Distance between the left edge of the top-level example and the left edge of the subexample number.
 ///
@@ -182,8 +182,8 @@
     e.field("auto-glosses", bool, default: true, doc: "Whether to treat bullet lists as glosses."),
     // accept lists for legacy support of ()
     e.field("auto-judges", e.types.union(dictionary, array), default: (
-      "\*": false,
-      "\#": true,
+      "*": false,
+      "#": true,
       "?": true,
       "OK": true,
     ), folds: false, doc: "A dictionary of characters to convert into judges (keys) and whether to superscript them (values)."),
@@ -284,7 +284,7 @@
 ///
 /// - auto-judges (dictionary): A dictionary of characters to convert into judges (keys) and whether to superscript them (values).
 ///
-///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
+///   *Default*: ("*": false, "#": true, "?": true, "OK": true)
 ///
 /// - indent (length): Distance between the left margin and the left edge of the example number.
 ///
@@ -338,8 +338,8 @@
     e.field("auto-labels", bool, default: true, doc: "Whether to insert subexample labels of the form ex-label:a."),
     // accept lists for legacy support of ()
     e.field("auto-judges", e.types.union(dictionary, array), default: (
-      "\*": false,
-      "\#": true,
+      "*": false,
+      "#": true,
       "?": true,
       "OK": true,
     ), folds: false, doc: "A dictionary of characters to convert into judges (keys) and whether to superscript them (values)."),

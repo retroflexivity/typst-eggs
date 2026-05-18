@@ -26,17 +26,16 @@
     (body, ([],))
   }
 
-  if type(head) != content or head.func() not in (text, symbol) {
+  if type(head) != content or head.func() not in (text, [\*].func()) {
     return {head; tail.join()}
-    // return head.func()
   }
 
-  let escape-special-characters(s) = s.replace(regex("[-\[\]{}()+?.,^$|\\s]"), c => "\\" + c.text)
+  let escape-special-characters(s) = s.replace(regex("[-\[\]{}()+*?.,^$|\\s]"), c => "\\" + c.text)
   let judge-regex(a) = regex("^(" + a.map(escape-special-characters).join("|") + ")+ ?")
   {
     show judge-regex(auto-judges.keys()): it => {
       show " ": ""
-      show judge-regex(auto-judges.keys().filter(key => auto-judges.at(key))): super
+      show judge-regex(auto-judges.keys().filter(key => auto-judges.at(key)) + ("emptyfiller",)): super
       judge(it)
     }
     (head)
