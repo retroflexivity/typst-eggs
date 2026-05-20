@@ -46,7 +46,7 @@
 ///
 /// - auto-judges (dictionary): A dictionary of characters to convert into judges (keys) and whether to superscript them (values).
 ///
-///   *Default*: ("*": false, "#": true, "?": true, "OK": true)
+///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
 ///
 /// - word-spacing (length): Horizontal spacing between words in glosses.
 ///

@@ -131,7 +131,7 @@
 ///
 /// - auto-judges (dictionary): A dictionary of characters to convert into judges (keys) and whether to superscript them (values).
 ///
-///   *Default*: ("*": false, "#": true, "?": true, "OK": true)
+///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
 ///
 /// - indent (length): Distance between the left edge of the top-level example and the left edge of the subexample number.
 ///
@@ -284,7 +284,7 @@
 ///
 /// - auto-judges (dictionary): A dictionary of characters to convert into judges (keys) and whether to superscript them (values).
 ///
-///   *Default*: ("*": false, "#": true, "?": true, "OK": true)
+///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
 ///
 /// - indent (length): Distance between the left margin and the left edge of the example number.
 ///
