@@ -1,5 +1,6 @@
 #import "@preview/elembic:1.1.1" as e
 
+#import "judge.typ": format-judges
 #import "utils.typ": auto-length, prefix, gen-get-function, split-content
 
 // take a martix of words
@@ -7,6 +8,7 @@
 #let build-gloss-grid(
   lines,
   styles: (),
+  auto-judges: auto,
   before-spacing: auto,
   after-spacing: auto,
   line-spacing: auto,
@@ -23,8 +25,12 @@
       box(
         grid(
           row-gutter: line-spacing,
-          // apply corresponding styling to each word
-          ..words.zip(styles).map(((word, style)) => style(word))
+          ..words
+            // parse each word for auto judges
+            .map(format-judges.with(auto-judges: auto-judges))
+            // apply corresponding styling to each word
+            .zip(styles)
+            .map(((word, style)) => style(word))
         )
       )
       h(word-spacing)
@@ -37,6 +43,10 @@
 /// - body (content): Any number of rows of equal length. Rows can be either contents where elements are separated by one or more spaces, or lists.
 ///
 ///   *Required*
+///
+/// - auto-judges (dictionary): A dictionary of characters to convert into judges (keys) and whether to superscript them (values).
+///
+///   *Default*: ("*": false, "#": true, "?": true, "OK": true)
 ///
 /// - word-spacing (length): Horizontal spacing between words in glosses.
 ///
@@ -72,6 +82,15 @@
 
   fields: (
     e.field("body", array, required: true, doc: "Any number of rows of equal length. Rows can be either contents where elements are separated by more than one space or lists."),
+
+    // accept lists for legacy support of ()
+    e.field("auto-judges", e.types.union(dictionary, array), default: (
+      "*": false,
+      "#": true,
+      "?": true,
+      "OK": true,
+    ), folds: false, doc: "A dictionary of characters to convert into judges (keys) and whether to superscript them (values)."),
+
     e.field("word-spacing", length, default: 1em, doc: "Horizontal spacing between words in glosses."),
     e.field("line-spacing", auto-length, doc: "Vertical spacing between lines in glosses. Defaults to `par.leading`."),
     e.field("before-spacing", auto-length, doc: "Vertical spacing above glosses (i.e. after the preamble). Defaults to `par.leading`."),
@@ -131,6 +150,7 @@
     build-gloss-grid(
       elem.body,
       styles: styles,
+      auto-judges: elem.auto-judges,
       before-spacing: (elem.get-before-spacing)(),
       after-spacing: (elem.get-after-spacing)(),
       line-spacing: (elem.get-line-spacing)(),

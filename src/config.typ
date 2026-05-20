@@ -224,6 +224,8 @@
   )
 
   let gloss-fields = (
+    ("auto-judges", auto-judges),
+
     ("word-spacing", gloss-word-spacing),
     ("line-spacing", gloss-line-spacing),
     ("before-spacing", gloss-before-spacing),
