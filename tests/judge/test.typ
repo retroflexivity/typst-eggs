@@ -3,6 +3,14 @@
 #show: eggs
 
 #example[
+  OK correct
+]
+
+#example[
+  \*incorrect
+]
+
+#example[
   + OK correct
   + \*incorrect
   + ?question
@@ -10,10 +18,22 @@
 ]
 
 #example[
-  + #judge[OK] correct
+  + #judge[#super[OK]]correct
   + #judge[\*]incorrect
-  + #judge[?]question
-  + #judge[\#]infelicitous
+  + #judge[#super[?]]question
+  + #judge[#super[\#]]infelicitous
+]
+
+#example[
+  + _what_? *umm* OK
+  + ?\# complex judge
+  + \*OK also complex judge
+  + \* OK and this is a simple judge
+]
+
+#example[
+  - \*(gloss) lines should be ?fine
+  - gloss lines should be _fine_?
 ]
 
 #show: eggs.with(
