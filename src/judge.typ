@@ -21,7 +21,7 @@
 // returns the pair (judge list, tail)
 #let parse-judges(children, judges) = {
   if children.len() == 0 {
-    return []
+    return ((), [])
   }
   let head = children.first()
   if (
