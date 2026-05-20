@@ -47,4 +47,25 @@
   text-split.flatten().split(separator).filter(it => it != ()).map([].func())
 }
 
+// given a sequence,
+// remove the initial space element
+// or any initial spaces from the first element
+#let trim-space(it) = {
+  if type(it) == content {
+    let (head, tail) = if it.has("children") {
+      (it.children.first(), it.children.slice(1).join())
+    } else {
+      (it, [])
+    }
+    if type(head) == content {
+      if head.func() == [ ].func() {
+        return tail
+      } else if head.func() == text {
+        return text(head.text.trim(at: start)) + tail
+      }
+    }
+  }
+  return it
+}
+
 #let prefix = "eggs07"

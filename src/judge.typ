@@ -1,3 +1,4 @@
+#import "utils.typ": trim-space
 /// Typesets the content, then adds negative space
 /// of the length of this content.
 /// Used to add a judge to the left of a text.
@@ -12,33 +13,64 @@
 ) = [#context(h(-measure(j).width))#j]
 
 
-  // show selected initial characters as corresponding judges
+// given a list of content and a list of judges,
+// recursively walk through a list of contents,
+// checking if the first child is text and
+// is equal to or starts with a judge,
+// returning the tail once it is not.
+// returns the pair (judge list, tail)
+#let parse-judges(children, judges) = {
+  if children.len() == 0 {
+    return []
+  }
+  let head = children.first()
+  if (
+    type(head) == content and
+    head.has("text")
+  ) {
+    let t = head.text
+    let j = judges.find(it => t.starts-with(it))
+
+    if j != none {
+      // a judge at the beginning
+
+      let (js, tail) = if t == j {
+        // whole child is a judge
+        parse-judges(children.slice(1), judges)
+      } else {
+        // beginning of child is a judge
+        parse-judges(
+          (text(t.trim(j, at: start)),) + children.slice(1),
+          judges
+        )
+      }
+      return ((j,) + js, tail)
+
+    }
+  }
+  // no judge at the beginning ---
+  // stopping and returning as is,
+  // trimming initial spaces
+  return ((), trim-space(children.join()))
+}
+
+// show selected initial characters as corresponding judges
 #let format-judges(body, auto-judges: (:)) = {
   if auto-judges.len() == 0 {
     return body
   }
   assert(type(auto-judges) == dictionary, message: "`auto-judges` must be a dictionary")
 
-  let (head, tail) = if type(body) == content and body.has("children") {
-    let head-ix = body.children.position(it => it != [ ])
-    (body.children.at(head-ix), body.children.slice(head-ix + 1))
-  } else {
-    (body, ([],))
-  }
+  let children = body.at("children", default: (body,))
+  let (js, tail) = parse-judges(
+    // remove initial spaces
+    children.slice(children.position(it => it != [ ])),
+    auto-judges.keys()
+  )
 
-  if type(head) != content or head.func() not in (text, [\*].func()) {
-    return {head; tail.join()}
+  // print judges (if present)
+  if js != () {
+    judge(js.map(j => if auto-judges.at(j) {super(j)} else {j}).join())
   }
-
-  let escape-special-characters(s) = s.replace(regex("[-\[\]{}()+*?.,^$|\\s]"), c => "\\" + c.text)
-  let judge-regex(a) = regex("^(" + a.map(escape-special-characters).join("|") + ")+ ?")
-  {
-    show judge-regex(auto-judges.keys()): it => {
-      show " ": ""
-      show judge-regex(auto-judges.keys().filter(key => auto-judges.at(key)) + ("emptyfiller",)): super
-      judge(it)
-    }
-    (head)
-  }
-  tail.join()
+  tail
 }
