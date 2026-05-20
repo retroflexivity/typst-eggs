@@ -30,7 +30,7 @@
 ///
 /// - auto-judges (dictionary): A dictionary of characters to convert into judges (keys) and whether to superscript them (values).
 ///
-///   *Default*: ("*": false, "#": true, "?": true, "OK": true)
+///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
 ///
 /// - subexample-wrapper (function): A function to wrap the subexample list. Should accept any number of arguments and return content. E.g. to align your subexamples horizontally, pass `grid.with(columns: 5)`. Only works for automatic examples.
 ///
