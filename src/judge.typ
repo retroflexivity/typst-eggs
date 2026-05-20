@@ -56,7 +56,11 @@
 
 // show selected initial characters as corresponding judges
 #let format-judges(body, auto-judges: (:)) = {
-  if auto-judges.len() == 0 {
+  // no auto judges or not a text (sequence): skip
+  if (
+    auto-judges.len() == 0
+    or (body.has("children") and body.func() != [\*?].func())
+  ) {
     return body
   }
   assert(type(auto-judges) == dictionary, message: "`auto-judges` must be a dictionary")

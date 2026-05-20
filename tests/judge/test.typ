@@ -36,6 +36,8 @@
   - gloss lines should be _fine_?
 ]
 
+#example[#grid(columns: (5em, 5em, 5em), [not], [a], [text])]
+
 #show: eggs.with(
   auto-judges: (:)
 )
