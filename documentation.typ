@@ -209,7 +209,7 @@ Glosses can by typeset manually with `gloss`. It accepts either a content, which
 
 = Judges
 
-Certain strings at the beginning of a line or a gloss word (see @glosses) are automatically transformed into left judges.#footnote[In fact, due to the way show rules work, this happens at the beginning of any elements inside examples, including inline ones. This might overgenerate left judges in certain narrow cases like in ```typst this one _?here_```. Disable auto judges if it is a problem.] Left judges are negatively padded strings that take up no space.
+Certain strings at the beginning of a line or a gloss word (see @glosses) are automatically transformed into left judges. Left judges are negatively padded strings that take up no space.
 
 By default, such strings are `*`, `#`, `?`, `OK`, and all combinations of these. All except the asterisk are also superscripted. Spaces after a judge are omitted for readability.
 
@@ -223,11 +223,12 @@ By default, such strings are `*`, `#`, `?`, `OK`, and all combinations of these.
   ```
 )
 
-This can be modified by tweaking `auto-judges` in the config (see @customization) or by passing the `auto-judges` argument to an example directly. `auto-judges` takes a dictionary where keys are the strings to treat as judges and values indicate whether to additionally superscript them. For instance, if you would like to make hashes and question marks non-superscripted, try ```typst auto-judges: ("\*": false, "\#": false, "?": false, "OK": true)```. Use `auto-judges: ()` to disable the automatic conversion completely.
+This can be modified by tweaking `auto-judges` in the config (see @customization) or by passing it to an example directly. `auto-judges` takes a dictionary where keys are the strings to treat as judges and values indicate whether to additionally superscript them. For instance, if you would like to make hashes and question marks non-superscripted, try ```typc auto-judges: ("*": false, "#": false, "?": false, "OK": true)```. Use `auto-judges: (:)` to disable the automatic conversion completely.
 
-Again, a function `judge` is provided to typeset judges manually. Following spaces are *not* omitted.
+Again, a function `judge` is provided to typeset judges manually. These should be superscripted manually, too, and following spaces are not omitted.
 
-#counter("eggsample").update(4)
+#counter("eggsample").update(5)
+
 #code-ex(
   ```typst
   The following pair shows the information-structural rigidity of specificational sentences.
@@ -237,8 +238,6 @@ Again, a function `judge` is provided to typeset judges manually. Following spac
   ]
   ```
 )
-
-#nb[Avoid using `judge` with strings that are already in `auto-judges`, as this can lead to superscript doubling.]
 
 = Abbreviations
 
