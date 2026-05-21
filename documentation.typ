@@ -1,7 +1,7 @@
 #set document(title: "typst eggs documentation")
 #let version = "0.8.0"
 
-#import "eggs.typ": abbreviations, example, gloss, judge, subexample, eggs, abbreviation, print-abbreviations, ex-label, ex-ref
+#import "eggs.typ": abbreviations, example, gloss, judge, trailing, subexample, eggs, abbreviation, print-abbreviations, ex-label, ex-ref
 #import "@preview/tidy:0.4.3"
 
 #show: eggs
@@ -26,7 +26,7 @@
       #eval(
         text,
         mode: "markup",
-        scope: (eggs: eggs, example: example, gloss: gloss, subexample: subexample, judge: judge, abbreviations: abbreviations, abbreviation: abbreviation, print-abbreviations: print-abbreviations, ex-label: ex-label, ex-ref: ex-ref)
+        scope: (eggs: eggs, example: example, gloss: gloss, subexample: subexample, judge: judge, trailing: trailing, abbreviations: abbreviations, abbreviation: abbreviation, print-abbreviations: print-abbreviations, ex-label: ex-label, ex-ref: ex-ref)
       )
     ]}
   ]
@@ -346,6 +346,24 @@ A dedicated function, `ex-ref`, is also provided. It accepts from 1 to 2 referen
 
 `smart-refs: false` can be passed to the configuration to disable automatic reference decoration.
 
+= Trailing citations#footnote[The naming is borrowed from `expex`.]
+
+A simple function `trailing` allows printing content at the end of a line, moving it to the next line if it does not fit. This is how sources and comments are usually typeset in linguistic examples.
+
+#code-ex(
+  ```typst
+  #example[
+    + Jones is a Jones.#trailing[(Burge 1973)]
+    + This entity called 'John J. Jones Jr.' is necessarily an entity called 'John J. Jones Jr.'.\ #trailing[(Burge 1973, adapted to make the line even longer)]
+  ]
+  ```
+)
+
+The function accepts the `gap` parameter for customizing the minimum space allowed between the end of a line and the trailing content. The larger the gap, the more often the content will move to the next line. The default is ```typc 1.5em```.
+
+#nb[The function does not support gloss lines. If you need to align some content to the right of interlinear glosses, please use a grid.]
+
+
 = Customization <customization>
 
 Eggs offers some layout and styling customization and several behaviour options. The complete list is given in @funcs.
@@ -474,7 +492,7 @@ A more sophisticated function can include splitting the content automatically an
 
 == Hide elements and pad under brackets in glosses
 
-When typesetting glosses, it's common that you need to put a bracket next to the following word with no tabulation between them, but align the other lines with the *word*, not the bracket.#footnote[`expex` uses `@` and `\nogloss` for this.]
+When typesetting glosses, it's common that you need to put a bracket next to the following word with no tabulation between them, but align the other lines with the word, not the bracket.#footnote[`expex` uses `@` and `\nogloss` for this.]
 
 A clean way to do this is to add a hidden printed bracket with the built-in #link("https://typst.app/docs/reference/layout/hide/")[hide].
 
@@ -498,23 +516,6 @@ In other cases, you may want to skip a word in some gloss line that is present i
     ]
   ```
 )
-
-== Float attributions and other text right
-
-Conventionally in linguistic examples, attributions are typeset as right-aligned text on the same line as the rest of the gloss. Adding #link("https://typst.app/docs/reference/layout/fraction/")[`1fr`] of #link("https://typst.app/docs/reference/layout/h/")[horizontal spacing] (100% of the available width) before an attribution will right-align it.
-
-If the line is too long and the attribution doesn't fit, insert a linebreak before it.
-
-#code-ex(
-  ```typst
-  #example[
-    + Jones is a Jones.#h(1fr) (Burge 1973)
-    + This entity called 'John J. Jones Jr.' is necessarily an entity called 'John J. Jones Jr.'.\ #h(1fr) (Burge 1973, adapted to make the line even longer)
-  ]
-  ```
-)
-
-#nb[This method does not work on gloss lines.]
 
 == Number examples by chapter
 
