@@ -518,9 +518,9 @@ If the line is too long and the attribution doesn't fit, insert a linebreak befo
 
 == Number examples by chapter
 
-Package #link("https://typst.app/universe/package/headcount")[headcount] provides graceful numbering dependent on current chapter. However, due to a #link("https://github.com/jbirnick/typst-headcount/issues/5")[bug], we need to tweak the definition of its `dependent-numbering` a bit.
+Package #link("https://typst.app/universe/package/headcount")[headcount] provides graceful numbering dependent on current chapter.
 
-Unfortunately, using `ex-ref` (and smart refs) with headcount is currently broken with cross-chapter references. This will probably be fixed when the next release of Elembic is dropped. For now, use \@-refs with `smart-refs` off.
+Unfortunately, using `ex-ref` (and smart refs) with Headcount is currently broken with cross-chapter references. This will probably be fixed when the next release of Elembic is dropped. For now, use \@-refs with `smart-refs` off.
 
 #context {
   show heading: set text(size: 0.8em)
@@ -531,10 +531,7 @@ Unfortunately, using `ex-ref` (and smart refs) with headcount is currently broke
   code-ex(
     ```typst
     #import "@preview/elembic:1.1.1" as e
-    #import "@preview/headcount:0.1.0": *
-
-    // tweak the definition
-    #let dependent-numbering(style, levels: 1) = (..ns) => numbering(style, ..normalize-length(counter(heading).get(), levels), ..ns.pos())
+    #import "@preview/headcount:0.1.1": *
 
     #show: eggs.with(
       smart-refs: false,
