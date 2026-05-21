@@ -80,8 +80,7 @@ Contributions are much welcome, too.
 
 TODO:
 - Smarter gloss line styling;
-- Figure out how to modify spacing between examples specifically;
-- `\trailingcitation`.
+- Figure out how to modify spacing between examples specifically.
 
 ## License
 
