@@ -346,7 +346,7 @@ A dedicated function, `ex-ref`, is also provided. It accepts from 1 to 2 referen
 
 `smart-refs: false` can be passed to the configuration to disable automatic reference decoration.
 
-= Trailing citations#footnote[The naming is borrowed from `expex`.]
+= Trailing citations
 
 A simple function `trailing` allows printing content at the end of a line, moving it to the next line if it does not fit. This is how sources and comments are usually typeset in linguistic examples.
 
