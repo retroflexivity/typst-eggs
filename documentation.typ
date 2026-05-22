@@ -359,7 +359,7 @@ A simple function `trailing` allows printing content at the end of a line, movin
   ```
 )
 
-The function accepts the `gap` parameter for customizing the minimum space allowed between the end of a line and the trailing content. The larger the gap, the more often the content will move to the next line. The default is ```typc 1.5em```.
+The function accepts the `gap` parameter for customizing the minimum space allowed between the end of the line and the trailing content. The larger the gap, the more often the content will move to the next line. The default is ```typc 1.5em```.
 
 #nb[The function does not support gloss lines. If you need to align some content to the right of interlinear glosses, please use a grid.]
 
