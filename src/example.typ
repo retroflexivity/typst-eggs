@@ -188,7 +188,7 @@
       "OK": true,
     ), folds: false, doc: "A dictionary of characters to convert into judges (keys) and whether to superscript them (values)."),
 
-    e.field("indent", length, default: 0em, doc: "Distance between the the left edge of the top-level example body and the left edge of the subexample number."),
+    e.field("indent", length, default: 0em, doc: "Distance between the left edge of the top-level example body and the left edge of the subexample number."),
     e.field("body-indent", length, default: 1.5em, doc: "Distance between the left edge of the subexample marker and the left edge of the subexample body."),
     e.field("spacing", auto-length, default: auto, doc: "Vertical spacing around the subexample. Currently, there is no way to modify spacing between two subexamples specifically."),
     e.field("breakable", bool, default: false, doc: "Whether the subexample figure is breakable."),
