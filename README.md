@@ -26,7 +26,7 @@ Below is an example of how to typeset an example.
 
 ### Basics
 
-Start with applying the global show rule. The central function is `example`, which typesets an example. Inside it, auto-numbered lists (`+`) are treated as subexamples, and bullet lists (`-`) as interlinear gloss lines. **Words in glosses must be separated by two or more spaces**.
+Start with applying the global show rule. The central function is `example`, which typesets an example. Inside it, auto-numbered lists (`+`) are treated as subexamples, and bullet lists (`-`) as interlinear gloss lines.
 
 This automatic conversion can be toggled off by passing `auto-subexamples: false` and `auto-glosses: false` to `example`, like this:
 
