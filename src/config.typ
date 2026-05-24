@@ -137,6 +137,10 @@
 ///
 ///   *Default*: current `par.leading`.
 ///
+/// - gloss-hanging-indent (length): Horizontal spacing before wrapped gloss lines.
+///
+///   *Default*: 1em
+///
 /// - gloss-styles (array): List of functions to be applied to each line of glosses.
 ///   Can be of any length. `gloss-styles[0]` is applied to the first line,
 ///   `gloss-styles[1]` --- to the second, etc.
@@ -175,6 +179,7 @@
   gloss-line-spacing: auto,
   gloss-before-spacing: auto,
   gloss-after-spacing: auto,
+  gloss-hanging-indent: auto,
   gloss-styles: auto,
 ) = {
   show: e.prepare()
@@ -230,6 +235,7 @@
     ("line-spacing", gloss-line-spacing),
     ("before-spacing", gloss-before-spacing),
     ("after-spacing", gloss-after-spacing),
+    ("hanging-indent", gloss-hanging-indent),
     ("styles", gloss-styles),
   )
 
