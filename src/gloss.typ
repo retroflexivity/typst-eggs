@@ -3,8 +3,7 @@
 #import "judge.typ": format-judges
 #import "utils.typ": auto-length, prefix, gen-get-function, split-content
 
-// take a martix of words
-// and assemble it into a gloss grid
+// take a matrix of words and assemble it into a gloss grid
 #let build-gloss-grid(
   lines,
   styles: (),
@@ -13,28 +12,31 @@
   after-spacing: auto,
   line-spacing: auto,
   word-spacing: auto,
+  hanging-spacing: auto,
 ) = {
   let length = lines.at(0).len()
   block(
     above: before-spacing,
     below: after-spacing,
 
-    // turn list of lines into list of columns
-    lines.at(0).zip(..lines.slice(1))
-    .map(words => {
-      box(
-        grid(
-          row-gutter: line-spacing,
-          ..words
-            // parse each word for auto judges
-            .map(format-judges.with(auto-judges: auto-judges))
-            // apply corresponding styling to each word
-            .zip(styles)
-            .map(((word, style)) => style(word))
+    par(hanging-indent: hanging-spacing,
+      // turn list of lines into list of columns
+      lines.at(0).zip(..lines.slice(1))
+      .map(words => {
+        box(
+          grid(
+            row-gutter: line-spacing,
+            ..words
+              // parse each word for auto judges
+              .map(format-judges.with(auto-judges: auto-judges))
+              // apply corresponding styling to each word
+              .zip(styles)
+              .map(((word, style)) => style(word))
+          )
         )
-      )
-      h(word-spacing)
-    }).join()
+        h(word-spacing)
+      }).join()
+    )
   )
 }
 
@@ -49,6 +51,10 @@
 ///   *Default*: ("\*": false, "\#": true, "?": true, "OK": true)
 ///
 /// - word-spacing (length): Horizontal spacing between words in glosses.
+///
+///   *Default*: 1em
+///
+/// - hanging-spacing (length): Horizontal spacing before wrapped gloss lines (i.e. a hanging indent).
 ///
 ///   *Default*: 1em
 ///
@@ -92,6 +98,7 @@
     ), folds: false, doc: "A dictionary of characters to convert into judges (keys) and whether to superscript them (values)."),
 
     e.field("word-spacing", length, default: 1em, doc: "Horizontal spacing between words in glosses."),
+    e.field("hanging-spacing", length, default: 1em, doc: "Horizontal spacing before wrapped gloss lines (i.e. a hanging indent)."),
     e.field("line-spacing", auto-length, doc: "Vertical spacing between lines in glosses. Defaults to `par.leading`."),
     e.field("before-spacing", auto-length, doc: "Vertical spacing above glosses (i.e. after the preamble). Defaults to `par.leading`."),
     e.field("after-spacing", auto-length, doc: "Vertical spacing below glosses (i.e. before the translation). Defaults to `par.leading`."),
@@ -118,7 +125,7 @@
     it,
     ("line-spacing", par.leading),
     ("before-spacing", par.leading),
-    ("after-spacing", par.leading)
+    ("after-spacing", par.leading),
   ),
 
   // split content lines into word arrays.
@@ -154,6 +161,7 @@
       before-spacing: (elem.get-before-spacing)(),
       after-spacing: (elem.get-after-spacing)(),
       line-spacing: (elem.get-line-spacing)(),
+      hanging-spacing: elem.hanging-spacing,
       word-spacing: elem.word-spacing,
     )
   }
