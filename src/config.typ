@@ -129,6 +129,10 @@
 ///
 ///   *Default*: current `par.leading`.
 ///
+/// - gloss-hanging-spacing (length): Horizontal spacing before wrapped gloss lines (i.e. a hanging indent).
+///
+///   *Default*: 1em
+///
 /// - gloss-before-spacing (length): Vertical spacing above glosses (i.e. after the preamble).
 ///
 ///   *Default*: current `par.leading`.
@@ -173,6 +177,7 @@
   sub-label-supplement: auto,
   gloss-word-spacing: auto,
   gloss-line-spacing: auto,
+  gloss-hanging-spacing: auto,
   gloss-before-spacing: auto,
   gloss-after-spacing: auto,
   gloss-styles: auto,
@@ -228,6 +233,7 @@
 
     ("word-spacing", gloss-word-spacing),
     ("line-spacing", gloss-line-spacing),
+    ("hanging-spacing", gloss-hanging-spacing),
     ("before-spacing", gloss-before-spacing),
     ("after-spacing", gloss-after-spacing),
     ("styles", gloss-styles),
