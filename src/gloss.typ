@@ -3,8 +3,7 @@
 #import "judge.typ": format-judges
 #import "utils.typ": auto-length, prefix, gen-get-function, split-content
 
-// take a martix of words
-// and assemble it into a gloss grid
+// take a matrix of words and assemble it into a gloss grid
 #let build-gloss-grid(
   lines,
   styles: (),
@@ -13,28 +12,31 @@
   after-spacing: auto,
   line-spacing: auto,
   word-spacing: auto,
+  hanging-indent: auto,
 ) = {
   let length = lines.at(0).len()
   block(
     above: before-spacing,
     below: after-spacing,
 
-    // turn list of lines into list of columns
-    lines.at(0).zip(..lines.slice(1))
-    .map(words => {
-      box(
-        grid(
-          row-gutter: line-spacing,
-          ..words
-            // parse each word for auto judges
-            .map(format-judges.with(auto-judges: auto-judges))
-            // apply corresponding styling to each word
-            .zip(styles)
-            .map(((word, style)) => style(word))
+    par(hanging-indent: hanging-indent,
+      // turn list of lines into list of columns
+      lines.at(0).zip(..lines.slice(1))
+      .map(words => {
+        box(
+          grid(
+            row-gutter: line-spacing,
+            ..words
+              // parse each word for auto judges
+              .map(format-judges.with(auto-judges: auto-judges))
+              // apply corresponding styling to each word
+              .zip(styles)
+              .map(((word, style)) => style(word))
+          )
         )
-      )
-      h(word-spacing)
-    }).join()
+        h(word-spacing)
+      }).join()
+    )
   )
 }
 
@@ -63,6 +65,10 @@
 /// - after-spacing (length): Vertical spacing below glosses (i.e. before the translation).
 ///
 ///   *Default*: current `par.leading`.
+///
+/// - hanging-indent (length): Horizontal spacing before wrapped gloss lines.
+///
+///   *Default*: 1em
 ///
 /// - styles (array): List of functions to be applied to each line of glosses.
 ///   Can be of any length. `gloss-styles[0]` is applied to the first line,
@@ -95,6 +101,7 @@
     e.field("line-spacing", auto-length, doc: "Vertical spacing between lines in glosses. Defaults to `par.leading`."),
     e.field("before-spacing", auto-length, doc: "Vertical spacing above glosses (i.e. after the preamble). Defaults to `par.leading`."),
     e.field("after-spacing", auto-length, doc: "Vertical spacing below glosses (i.e. before the translation). Defaults to `par.leading`."),
+    e.field("hanging-indent", length, default: 1em, doc: "Horizontal spacing before wrapped gloss lines."),
     e.field("styles", array, doc: "List of functions to be applied to each line of glosses. Can be of any length. `gloss-styles[0]` is applied to the first line, `gloss-styles[1]` --- to the second, etc. E.g. ```typst (emph, it => it + [.])``` makes the first line italicized and adds a period to the second line."),
 
     e.field("get-line-spacing", function, synthesized: true, default: () => par.leading),
@@ -155,6 +162,7 @@
       after-spacing: (elem.get-after-spacing)(),
       line-spacing: (elem.get-line-spacing)(),
       word-spacing: elem.word-spacing,
+      hanging-indent: elem.hanging-indent,
     )
   }
 )
