@@ -126,15 +126,14 @@
   // so we must do all the validation here
   construct: constructor => (..args) => {
     // ISSUE: we can't control whether split happens on single spaces
-    // using a show rule,
-    // because we do that in the constructor
+    // using a show rule, because we do that in the constructor
     let lines = args.pos().map(split-content)
     assert(lines.len() > 0, message: "at least one gloss line must be present")
 
     // guard against invalid line lengths
     let length = lines.at(0).len()
     for line in lines {
-      assert(line.len() == length, message: "gloss lines have different lengths.\ntip: make sure that spaces you don't want to split on are non-breakable (`~`)")
+      assert(line.len() == length, message: "gloss lines have different lengths")
     }
 
     constructor(..lines, ..args.named())
