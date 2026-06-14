@@ -68,8 +68,9 @@
     it
   }
 
-  grid(columns: (elem.indent, elem.body-indent, 1fr),
-    [], numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, show-with-autos(elem)))
+  block(inset: (left: elem.indent),
+    grid(columns: (elem.body-indent, 1fr),
+      numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, show-with-autos(elem))))
 }
 
 /// Second-level linguistic subexample. Only intended for use inside an example.
@@ -256,8 +257,9 @@
     it
   }
 
-  grid(columns: (elem.indent, elem.body-indent, 1fr),
-    [], numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, show-with-autos(elem)))
+  block(inset: (left: elem.indent),
+    grid(columns: (elem.body-indent, 1fr),
+      numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, example-body)))
 }
 
 /// Top-level linguistic example.
