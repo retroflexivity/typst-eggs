@@ -40,35 +40,13 @@
 )
 
 
-// assemble the example
-#let build-example(
-  elem,
-  // use recursion with early binding
-  // per https://github.com/typst/typst/issues/744#issuecomment-2343319015
-  subexample-func: none,
-  number: none,
-  level: 0,
-  kind: none
-) = {
-
-  // turn a list into subexamples
-  let into-subexamples(enabled, level: 0, subexample-wrapper: none, parent-number: none, parent-label: none) = it => {
-    if enabled {
-      subexample-wrapper(
-        ..it.children.map(item => {
-          subexample-func(
-            item.body,
-            _parent-number: parent-number,
-            _parent-label: parent-label,
-          )
-        })
-      )
-    } else {
-      it
-    }
+#let build-subexample(elem) = {
+  let number = if elem.number != none {
+    elem.number
+  } else {
+    elem._counter.get().at(1) // the subexample counter is at level 1
   }
 
-  // turn a list into glosses
   let into-glosses(enabled) = it => {
     if enabled {
       gloss(..it.children.map(it => it.body))
@@ -77,14 +55,8 @@
     }
   }
 
-  let show-with-autos(elem, level: 0, parent-number: none, parent-label: none) = {
-    show enum: into-subexamples(
-      elem.auto-subexamples,
-      level: 0,
-      subexample-wrapper: elem.at("subexample-wrapper", default: "none"),
-      parent-number: parent-number,
-      parent-label: parent-label
-    )
+  let show-with-autos(elem) = {
+    // note that subexamples can never have subexamples themselves
     show list: into-glosses(elem.auto-glosses)
     format-judges(elem.body, auto-judges: elem.auto-judges)
   }
@@ -96,22 +68,8 @@
     it
   }
 
-  grid(
-    columns: (elem.indent, elem.body-indent, 1fr),
-    [],
-    numbering(
-      elem.num-pattern,
-      if elem.number != none { elem.number } else { elem._counter.get().at(level) }
-    ),
-    grid.cell(
-      show-with-autos(
-        elem,
-        level: level,
-        parent-number: elem.at("number", default: none),
-        parent-label: if elem.auto-subexamples and elem.auto-labels { elem.at("label", default: none) } else { none }
-      ),
-      breakable: elem.breakable),
-  )
+  grid(columns: (elem.indent, elem.body-indent, 1fr),
+    [], numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, show-with-autos(elem)))
 }
 
 /// Second-level linguistic subexample. Only intended for use inside an example.
@@ -192,7 +150,7 @@
     e.field("body-indent", length, default: 1.5em, doc: "Distance between the left edge of the subexample marker and the left edge of the subexample body."),
     e.field("spacing", auto-length, default: auto, doc: "Vertical spacing around the subexample. Currently, there is no way to modify spacing between two subexamples specifically."),
     e.field("breakable", bool, default: false, doc: "Whether the subexample figure is breakable."),
-    
+
     e.field("num-pattern", e.types.union(str, function), default: "a.", doc: "Subexample number format."),
     e.field("ref-pattern", e.types.union(str, function), default: "1a", doc: "Example reference format (without brackets). A 2-level numbering pattern."),
     e.field("second-sub-ref-pattern", str, default: "a", doc: "Format to reference the second argument of `ex-ref` if it is a subexample. A 1-level numbering pattern."),
@@ -204,7 +162,7 @@
     e.field("auto-subexamples", bool, synthesized: true),
     e.field("get-spacing", function, synthesized: true, default: () => par.leading)
   ),
-  
+
   construct: constructor => (..args) => {
     if args.named().at("label", default: none) != none {
       constructor(..args)
@@ -253,12 +211,58 @@
     }
   ),
 
-  display: it => build-example(
-    it,
-    level: 1,
-  )
+  display: it => build-subexample(it)
 )
 
+
+#let build-example(elem) = {
+  let number = if elem.number != none {
+    elem.number
+  } else {
+    elem._counter.get().at(0) // the example counter is at level 0
+  }
+
+  let into-subexamples(enabled, subexample-wrapper: none, parent-number: none, parent-label: none) = it => {
+    if enabled {
+      subexample-wrapper(..it.children.map(item =>
+        subexample(item.body, _parent-number: parent-number, _parent-label: parent-label)))
+    } else {
+      it
+    }
+  }
+
+  let into-glosses(enabled) = it => {
+    if enabled {
+      gloss(..it.children.map(it => it.body))
+    } else {
+      it
+    }
+  }
+
+  let show-with-autos(elem) = {
+    show enum: into-subexamples(elem.auto-subexamples,
+      subexample-wrapper: elem.at("subexample-wrapper", default: none),
+      parent-number: elem.at("number", default: none),
+      parent-label: if elem.auto-subexamples and elem.auto-labels {
+        elem.at("label", default: none)
+      } else {
+        none
+      }
+    )
+    show list: into-glosses(elem.auto-glosses)
+
+    format-judges(elem.body, auto-judges: elem.auto-judges)
+  }
+
+  show: it => {
+    set block(spacing: (elem.get-spacing)())
+    set grid(row-gutter: (elem.get-spacing)())
+    it
+  }
+
+  grid(columns: (elem.indent, elem.body-indent, 1fr),
+    [], numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, show-with-autos(elem)))
+}
 
 /// Top-level linguistic example.
 ///
@@ -382,9 +386,5 @@
     )
   ),
 
-  display: it => build-example(
-    subexample-func: subexample,
-    it,
-    level: 0,
-  )
+  display: it => build-example(it)
 )
