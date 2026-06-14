@@ -68,9 +68,16 @@
     it
   }
 
-  block(inset: (left: elem.indent),
-    grid(columns: (elem.body-indent, 1fr),
-      numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, show-with-autos(elem))))
+  // if we're targeting html... what's important are semantic notions, not rendering specifics.
+  // so we consider a subexample to be an `<li>` (within an `<ol>` of some example).
+  if "html" in dictionary(std) and target() == "html" {
+    html.elem("li", attrs: (class: "subeggsample", value: str(number)),
+      show-with-autos(elem))
+  } else {
+    block(inset: (left: elem.indent),
+      grid(columns: (elem.body-indent, 1fr),
+        numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, show-with-autos(elem))))
+  }
 }
 
 /// Second-level linguistic subexample. Only intended for use inside an example.
@@ -257,9 +264,18 @@
     it
   }
 
-  block(inset: (left: elem.indent),
-    grid(columns: (elem.body-indent, 1fr),
-      numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, example-body)))
+  // if we're targeting html... what's important are semantic notions, not rendering specifics.
+  // so we consider an example to be an `<li>`, within a singleton `<ol>`.
+  // this `<li>` contains an `<ol>`, which may possibly contain `<li>` subexamples.
+  if "html" in dictionary(std) and target() == "html" {
+    html.elem("ol", attrs: (class: "eggsample"),
+      html.elem("li", attrs: (value: str(number)),
+        html.elem("ol", show-with-autos(elem))))
+  } else {
+    block(inset: (left: elem.indent),
+      grid(columns: (elem.body-indent, 1fr),
+        numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, show-with-autos(elem))))
+  }
 }
 
 /// Top-level linguistic example.
