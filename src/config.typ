@@ -137,6 +137,10 @@
 ///
 ///   *Default*: current `par.leading`.
 ///
+/// - gloss-leading (length): Vertical spacing between between blocks of (wrapped) glosses.
+///
+///   *Default*: current `par.leading`.
+///
 /// - gloss-hanging-indent (length): Horizontal spacing before wrapped gloss lines.
 ///
 ///   *Default*: 1em
@@ -179,6 +183,7 @@
   gloss-line-spacing: auto,
   gloss-before-spacing: auto,
   gloss-after-spacing: auto,
+  gloss-leading: auto,
   gloss-hanging-indent: auto,
   gloss-styles: auto,
 ) = {
@@ -235,6 +240,7 @@
     ("line-spacing", gloss-line-spacing),
     ("before-spacing", gloss-before-spacing),
     ("after-spacing", gloss-after-spacing),
+    ("leading", gloss-leading),
     ("hanging-indent", gloss-hanging-indent),
     ("styles", gloss-styles),
   )

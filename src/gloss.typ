@@ -12,6 +12,7 @@
   after-spacing: auto,
   line-spacing: auto,
   word-spacing: auto,
+  leading: auto,
   hanging-indent: auto,
 ) = {
   let length = lines.at(0).len()
@@ -19,7 +20,7 @@
     above: before-spacing,
     below: after-spacing,
 
-    par(hanging-indent: hanging-indent,
+    par(hanging-indent: hanging-indent, leading: leading,
       // turn list of lines into list of columns
       lines.at(0).zip(..lines.slice(1))
       .map(words => {
@@ -66,6 +67,10 @@
 ///
 ///   *Default*: current `par.leading`.
 ///
+/// - leading (length): Vertical spacing between between blocks of (wrapped) glosses.
+///
+///   *Default*: current `par.leading`.
+///
 /// - hanging-indent (length): Horizontal spacing before wrapped gloss lines.
 ///
 ///   *Default*: 1em
@@ -101,6 +106,7 @@
     e.field("line-spacing", auto-length, doc: "Vertical spacing between lines in glosses. Defaults to `par.leading`."),
     e.field("before-spacing", auto-length, doc: "Vertical spacing above glosses (i.e. after the preamble). Defaults to `par.leading`."),
     e.field("after-spacing", auto-length, doc: "Vertical spacing below glosses (i.e. before the translation). Defaults to `par.leading`."),
+    e.field("leading", auto-length, doc: "Vertical spacing between between blocks of (wrapped) glosses. Defaults to `par.leading`."),
     e.field("hanging-indent", length, default: 1em, doc: "Horizontal spacing before wrapped gloss lines."),
     e.field("styles", array, doc: "List of functions to be applied to each line of glosses. Can be of any length. `gloss-styles[0]` is applied to the first line, `gloss-styles[1]` --- to the second, etc. E.g. ```typst (emph, it => it + [.])``` makes the first line italicized and adds a period to the second line."),
 
@@ -161,6 +167,7 @@
       before-spacing: (elem.get-before-spacing)(),
       after-spacing: (elem.get-after-spacing)(),
       line-spacing: (elem.get-line-spacing)(),
+      leading: (elem.leading)(),
       word-spacing: elem.word-spacing,
       hanging-indent: elem.hanging-indent,
     )
