@@ -24,13 +24,28 @@
     .zip(styles)
     .map(((word, style)) => style(word))
 
-  block(above: before-spacing, below: after-spacing,
-    par(hanging-indent: hanging-indent, leading: leading,
-      for words in gloss-units(lines) { // note: this is a joining `for`, loop results are appended together
-        box(grid(row-gutter: line-spacing, ..style-units(words, styles))) + h(word-spacing)
-      }
+  // if we're targeting html, we compile glosses to `<table>`, since we're giving a semantic representation.
+  if "html" in dictionary(std) and target() == "html" {
+    html.elem("table", attrs: (class: "gloss", style: "border-spacing: 1em 0;"),
+      html.elem("tbody",
+        for words in lines { // note: this is a joining `for`, loop results are appended together
+          html.elem("tr",
+            for word in words {
+              html.elem("td", format-judges(word, auto-judges: auto-judges))
+            }
+          )
+        }
+      )
     )
-  )
+  } else {
+    block(above: before-spacing, below: after-spacing,
+      par(hanging-indent: hanging-indent, leading: leading,
+        for words in gloss-units(lines) { // note: this is a joining `for`, loop results are appended together
+          box(grid(row-gutter: line-spacing, ..style-units(words, styles))) + h(word-spacing)
+        }
+      )
+    )
+  }
 }
 
 /// Interlinear gloss grid.
