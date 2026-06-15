@@ -15,28 +15,20 @@
   leading: auto,
   hanging-indent: auto,
 ) = {
-  let length = lines.at(0).len()
-  block(
-    above: before-spacing,
-    below: after-spacing,
+  // transpose a list of lines into a list of columns
+  let gloss-units(lines) = lines.at(0).zip(..lines.slice(1))
+  let style-units(words, styles) = words
+    // parse each word for auto judges
+    .map(format-judges.with(auto-judges: auto-judges))
+    // apply corresponding styling to each word
+    .zip(styles)
+    .map(((word, style)) => style(word))
 
+  block(above: before-spacing, below: after-spacing,
     par(hanging-indent: hanging-indent, leading: leading,
-      // turn list of lines into list of columns
-      lines.at(0).zip(..lines.slice(1))
-      .map(words => {
-        box(
-          grid(
-            row-gutter: line-spacing,
-            ..words
-              // parse each word for auto judges
-              .map(format-judges.with(auto-judges: auto-judges))
-              // apply corresponding styling to each word
-              .zip(styles)
-              .map(((word, style)) => style(word))
-          )
-        )
-        h(word-spacing)
-      }).join()
+      for words in gloss-units(lines) { // note: this is a joining `for`, loop results are appended together
+        box(grid(row-gutter: line-spacing, ..style-units(words, styles))) + h(word-spacing)
+      }
     )
   )
 }
