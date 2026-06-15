@@ -1,44 +1,12 @@
 #import "@preview/elembic:1.1.1" as e
 
 #import "gloss.typ": gloss
-#import "utils.typ": auto-length, gen-get-function, prefix
+#import "utils.typ": auto-length, gen-get-function, prefix, update-counter
 #import "ex-label.typ": ex-label, get-ex-label
 #import "judge.typ": judge, format-judges
 
-
 #let ctr = counter("eggsample")
 #let fn-ctr = counter("fn-eggsample")
-
-// trim a counter, removing all values after `level`
-#let reset-at(..args, level: 0) = {
-  let c = args.pos()
-  if c.len() > level + 1 {
-    return c.slice(0, level + 1)
-  }
-  return c
-}
-
-// either step the counter or trim it
-#let update-counter(ctr, level: 0, increment: true) = {
-  if increment {
-    // increment only if no custom number is sent
-    ctr.step(level: level + 1)
-  } else {
-    // since the counter is not stepped,
-    // prevent subexample numbering from being continued from the previous example
-    ctr.update(reset-at.with(level: level))
-  }
-}
-
-
-// generate a sub label of the form parent-label:n,
-// getting n from the counter
-#let auto-sub-label(parent-label) = label(
-  str(parent-label)
-  + ":"
-  + (numbering("a", ctr.get().at(1, default: 0) + 1))
-)
-
 
 #let build-subexample(elem) = {
   let number = if elem.number != none {
@@ -47,36 +15,27 @@
     elem._counter.get().at(1) // the subexample counter is at level 1
   }
 
-  let into-glosses(enabled) = it => {
-    if enabled {
+  let elem-with-autos = {
+    // note that subexamples can never have subexamples themselves
+    show list: it => if elem.auto-glosses {
       gloss(..it.children.map(it => it.body))
     } else {
       it
     }
-  }
-
-  let show-with-autos(elem) = {
-    // note that subexamples can never have subexamples themselves
-    show list: into-glosses(elem.auto-glosses)
     format-judges(elem.body, auto-judges: elem.auto-judges)
   }
 
-  show: it => {
-    set block(spacing: (elem.get-spacing)())
-    // for wrapping examples in a grid
-    set grid(row-gutter: (elem.get-spacing)())
-    it
-  }
+  set block(spacing: (elem.get-spacing)())
+  set grid(row-gutter: (elem.get-spacing)())
 
   // if we're targeting html... what's important are semantic notions, not rendering specifics.
   // so we consider a subexample to be an `<li>` (within an `<ol>` of some example).
   if "html" in dictionary(std) and target() == "html" {
-    html.elem("li", attrs: (class: "subeggsample", value: str(number)),
-      show-with-autos(elem))
+    html.elem("li", attrs: (class: "subeggsample", value: str(number)), elem-with-autos)
   } else {
     block(inset: (left: elem.indent),
       grid(columns: (elem.body-indent, 1fr),
-        numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, show-with-autos(elem))))
+        numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, elem-with-autos)))
   }
 }
 
@@ -179,7 +138,8 @@
       // only use context when needed to generate auto labels
       if lbl == none and args.at("_parent-label", default: none) != none {
         context {
-          let lbl = auto-sub-label(args.at("_parent-label"))
+          // build a sub label of the form parent-label:n, getting n from the counter
+          let lbl = label(str(args.at("_parent-label")) + ":" + (numbering("a", ctr.get().at(1, default: 0) + 1)))
           constructor(..args, label: lbl)
         }
       } else {
@@ -226,43 +186,26 @@
     elem._counter.get().at(0) // the example counter is at level 0
   }
 
-  let into-subexamples(enabled, subexample-wrapper: none, parent-number: none, parent-label: none) = it => {
-    if enabled {
-      subexample-wrapper(..it.children.map(item =>
-        subexample(item.body, _parent-number: parent-number, _parent-label: parent-label)))
+  let elem-with-autos = {
+    show enum: it => if elem.auto-subexamples {
+      let subexample-wrapper = elem.at("subexample-wrapper", default: none)
+      let subexample-func = subexample.with(
+        _parent-number: elem.number,
+        _parent-label: if elem.auto-subexamples and elem.auto-labels { elem.at("label", default: none) } else { none })
+      subexample-wrapper(..it.children.map(item => subexample-func(item.body)))
     } else {
       it
     }
-  }
-
-  let into-glosses(enabled) = it => {
-    if enabled {
+    show list: it => if elem.auto-glosses {
       gloss(..it.children.map(it => it.body))
     } else {
       it
     }
-  }
-
-  let show-with-autos(elem) = {
-    show enum: into-subexamples(elem.auto-subexamples,
-      subexample-wrapper: elem.at("subexample-wrapper", default: none),
-      parent-number: elem.at("number", default: none),
-      parent-label: if elem.auto-subexamples and elem.auto-labels {
-        elem.at("label", default: none)
-      } else {
-        none
-      }
-    )
-    show list: into-glosses(elem.auto-glosses)
-
     format-judges(elem.body, auto-judges: elem.auto-judges)
   }
 
-  show: it => {
-    set block(spacing: (elem.get-spacing)())
-    set grid(row-gutter: (elem.get-spacing)())
-    it
-  }
+  set block(spacing: (elem.get-spacing)())
+  set grid(row-gutter: (elem.get-spacing)())
 
   // if we're targeting html... what's important are semantic notions, not rendering specifics.
   // so we consider an example to be an `<li>`, within a singleton `<ol>`.
@@ -270,11 +213,11 @@
   if "html" in dictionary(std) and target() == "html" {
     html.elem("ol", attrs: (class: "eggsample"),
       html.elem("li", attrs: (value: str(number)),
-        html.elem("ol", show-with-autos(elem))))
+        html.elem("ol", elem-with-autos)))
   } else {
     block(inset: (left: elem.indent),
       grid(columns: (elem.body-indent, 1fr),
-        numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, show-with-autos(elem))))
+        numbering(elem.num-pattern, number), grid.cell(breakable: elem.breakable, elem-with-autos)))
   }
 }
 

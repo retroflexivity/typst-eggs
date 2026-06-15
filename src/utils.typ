@@ -16,7 +16,7 @@
 
 // in all text-type children,
 // find `from` string and replace it with `to` content
-// returning an array of content 
+// returning an array of content
 #let replace-text-with-content(it, from: " ", to: [ ]) = {
   if it.has("text") {
     it.text.split(from).map(text).intersperse(to)
@@ -60,12 +60,35 @@
     if type(head) == content {
       if head.func() == [ ].func() {
         return tail
-      } else if head.func() == text {
+      }
+      if head.func() == text {
         return text(head.text.trim(at: start)) + tail
       }
     }
   }
-  return it
+  it
+}
+
+// trim a counter, removing all values after `level`
+#let reset-counter-at(..args, level: 0) = {
+  let c = args.pos()
+  if c.len() > level + 1 {
+    c.slice(0, level + 1)
+  } else {
+    c
+  }
+}
+
+// either step the counter or trim it
+#let update-counter(ctr, level: 0, increment: true) = {
+  if increment {
+    // increment only if no custom number is sent
+    ctr.step(level: level + 1)
+  } else {
+    // since the counter is not stepped,
+    // prevent subexample numbering from being continued from the previous example
+    ctr.update(reset-counter-at.with(level: level))
+  }
 }
 
 #let prefix = "eggs07"
