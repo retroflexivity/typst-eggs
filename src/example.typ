@@ -159,7 +159,6 @@
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
     e.field("_parent-number", e.types.option(int), doc: "Top-level example number, when overriden. Set automatically."),
     e.field("_parent-label", e.types.option(label), doc: "Top-level example label for auto-labels. Set automatically."),
-    e.field("auto-subexamples", bool, synthesized: true),
     e.field("get-spacing", function, synthesized: true, default: () => par.leading)
   ),
 
@@ -181,10 +180,7 @@
     }
   },
 
-  synthesize: it => {
-    it.auto-subexamples = false
-    gen-get-function(it, ("spacing", par.leading))
-  },
+  synthesize: it => gen-get-function(it, ("spacing", par.leading)),
 
   // using custom counter
   count: _ => it => update-counter(it._counter, level: 1, increment: it.number == none),
