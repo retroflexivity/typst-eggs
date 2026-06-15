@@ -113,6 +113,7 @@
     e.field("get-line-spacing", function, synthesized: true, default: () => par.leading),
     e.field("get-before-spacing", function, synthesized: true, default: () => par.leading),
     e.field("get-after-spacing", function, synthesized: true, default: () => par.leading),
+    e.field("get-leading", function, synthesized: true, default: () => par.leading),
   ),
 
   parse-args: (default-parser, fields: none, typecheck: none) => (args, include-required: false) => {
@@ -131,7 +132,8 @@
     it,
     ("line-spacing", par.leading),
     ("before-spacing", par.leading),
-    ("after-spacing", par.leading)
+    ("after-spacing", par.leading),
+    ("leading", par.leading),
   ),
 
   // split content lines into word arrays.
@@ -164,7 +166,7 @@
       before-spacing: (elem.get-before-spacing)(),
       after-spacing: (elem.get-after-spacing)(),
       line-spacing: (elem.get-line-spacing)(),
-      leading: (elem.leading)(),
+      leading: (elem.get-leading)(),
       word-spacing: elem.word-spacing,
       hanging-indent: elem.hanging-indent,
     )
