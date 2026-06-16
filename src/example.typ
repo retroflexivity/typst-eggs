@@ -1,7 +1,7 @@
 #import "@preview/elembic:1.1.1" as e
 
 #import "gloss.typ": gloss
-#import "utils.typ": auto-length, gen-get-function, prefix
+#import "utils.typ": auto-length, gen-get-function, prefix, is-html
 #import "ex-label.typ": ex-label, get-ex-label
 #import "judge.typ": judge, format-judges
 
@@ -96,22 +96,28 @@
     it
   }
 
-  grid(
-    columns: (elem.indent, elem.body-indent, 1fr),
-    [],
-    numbering(
-      elem.num-pattern,
-      if elem.number != none { elem.number } else { elem._counter.get().at(level) }
-    ),
-    grid.cell(
-      show-with-autos(
-        elem,
-        level: level,
-        parent-number: elem.at("number", default: none),
-        parent-label: if elem.auto-subexamples and elem.auto-labels { elem.at("label", default: none) } else { none }
-      ),
-      breakable: elem.breakable),
+  let number = if elem.number != none { elem.number } else { elem._counter.get().at(level) }
+
+  let body = show-with-autos(
+    elem,
+    level: level,
+    parent-number: elem.at("number", default: none),
+    parent-label: if elem.auto-subexamples and elem.auto-labels { elem.at("label", default: none) } else { none }
   )
+
+  if is-html() {
+    (elem.html)(body, number)
+  } else {
+    grid(
+      columns: (elem.indent, elem.body-indent, 1fr),
+      [],
+      numbering(elem.num-pattern, number),
+      grid.cell(
+        body,
+        breakable: elem.breakable),
+    )
+    
+  }
 }
 
 /// Second-level linguistic subexample. Only intended for use inside an example.
@@ -202,7 +208,8 @@
     e.field("_parent-number", e.types.option(int), doc: "Top-level example number, when overriden. Set automatically."),
     e.field("_parent-label", e.types.option(label), doc: "Top-level example label for auto-labels. Set automatically."),
     e.field("auto-subexamples", bool, synthesized: true),
-    e.field("get-spacing", function, synthesized: true, default: () => par.leading)
+    e.field("get-spacing", function, synthesized: true, default: () => par.leading),
+    e.field("html", function, synthesized: true, default: (body, number) => body)
   ),
   
   construct: constructor => (..args) => {
@@ -225,7 +232,14 @@
 
   synthesize: it => {
     it.auto-subexamples = false
-    gen-get-function(it, ("spacing", par.leading))
+    it.html = (body, number) => (
+      html.elem("li", attrs: (class: "subeggsample", value: str(number)),
+        body
+      )
+    )
+    gen-get-function(it,
+      ("spacing", par.leading),
+    )
   },
 
   // using custom counter
@@ -357,7 +371,8 @@
     e.field("smart-refs", bool, default: true, doc: "Whether to format `@`-references and `ref`-references to examples Adding parenthesis and parsing the supplement."),
 
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
-    e.field("get-spacing", function, synthesized: true, default: () => par.spacing)
+    e.field("get-spacing", function, synthesized: true, default: () => par.spacing),
+    e.field("html", function, synthesized: true, default: (body, number) => body)
   ),
 
   construct: constructor => (..args) => {
@@ -368,7 +383,20 @@
     }
   },
 
-  synthesize: it => gen-get-function(it, ("spacing", par.spacing)),
+  synthesize: it => {
+    it.html = (body, number) => (
+      html.elem("ol",
+        html.elem("li", attrs: (class: "eggsample", value: str(number)),
+          html.elem("ol",
+            body
+          )
+        )
+      )    
+    )
+    gen-get-function(it,
+        ("spacing", par.spacing),
+    )
+  },
 
   // using custom counter
   count: _ => it => update-counter(it._counter, level: 0, increment: it.number == none),

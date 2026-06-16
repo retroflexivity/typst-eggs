@@ -68,4 +68,6 @@
   return it
 }
 
+#let is-html() = "html" in dictionary(std) and target() == "html"
+
 #let prefix = "eggs07"
