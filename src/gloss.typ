@@ -1,7 +1,7 @@
 #import "@preview/elembic:1.1.1" as e
 
 #import "judge.typ": format-judges
-#import "utils.typ": auto-length, prefix, gen-get-function, split-content
+#import "utils.typ": auto-length, prefix, gen-get-function, split-content, is-html
 
 // take a matrix of words and assemble it into a gloss grid
 #let build-gloss-grid(
@@ -16,29 +16,46 @@
   hanging-indent: auto,
 ) = {
   let length = lines.at(0).len()
-  block(
-    above: before-spacing,
-    below: after-spacing,
 
-    par(hanging-indent: hanging-indent, leading: leading,
-      // turn list of lines into list of columns
-      lines.at(0).zip(..lines.slice(1))
-      .map(words => {
-        box(
-          grid(
-            row-gutter: line-spacing,
-            ..words
-              // parse each word for auto judges
-              .map(format-judges.with(auto-judges: auto-judges))
-              // apply corresponding styling to each word
-              .zip(styles)
-              .map(((word, style)) => style(word))
-          )
-        )
-        h(word-spacing)
-      }).join()
-    )
+  let cols = lines.at(0).zip(..lines.slice(1)).map(words =>
+    words
+      // parse each word for auto judges
+      .map(format-judges.with(auto-judges: auto-judges))
+      // apply corresponding styling to each word
+      .zip(styles)
+      .map(((word, style)) => style(word))
   )
+
+  if is-html() {
+    html.elem("div", attrs: (style: "display: flex; gap: 20pt; flex-wrap: wrap"),
+      cols.map(col =>
+        html.elem("div", attrs: (style: "display: grid"),
+          col.map(word =>
+            html.elem("span", word)
+          ).join()
+        )
+      ).join()
+    )
+  } else {
+    block(
+      above: before-spacing,
+      below: after-spacing,
+
+      par(hanging-indent: hanging-indent, leading: leading,
+        // turn list of lines into list of columns
+        cols
+        .map(words => {
+          box(
+            grid(
+              row-gutter: line-spacing,
+              ..words
+            )
+          )
+          h(word-spacing)
+        }).join()
+      )
+    )
+  }
 }
 
 /// Interlinear gloss grid.
