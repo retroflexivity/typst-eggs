@@ -1,7 +1,7 @@
 #import "@preview/elembic:1.1.1" as e
 
 #import "gloss.typ": gloss
-#import "utils.typ": auto-length, gen-get-function, prefix, is-html
+#import "utils.typ": auto-length, gen-get-function, prefix, is-html, html-style, html-height, html-style-maybe
 #import "ex-label.typ": ex-label, get-ex-label
 #import "judge.typ": judge, format-judges
 
@@ -31,6 +31,20 @@
 }
 
 
+// check if there are any enum items
+// or "subexample" elembic elems
+#let has-subexamples(it) = {
+  it.child.children
+    .filter(it => type(it) == content)
+    .any(it =>
+      it.func() == enum.item or
+      it.func() == metadata
+        and type(it.at("value", default: none)) == dictionary
+        and it.value.at("name", default: none) == "subexample"
+    )
+}
+
+
 // generate a sub label of the form parent-label:n,
 // getting n from the counter
 #let auto-sub-label(parent-label) = label(
@@ -39,6 +53,74 @@
   + (numbering("a", ctr.get().at(1, default: 0) + 1))
 )
 
+
+// <li> element with a marker and a body
+#let html-item(elem) = (number: 1, label: none, ..args) => {
+  let style = html-style-maybe.with(level: elem.html-styling)
+
+  (
+    html.elem("li",
+      attrs: (
+        class: elem._unique-name,
+        value: str(number),
+        ..style(
+          basic: (
+            list-style-type: "\"" + numbering(elem.num-pattern, number) + " \""
+          ),
+          full: (
+            padding-left: elem.indent,
+            list-style-type: "none",
+            display: "flex",
+            ..args.named()
+          )
+        ),
+        ..if label != none {(id: str(label))},
+      ),
+      (
+        // example number
+        // only drawn manually when full styling
+        ..if elem.html-styling == "full" {
+          html.elem("span",
+            attrs: (
+              class: "number",
+              style: html-style(
+                display: "inline-block",
+                width: elem.body-indent,
+                min-width: elem.body-indent
+              )
+            ),
+            numbering(elem.num-pattern, number)
+          ) 
+        },
+        // example body
+        html.elem("div",
+          attrs: (
+            class: "body"
+          ),
+          ..args.pos()
+        )
+      ).join()
+    )
+  )
+}
+
+// <ol> element that wraps examples and subexamples
+#let html-ol(elem) = (..args) => (
+  html.elem("ol",
+    attrs: (
+      class: elem._unique-name + "-list",
+      ..html-style-maybe(
+        full: (
+          margin: 0em,
+          padding-left: 0pt,
+          ..args.named()
+        ),
+        level: elem.html-styling
+      )
+    ),
+    ..args.pos()
+  )
+)
 
 // assemble the example
 #let build-example(
@@ -106,7 +188,7 @@
   )
 
   if is-html() {
-    (elem.html)(body, number)
+    (elem.html)(body, number: number, label: elem.at("label", default: none), margin: (html-height((elem.get-spacing)()), "auto"))
   } else {
     grid(
       columns: (elem.indent, elem.body-indent, 1fr),
@@ -175,6 +257,14 @@
 ///
 ///   *Default*: none
 ///
+/// - html-styling ("full" | "basic" | "none"): How much to style the HTML output via inline styles.
+///   "full" completely mimics the PDF output;
+///   "basic" formats example numbers, arranges glosses in a grid, and pads judges;
+///   "none" adds no styles at all.
+///   The more complete the styling, the less it can be overridden by external stylesheets.
+///
+///   *Default*: "full"
+///
 /// -> content
 #let subexample = e.element.declare(
   "subexample",
@@ -204,12 +294,15 @@
     e.field("second-sub-ref-pattern", str, default: "a", doc: "Format to reference the second argument of `ex-ref` if it is a subexample. A 1-level numbering pattern."),
     e.field("label-supplement", e.types.option(str), doc: "The subexample figure supplement used in references. Has no effect when `smart-ref` is `true`."),
 
+   e.field("html-styling", e.types.union("full", "basic", "none"), default: "full", doc: "How much to style the HTML output via inline styles. \"full\" completely mimics the PDF output; \"basic\" formats example numbers, arranges glosses in a grid, and pads judges; \"none\" adds no styles at all. The more complete the styling, the less it can be overridden by external stylesheets."),
+
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
+    e.field("_unique-name", str, default: "subeggsample", doc: "The unique name to be used when disambiguation from other things named 'example' is necessary, like html classes."),
     e.field("_parent-number", e.types.option(int), doc: "Top-level example number, when overriden. Set automatically."),
     e.field("_parent-label", e.types.option(label), doc: "Top-level example label for auto-labels. Set automatically."),
     e.field("auto-subexamples", bool, synthesized: true),
     e.field("get-spacing", function, synthesized: true, default: () => par.leading),
-    e.field("html", function, synthesized: true, default: (body, number) => body)
+    e.field("html", function, synthesized: true, default: (body, number: 1) => body),
   ),
   
   construct: constructor => (..args) => {
@@ -232,11 +325,7 @@
 
   synthesize: it => {
     it.auto-subexamples = false
-    it.html = (body, number) => (
-      html.elem("li", attrs: (class: "subeggsample", value: str(number)),
-        body
-      )
-    )
+    it.html = html-item(it)
     gen-get-function(it,
       ("spacing", par.leading),
     )
@@ -337,6 +426,14 @@
 ///
 ///   *Default*: true
 ///
+/// - html-styling ("full" | "basic" | "none"): How much to style the HTML output via inline styles.
+///   "full" completely mimics the PDF output;
+///   "basic" formats example numbers, arranges glosses in a grid, and pads judges;
+///   "none" adds no styles at all.
+///   The more complete the styling, the less it can be overridden by external stylesheets.
+///
+///   *Default*: "full"
+///
 /// -> content
 #let example = e.element.declare(
   "example",
@@ -370,9 +467,12 @@
     e.field("label-supplement", e.types.option(str), default: none, doc: "The example figure supplement used in references. Has no effect when `smart-ref` is `true`."),
     e.field("smart-refs", bool, default: true, doc: "Whether to format `@`-references and `ref`-references to examples Adding parenthesis and parsing the supplement."),
 
+   e.field("html-styling", e.types.union("full", "basic", "none"), default: "full", doc: "How much to style the HTML output via inline styles. \"full\" completely mimics the PDF output; \"basic\" formats example numbers, arranges glosses in a grid, and pads judges; \"none\" adds no styles at all. The more complete the styling, the less it can be overridden by external stylesheets."),
+
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
+    e.field("_unique-name", str, default: "eggsample", doc: "The unique name to be used when disambiguation from other things named 'example' is necessary, like html classes."),
     e.field("get-spacing", function, synthesized: true, default: () => par.spacing),
-    e.field("html", function, synthesized: true, default: (body, number) => body)
+    e.field("html", function, synthesized: true, default: (body, number: 1) => body),
   ),
 
   construct: constructor => (..args) => {
@@ -384,15 +484,19 @@
   },
 
   synthesize: it => {
-    it.html = (body, number) => (
-      html.elem("ol",
-        html.elem("li", attrs: (class: "eggsample", value: str(number)),
-          html.elem("ol",
-            body
-          )
-        )
+    it.html = (body, number: 1, ..args) => {
+      let wrap = if has-subexamples(body) {
+        // make it subeggsample-list
+        html-ol(it + (_unique-name: "subeggsample"))
+      } else {
+        it => it
+      }
+
+      html-ol(it)(
+        html-item(it)(wrap(body), number: number, ..args)
       )    
-    )
+    }
+
     gen-get-function(it,
         ("spacing", par.spacing),
     )

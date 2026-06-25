@@ -71,3 +71,30 @@
 #let is-html() = "html" in dictionary(std) and target() == "html"
 
 #let prefix = "eggs07"
+
+// -> dictionary
+#let html-style(..args) = {
+  let parse-val(val) = (
+    if type(val) == array {val.map(parse-val).join(" ")}
+    // TODO: figure out a smarter way to pass lengths
+    else if type(val) == length {repr(val)}
+    else {str(val)}
+  )
+
+  args.named().filter(it => it != none).pairs().map(((key, val)) => {
+    key + ": " + parse-val(val)
+  }).join("; ")
+}
+
+// -> (:) | (style: ...)
+#let html-style-maybe(none_: (:), basic: (:), full: (:), level: "full") = {
+  assert(level in ("full", "basic", "none", auto), message: "`level` must be one of \"full\", \"basic\", and \"none\".")
+
+  let style = html-style(
+    ..(none_ + if level in ("basic", "full") {basic} + if level == "full" {full})
+  )
+
+  if style != none {(style: style)} else {(:)}
+}
+
+#let html-height(h) = if type(h) == length {h - 0.65em} else {h}

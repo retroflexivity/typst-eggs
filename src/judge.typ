@@ -1,4 +1,7 @@
-#import "utils.typ": trim-space
+#import "utils.typ": trim-space, is-html, html-style
+
+#let html-pad-judges = state("eggs-html-pad-judges")
+
 /// Typesets the content, then adds negative space
 /// of the length of this content.
 /// Used to add a judge to the left of a text.
@@ -10,7 +13,23 @@
 /// -> content
 #let judge(
   j
-) = [#context(h(-measure(j).width))#j]
+) = if is-html() {
+  context {
+    html.elem("span",
+      ..if html-pad-judges.get() {(
+        attrs: (
+          style: html-style(
+            position: "absolute",
+            transform: "translateX(-100%)"
+          )
+        )
+      )},
+      j
+    )
+  }
+} else {
+  [#context(h(-measure(j).width))#j]
+}
 
 
 // given a list of content and a list of judges,

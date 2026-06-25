@@ -1,5 +1,6 @@
 #import "@preview/elembic:1.1.1" as e
 
+#import("judge.typ"): html-pad-judges
 #import("ex-ref.typ"): parse-ref
 #import("example.typ"): example, subexample, fn-ctr
 #import("gloss.typ"): gloss
@@ -153,6 +154,14 @@
 ///
 ///   *Default*: ()
 ///
+/// - html-styling ("full" | "basic" | "none"): How much to style the HTML output via inline styles.
+///   "full" completely mimics the PDF output;
+///   "basic" formats example numbers, arranges glosses in a grid, and pads judges;
+///   "none" adds no styles at all.
+///   The more complete the styling, the less it can be overridden by external stylesheets.
+///
+///   *Default*: "full"
+///
 /// -> content
 #let eggs(
   it,
@@ -186,8 +195,11 @@
   gloss-leading: auto,
   gloss-hanging-indent: auto,
   gloss-styles: auto,
+  html-styling: auto,
 ) = {
   show: e.prepare()
+
+  assert(html-styling in ("full", "basic", "none", auto), message: "`html-styling` must be one of \"full\", \"basic\", and \"none\".")
 
   let get-default-footnote(..fields) = fields.named().pairs().map(it =>
     if it.at(1) == auto {(it.at(0):
@@ -216,6 +228,8 @@
     ("ref-pattern", ref-pattern),
 
     ("label-supplement", label-supplement),
+
+    ("html-styling", html-styling)
   )
 
   let subexample-fields = (
@@ -231,6 +245,8 @@
     ("ref-pattern", ref-pattern),
     ("second-sub-ref-pattern", second-sub-ref-pattern),
     ("label-supplement", sub-label-supplement),
+
+    ("html-styling", html-styling)
   )
 
   let gloss-fields = (
@@ -243,6 +259,8 @@
     ("leading", gloss-leading),
     ("hanging-indent", gloss-hanging-indent),
     ("styles", gloss-styles),
+
+    ("html-styling", html-styling)
   )
 
   show: e.set_(example,
@@ -255,6 +273,7 @@
     ..get-dict-without-autos(gloss-fields)
   )
 
+  html-pad-judges.update(html-styling != "none")
 
   show footnote.entry: it => {
     let separate-numbering = get-default-footnote(separate-numbering: footnote-separate-numbering).separate-numbering
