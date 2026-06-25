@@ -1,7 +1,7 @@
 #import "@preview/elembic:1.1.1" as e
 
 #import "judge.typ": format-judges
-#import "utils.typ": auto-length, prefix, gen-get-function, split-content, is-html
+#import "utils.typ": auto-length, prefix, gen-get-function, split-content, is-html, html-style-maybe, html-height
 
 // take a matrix of words and assemble it into a gloss grid
 #let build-gloss-grid(
@@ -14,6 +14,7 @@
   word-spacing: auto,
   leading: auto,
   hanging-indent: auto,
+  html-styling: auto
 ) = {
   let length = lines.at(0).len()
 
@@ -27,11 +28,42 @@
   )
 
   if is-html() {
-    html.elem("div", attrs: (style: "display: flex; gap: 20pt; flex-wrap: wrap"),
+    let style = html-style-maybe.with(level: html-styling)
+    html.elem("div",
+      attrs: (
+        class: "egglosses",
+        ..style(
+          basic: (
+            display: "flex",
+            flex-wrap: "wrap"
+          ),
+          full: (
+            margin-top: html-height(before-spacing),
+            margin-bottom: html-height(after-spacing),
+            gap: (html-height(leading), word-spacing),
+          )
+        )
+      ),
       cols.map(col =>
-        html.elem("div", attrs: (style: "display: grid"),
+        html.elem("div",
+          attrs: (
+            class: "block",
+            ..style(
+              basic: (
+                display: "grid",
+              ),
+              full: (
+                gap: html-height(line-spacing)
+              )
+            )
+          ),
           col.map(word =>
-            html.elem("span", word)
+            html.elem("span",
+              attrs: (
+                class: "word"
+              ),
+              word
+            )
           ).join()
         )
       ).join()
@@ -100,6 +132,13 @@
 ///
 ///   *Default*: ()
 ///
+/// - html-styling ("full" | "basic" | "none"): How much to style the HTML output via inline styles.
+///   "full" completely mimics the PDF output;
+///   "basic" formats example numbers, arranges glosses in a grid, and pads judges;
+///   "none" adds no styles at all.
+///   The more complete the styling, the less it can be overridden by external stylesheets.
+///
+///   *Default*: "full"
 ///
 /// -> content
 #let gloss = e.element.declare(
@@ -126,6 +165,8 @@
     e.field("leading", auto-length, doc: "Vertical spacing between between blocks of (wrapped) glosses. Defaults to `par.leading`."),
     e.field("hanging-indent", length, default: 1em, doc: "Horizontal spacing before wrapped gloss lines."),
     e.field("styles", array, doc: "List of functions to be applied to each line of glosses. Can be of any length. `gloss-styles[0]` is applied to the first line, `gloss-styles[1]` --- to the second, etc. E.g. ```typst (emph, it => it + [.])``` makes the first line italicized and adds a period to the second line."),
+
+   e.field("html-styling", e.types.union("full", "basic", "none"), default: "full", doc: "How much to style the HTML output via inline styles. \"full\" completely mimics the PDF output; \"basic\" formats example numbers, arranges glosses in a grid, and pads judges; \"none\" adds no styles at all. The more complete the styling, the less it can be overridden by external stylesheets."),
 
     e.field("get-line-spacing", function, synthesized: true, default: () => par.leading),
     e.field("get-before-spacing", function, synthesized: true, default: () => par.leading),
@@ -186,6 +227,7 @@
       leading: (elem.get-leading)(),
       word-spacing: elem.word-spacing,
       hanging-indent: elem.hanging-indent,
+      html-styling: elem.html-styling
     )
   }
 )
