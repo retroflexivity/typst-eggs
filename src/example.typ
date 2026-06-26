@@ -79,7 +79,7 @@
       (
         // example number
         // only drawn manually when full styling
-        ..if elem.html-styling == "full" {
+        if elem.html-styling == "full" {
           html.elem("span",
             attrs: (
               class: "number",
