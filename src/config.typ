@@ -163,6 +163,11 @@
 ///
 ///   *Default*: "full"
 ///
+/// - gloss-html-table (bool): Whether to render glosses in HTML as a table instead of a flexbox.
+///   A table might be considered more semantic, but is unable to wrap.
+///
+///   *Default*: false
+///
 /// -> content
 #let eggs(
   it,
@@ -197,6 +202,7 @@
   gloss-hanging-indent: auto,
   gloss-styles: auto,
   html-styling: auto,
+  gloss-html-table: auto,
 ) = {
   show: e.prepare()
 
@@ -261,7 +267,8 @@
     ("hanging-indent", gloss-hanging-indent),
     ("styles", gloss-styles),
 
-    ("html-styling", html-styling)
+    ("html-styling", html-styling),
+    ("html-table", gloss-html-table)
   )
 
   show: e.set_(example,

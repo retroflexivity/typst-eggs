@@ -14,53 +14,45 @@
   word-spacing: auto,
   leading: auto,
   hanging-indent: auto,
-  html-styling: auto
+  html-styling: auto,
+  html-table: auto
 ) = {
-  let length = lines.at(0).len()
-
-  let cols = lines.at(0).zip(..lines.slice(1)).map(words =>
-    words
-      // parse each word for auto judges
-      .map(format-judges.with(auto-judges: auto-judges))
-      // apply corresponding styling to each word
-      .zip(styles)
-      .map(((word, style)) => style(word))
-  )
-
-  if is-html() {
+  if is-html() and html-table {
     let style = html-style-maybe.with(level: html-styling)
-    html.elem("div",
+
+    let rows = lines.zip(styles).map(((line, style)) =>
+      line.map(word =>
+        // parse each word for auto judges
+        // and apply styling
+        style(format-judges(word, auto-judges: auto-judges)
+      )
+    ))
+
+    html.elem("table",
       attrs: (
         class: "egglosses",
         ..style(
-          basic: (
-            display: "flex",
-            flex-wrap: "wrap"
-          ),
           full: (
             margin-top: html-height(before-spacing),
             margin-bottom: html-height(after-spacing),
-            gap: (html-height(leading), word-spacing),
+            border-spacing: 0pt
           )
         )
       ),
-      cols.map(col =>
-        html.elem("div",
+      rows.map(row =>
+        html.elem("tr",
           attrs: (
-            class: "block",
-            ..style(
-              basic: (
-                display: "grid",
-              ),
-              full: (
-                gap: html-height(line-spacing)
-              )
-            )
+            class: "line",
           ),
-          col.map(word =>
-            html.elem("span",
+          row.map(word =>
+            html.elem("td",
               attrs: (
-                class: "word"
+                class: "word",
+                ..style(
+                  full: (
+                    padding: (0pt, word-spacing, html-height(line-spacing), 0pt),
+                  )
+                )
               ),
               word
             )
@@ -68,25 +60,79 @@
         )
       ).join()
     )
-  } else {
-    block(
-      above: before-spacing,
-      below: after-spacing,
 
-      par(hanging-indent: hanging-indent, leading: leading,
-        // turn list of lines into list of columns
-        cols
-        .map(words => {
-          box(
-            grid(
-              row-gutter: line-spacing,
-              ..words
+  } else {
+    let length = lines.at(0).len()
+    let cols = lines.at(0).zip(..lines.slice(1)).map(words =>
+      words
+        // parse each word for auto judges
+        .map(format-judges.with(auto-judges: auto-judges))
+        // apply corresponding styling to each word
+        .zip(styles)
+        .map(((word, style)) => style(word))
+    )
+
+    if is-html() {
+      let style = html-style-maybe.with(level: html-styling)
+      html.elem("div",
+        attrs: (
+          class: "egglosses",
+          ..style(
+            basic: (
+              display: "flex",
+              flex-wrap: "wrap"
+            ),
+            full: (
+              margin-top: html-height(before-spacing),
+              margin-bottom: html-height(after-spacing),
+              gap: (html-height(leading), word-spacing),
             )
           )
-          h(word-spacing)
-        }).join()
+        ),
+        cols.map(col =>
+          html.elem("div",
+            attrs: (
+              class: "block",
+              ..style(
+                basic: (
+                  display: "grid",
+                ),
+                full: (
+                  gap: html-height(line-spacing)
+                )
+              )
+            ),
+            col.map(word =>
+              html.elem("span",
+                attrs: (
+                  class: "word"
+                ),
+                word
+              )
+            ).join()
+          )
+        ).join()
       )
-    )
+    } else {
+      block(
+        above: before-spacing,
+        below: after-spacing,
+
+        par(hanging-indent: hanging-indent, leading: leading,
+          // turn list of lines into list of columns
+          cols
+          .map(words => {
+            box(
+              grid(
+                row-gutter: line-spacing,
+                ..words
+              )
+            )
+            h(word-spacing)
+          }).join()
+        )
+      )
+    }
   }
 }
 
@@ -140,6 +186,11 @@
 ///
 ///   *Default*: "full"
 ///
+/// - html-table (bool): Whether to render glosses in HTML as a table instead of a flexbox.
+///   A table might be considered more semantic, but is unable to wrap.
+///
+///   *Default*: false
+///
 /// -> content
 #let gloss = e.element.declare(
   "gloss",
@@ -167,6 +218,7 @@
     e.field("styles", array, doc: "List of functions to be applied to each line of glosses. Can be of any length. `gloss-styles[0]` is applied to the first line, `gloss-styles[1]` --- to the second, etc. E.g. ```typst (emph, it => it + [.])``` makes the first line italicized and adds a period to the second line."),
 
    e.field("html-styling", e.types.union("full", "basic", "none"), default: "full", doc: "How much to style the HTML output via inline styles. \"full\" completely mimics the PDF output; \"basic\" formats example numbers, arranges glosses in a grid, and pads judges; \"none\" adds no styles at all. The more complete the styling, the less it can be overridden by external stylesheets."),
+   e.field("html-table", bool, default: false, doc: "Whether to render glosses in HTML as a table instead of a flexbox. A table might be considered more semantic, but is unable to wrap."),
 
     e.field("get-line-spacing", function, synthesized: true, default: () => par.leading),
     e.field("get-before-spacing", function, synthesized: true, default: () => par.leading),
@@ -227,7 +279,8 @@
       leading: (elem.get-leading)(),
       word-spacing: elem.word-spacing,
       hanging-indent: elem.hanging-indent,
-      html-styling: elem.html-styling
+      html-styling: elem.html-styling,
+      html-table: elem.html-table
     )
   }
 )
