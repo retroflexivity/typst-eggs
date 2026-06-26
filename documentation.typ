@@ -364,6 +364,48 @@ The function accepts the `gap` parameter for customizing the minimum space allow
 #nb[The function does not support gloss lines. If you need to align some content to the right of interlinear glosses, please use a grid.]
 
 
+= HTML output <html>
+
+Eggs has fully custom support for HTML output. Currently, Typst's HTML output is purely semantic (adds no styling); but since there are no semantic primitives in HTML that correspond to linguistic examples, glosses, and everything else, Eggs takes a different approach and provides inline styling for HTML elements that more or less mimics the PDF output in appearance.
+
+The structure of the HTML output is the following:
+
+#[
+#set raw(lang: "html")
+
+- An example is a `<li>` (list item) of an `<ol>` (enumerated list). Since Typst does not support collapsing, every example is in its own `<ol>`. The default marker is hidden, and there is a `<span>` inside `<li>` that shows the marker, in order to control spacing. Consequently, the `<li>` is a flexbox and the body is a `<div>`.
+
+- A subexample is almost the same, but with collapsing of the list: there is a single `<ol>` that wraps the whole contents of an example if it has any subexamples.#footnote[As such, it also wraps around everything that goes before or after subexamples in the example. It is a bug.]
+
+- Interlinear glosses are a flexbox of horizontal grids of `<span>`s (words), or tables, depending on the value of `gloss-html-table`.
+
+- Judges are `<span>`s with ```scss position: absolute``` and ```scss transform: translateX(-100%)```.
+
+- Trailings are `<span>`s with `float: right`.#footnote[Ironically, they're much cleaner and easier to implement in HTML than in PDF Typst.]
+]
+
+== Controlling the amount of styling
+
+The amount of inline styling applied can be changed using the `html-styling` setting (see @customization). It accepts one of the following:
+
+/ `"full"` (default): All of the styling.
+
+/ `"basic"`: "Contentful" changes only. These are: (sub)example marker formatting (changing the default marker, not adding the new one); flexboxes with grids for glosses; judge padding; trailing floating.
+
+/ `"none"`: No use of HTML `style` at all.
+
+Furthermore, as mentioned above, the `gloss-html-table` can be set to ```typc true``` in all styling levels to use a table for glosses.
+
+#nb[Inline styles in HTML cannot be overriden. This is why you might like to decrease the styling level if you are using a comprehensive stylesheet.]
+
+== The state of the feature
+
+HTML support in Typst is experimental, and so it is in Eggs. Listed below are the things that do not work or work poorly.
+
+- `gloss-hanging-indent` for glosses is not supported and ignored;
+- `subexample-spacing` and `gloss-before-spacing` add margins above subexamples and glosses even at the beginning of an example. This makes them misaligned with the example number. This is why you probably do not want to use them;
+- Typst vertical spacing and HTML margins are calculated differently. This difference is mitigated by substracting the default leading (```typc 0.65em```) from all vertical spacing when compiling to HTML. This might lead to strange results in some cases.
+
 = Customization <customization>
 
 Eggs offers some layout and styling customization and several behaviour options. The complete list is given in @funcs.
@@ -632,12 +674,12 @@ The look of term lists can also be modified using show rules.
 }
 #set list(spacing: 1.5em, marker: rotate(90deg, "🥚"))
 
-#show regex("^[a-z\-.]+\s\((\w+(\s\|\s)?)+\)"): it => {
+#show regex("^[a-z\-.]+\s\(([\w\"]+(\s\|\s)?)+\)"): it => {
   set text(font: "DejaVu Sans Mono", size: 0.8em)
   show regex("[\(\)]"): none
   show " ": h(0.3em)
-  show regex("\((\w+(\s\|\s)?)+\)"): it => {
-    show regex("(\w+(\s\|\s)?)+"): it => {
+  show regex("\(([\w+\"](\s\|\s)?)+\)"): it => {
+    show regex("([\w+\"](\s\|\s)?)+"): it => {
       set text(fill: olive)
       [[#it]]
     }
