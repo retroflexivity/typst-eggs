@@ -1,6 +1,7 @@
 #import "@preview/elembic:1.1.1" as e
 
 #import("judge.typ"): html-pad-judges
+#import("trailing.typ"): html-align-trailing
 #import("ex-ref.typ"): parse-ref
 #import("example.typ"): example, subexample, fn-ctr
 #import("gloss.typ"): gloss
@@ -155,8 +156,8 @@
 ///   *Default*: ()
 ///
 /// - html-styling ("full" | "basic" | "none"): How much to style the HTML output via inline styles.
-///   "full" completely mimics the PDF output;
-///   "basic" formats example numbers, arranges glosses in a grid, and pads judges;
+///   "full" (almost) completely mimics the PDF output;
+///   "basic" formats example numbers, arranges glosses in a grid, pads judges and right-aligns trailings;
 ///   "none" adds no styles at all.
 ///   The more complete the styling, the less it can be overridden by external stylesheets.
 ///
@@ -274,6 +275,7 @@
   )
 
   html-pad-judges.update(html-styling != "none")
+  html-align-trailing.update(html-styling != "none")
 
   show footnote.entry: it => {
     let separate-numbering = get-default-footnote(separate-numbering: footnote-separate-numbering).separate-numbering

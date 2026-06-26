@@ -95,7 +95,12 @@
         // example body
         html.elem("div",
           attrs: (
-            class: "body"
+            class: "body",
+            ..style(
+              basic: (
+                width: "100%"
+              )
+            )
           ),
           ..args.pos()
         )
