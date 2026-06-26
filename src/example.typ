@@ -264,7 +264,7 @@
 ///
 /// - html-styling ("full" | "basic" | "none"): How much to style the HTML output via inline styles.
 ///   "full" completely mimics the PDF output;
-///   "basic" formats example numbers, arranges glosses in a grid, and pads judges;
+///   "basic" only formats example numbers;
 ///   "none" adds no styles at all.
 ///   The more complete the styling, the less it can be overridden by external stylesheets.
 ///
@@ -299,7 +299,7 @@
     e.field("second-sub-ref-pattern", str, default: "a", doc: "Format to reference the second argument of `ex-ref` if it is a subexample. A 1-level numbering pattern."),
     e.field("label-supplement", e.types.option(str), doc: "The subexample figure supplement used in references. Has no effect when `smart-ref` is `true`."),
 
-   e.field("html-styling", e.types.union("full", "basic", "none"), default: "full", doc: "How much to style the HTML output via inline styles. \"full\" completely mimics the PDF output; \"basic\" formats example numbers, arranges glosses in a grid, and pads judges; \"none\" adds no styles at all. The more complete the styling, the less it can be overridden by external stylesheets."),
+   e.field("html-styling", e.types.union("full", "basic", "none"), default: "full", doc: "How much to style the HTML output via inline styles. \"full\" completely mimics the PDF output; \"basic\" formats example numbers; \"none\" adds no styles at all. The more complete the styling, the less it can be overridden by external stylesheets."),
 
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
     e.field("_unique-name", str, default: "subeggsample", doc: "The unique name to be used when disambiguation from other things named 'example' is necessary, like html classes."),
@@ -433,7 +433,7 @@
 ///
 /// - html-styling ("full" | "basic" | "none"): How much to style the HTML output via inline styles.
 ///   "full" completely mimics the PDF output;
-///   "basic" formats example numbers, arranges glosses in a grid, and pads judges;
+///   "basic" only formats example numbers;
 ///   "none" adds no styles at all.
 ///   The more complete the styling, the less it can be overridden by external stylesheets.
 ///
@@ -472,7 +472,7 @@
     e.field("label-supplement", e.types.option(str), default: none, doc: "The example figure supplement used in references. Has no effect when `smart-ref` is `true`."),
     e.field("smart-refs", bool, default: true, doc: "Whether to format `@`-references and `ref`-references to examples Adding parenthesis and parsing the supplement."),
 
-   e.field("html-styling", e.types.union("full", "basic", "none"), default: "full", doc: "How much to style the HTML output via inline styles. \"full\" completely mimics the PDF output; \"basic\" formats example numbers, arranges glosses in a grid, and pads judges; \"none\" adds no styles at all. The more complete the styling, the less it can be overridden by external stylesheets."),
+   e.field("html-styling", e.types.union("full", "basic", "none"), default: "full", doc: "How much to style the HTML output via inline styles. \"full\" completely mimics the PDF output; \"basic\" formats example numbers; \"none\" adds no styles at all. The more complete the styling, the less it can be overridden by external stylesheets."),
 
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
     e.field("_unique-name", str, default: "eggsample", doc: "The unique name to be used when disambiguation from other things named 'example' is necessary, like html classes."),

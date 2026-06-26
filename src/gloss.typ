@@ -180,7 +180,7 @@
 ///
 /// - html-styling ("full" | "basic" | "none"): How much to style the HTML output via inline styles.
 ///   "full" completely mimics the PDF output;
-///   "basic" formats example numbers, arranges glosses in a grid, and pads judges;
+///   "basic" only arranges glosses in a grid;
 ///   "none" adds no styles at all.
 ///   The more complete the styling, the less it can be overridden by external stylesheets.
 ///
@@ -217,7 +217,7 @@
     e.field("hanging-indent", length, default: 1em, doc: "Horizontal spacing before wrapped gloss lines."),
     e.field("styles", array, doc: "List of functions to be applied to each line of glosses. Can be of any length. `gloss-styles[0]` is applied to the first line, `gloss-styles[1]` --- to the second, etc. E.g. ```typst (emph, it => it + [.])``` makes the first line italicized and adds a period to the second line."),
 
-   e.field("html-styling", e.types.union("full", "basic", "none"), default: "full", doc: "How much to style the HTML output via inline styles. \"full\" completely mimics the PDF output; \"basic\" formats example numbers, arranges glosses in a grid, and pads judges; \"none\" adds no styles at all. The more complete the styling, the less it can be overridden by external stylesheets."),
+   e.field("html-styling", e.types.union("full", "basic", "none"), default: "full", doc: "How much to style the HTML output via inline styles. \"full\" completely mimics the PDF output; \"basic\" only arranges glosses in a grid; \"none\" adds no styles at all. The more complete the styling, the less it can be overridden by external stylesheets."),
    e.field("html-table", bool, default: false, doc: "Whether to render glosses in HTML as a table instead of a flexbox. A table might be considered more semantic, but is unable to wrap."),
 
     e.field("get-line-spacing", function, synthesized: true, default: () => par.leading),
