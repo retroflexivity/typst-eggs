@@ -13,17 +13,18 @@
 /// -> content
 #let judge(
   j
-) = if is-html() {
+) = context if is-html() {
   context {
     html.elem("span",
-      ..if html-pad-judges.get() {(
-        attrs: (
+      attrs: (
+        class: "eggs-judge",
+        ..if html-pad-judges.get() {(
           style: html-style(
             position: "absolute",
             transform: "translateX(-100%)"
           )
-        )
-      )},
+        )}
+      ),
       j
     )
   }
