@@ -1,6 +1,6 @@
 # Typeset linguistic examples with the Simplest Syntax possible
 
-This is a [Typst](https://github.com/typst/typst) package that provides linguistic examples and interlinear glossing. It is a heavily modified fork of [neunenak's typst-leipzig-glossing](https://github.com/neunenak/typst-leipzig-glossing).
+This is a [Typst](https://github.com/typst/typst) package that provides linguistic examples and interlinear glossing.
 
 See it on [Typst Universe](https://typst.app/universe/package/eggs).
 
@@ -14,8 +14,8 @@ Below is an example of how to typeset an example.
 #show: eggs
 
 #example[
-  + - primer   s     gloss-ami
-    - example  with  gloss-#pl.#ins
+  + - primer  s    gloss-ami
+    - example with gloss-#pl.#ins
     'an/the example with glosses' #ex-label(<gl>)
   + \*example without glosses
   #ex-label(<pex>)
@@ -26,18 +26,21 @@ Below is an example of how to typeset an example.
 
 ### Basics
 
-Start with applying the global show rule. The central function is `example`, which typesets an example. Inside it, auto-numbered lists (`+`) are treated as subexamples, and bullet lists (`-`) as interlinear gloss lines.
+Start with applying the global show rule: `#show: eggs`.
 
-This automatic conversion can be toggled off by passing `auto-subexamples: false` and `auto-glosses: false` to `example`, like this:
+The central function is `example`, which typesets an example. Inside it, enumerated lists (`+`) are treated as subexamples, and bullet lists (`-`) as interlinear gloss lines.
+
+This automatic conversion can be toggled off by passing `auto-subexamples: false` and `auto-glosses: false` to `example`. Then, use `subexample` and `gloss` to explicitly typeset subexamples and glosses.
+
 
 ```typst
 #example(auto-subexamples: false, auto-glosses: false)[
   + This is a proper numbered item
   - And this is a proper bullet item
+  #subexample[But this is a subexample]
+  #gloss[i gloss-y][and gloss-#pl]
 ]
 ```
-
-Additionally, `subexample` explicitly typesets a subexample and `gloss` explicitly typesets glosses.
 
 ### Numbering
 
@@ -45,7 +48,7 @@ Examples are numbered following [a counter](https://typst.app/docs/reference/int
 
 ### Labels and refs
 
-Examples (and subexamples) can be labeled by putting `#ex-label(<label-name>)` somewhere inside them or passing a `label: <label-name>` argument. Automatic codly-style labels are added to subexamples, too.
+Examples (and subexamples) can be labeled by putting `ex-label(<label-name>)` somewhere inside them or passing a `label: <label-name>` argument. Automatic codly-style labels are added to subexamples, too.
 
 References are clever, bracketed and with support for two-example references via supplements. `ex-ref` is even more powerful.
 
@@ -56,15 +59,29 @@ References are clever, bracketed and with support for two-example references via
 #ex-ref(1) // (2) --- relative numbering like expex's nextx
 ```
 
-### Misc stuff
+### Judges
 
-Common judges are recognized automatically. `judge` typesets text without taking up space.
+Common judges are recognized automatically at the beginning of an example or a gloss word, and are typeset without taking space. `judge()` does it automatically.
+
+### Abbreviations
 
 The `abbreviations` submodule provides `leipzig`-style abbreviation commands. They are kept track of and can be printed with `print-abbreviations`.
 
-Customization is done via the global show rule: `#show eggs.with()`.
+### Trailing citations
 
-### More stuff
+The function `trailing` aligns the content on the right. Use it to add sources to your examples.
+
+### Customization
+
+Customization is done via the global show rule: `#show eggs.with(...)`.
+
+## HTML
+
+Eggs' fully custom richly inline-styled HTML output looks almost as good as the PDF one. Like this:
+
+<ol class="eggsample-list" style="margin: 0pt; padding-left: 0pt"><li class="eggsample" value="1" style="list-style-type: none; padding-left: 0pt; display: flex; margin: 0.55em auto" id="pex"><span class="number" style="display: inline-block; width: 2.5em; min-width: 2.5em">(1)</span><div class="body" style="width: 100%"><ol class="subeggsample-list" style="margin: 0pt; padding-left: 0pt"><li class="subeggsample" value="1" style="list-style-type: none; padding-left: 0pt; display: flex; margin: 0pt auto" id="gl"><span class="number" style="display: inline-block; width: 1.5em; min-width: 1.5em">a.</span><div class="body" style="width: 100%"><div class="egglosses" style="display: flex; flex-wrap: wrap; margin-top: 0pt; margin-bottom: 0pt; gap: 0pt 1em"><div class="block" style="display: grid; gap: 0pt"><span class="word">primer</span><span class="word">example</span></div><div class="block" style="display: grid; gap: 0pt"><span class="word">s</span><span class="word">with</span></div><div class="block" style="display: grid; gap: 0pt"><span class="word">gloss-ami</span><span class="word">gloss-<span style="font-variant-caps: small-caps">pl</span>.<span style="font-variant-caps: small-caps">ins</span></span></div></div>’an/the example with glosses’</div></li><li class="subeggsample" value="2" style="list-style-type: none; padding-left: 0pt; display: flex; margin: 0pt auto" id="pex:b"><span class="number" style="display: inline-block; width: 1.5em; min-width: 1.5em">b.</span><div class="body" style="width: 100%"><span class="eggs-judge" style="position: absolute; transform: translateX(-100%)">*</span>example without glosses</div></li></ol></div></li></ol>
+
+## More stuff
 
 See [documentation.pdf](documentation.pdf) for more info.
 
@@ -88,7 +105,6 @@ MIT License.
 
 ## Special thanks
 
-- [Thumus](https://github.com/Thumuss), [bluss](https://github.com/bluss), and especially [Laurenz](https://github.com/laurmaedje) for an important discussion on row splitting functionality.
-- [Greg Shuflin](https://github.com/neunenak) and contributors for creating the original leipzig-glossing.
-- [PgBiel](https://github.com/PgBiel) for creating elembic.
 - [JJ](https://github.com/omentic) for various improvements.
+- [PgBiel](https://github.com/PgBiel) for creating elembic.
+- [Greg Shuflin](https://github.com/neunenak) and contributors for creating the original leipzig-glossing.
