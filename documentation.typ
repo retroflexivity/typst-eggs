@@ -390,7 +390,7 @@ The amount of inline styling applied can be changed using the `html-styling` set
 
 / `"full"` (default): All of the styling.
 
-/ `"basic"`: "Contentful" changes only. These are: (sub)example marker formatting (changing the default marker, not adding the new one); flexboxes with grids for glosses; judge padding; trailing floating.
+/ `"basic"`: "Contentful" changes only. These are: (sub)example marker formatting (changing the default marker, not adding the new one); flexboxes with grids for glosses; judge padding; trailing citation floating.
 
 / `"none"`: No use of HTML `style` at all.
 
@@ -400,7 +400,7 @@ Furthermore, as mentioned above, the `gloss-html-table` can be set to ```typc tr
 
 == The state of the feature
 
-HTML support in Typst is experimental, and so it is in Eggs. Listed below are the things that do not work or work poorly.
+HTML support in Typst is experimental, and so it is in Eggs. The known issues are listed below.
 
 - `gloss-hanging-indent` for glosses is not supported and ignored;
 - `subexample-spacing` and `gloss-before-spacing` add margins above subexamples and glosses even at the beginning of an example. This makes them misaligned with the example number. This is why you probably do not want to use them;
