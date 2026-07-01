@@ -77,7 +77,7 @@ Customization is done via the global show rule: `#show eggs.with(...)`.
 
 ## HTML
 
-Eggs' fully custom richly inline-styled HTML output looks almost as good as the PDF one. (assets/example.html)[Check it out]
+Eggs' fully custom richly inline-styled HTML output looks almost as good as the PDF one. [Check it out](assets/example.html)
 
 ## More stuff
 
