@@ -1,5 +1,5 @@
 #set document(title: "typst eggs documentation")
-#let version = "0.8.0"
+#let version = "0.9.0"
 
 #import "eggs.typ": abbreviations, example, gloss, judge, trailing, subexample, eggs, abbreviation, print-abbreviations, ex-label, ex-ref
 #import "@preview/tidy:0.4.3"
