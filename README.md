@@ -77,7 +77,7 @@ Customization is done via the global show rule: `#show eggs.with(...)`.
 
 ## HTML
 
-Eggs' fully custom richly inline-styled HTML output looks almost as good as the PDF one. [Check it out](https://html-preview.github.io/?url=https://github.com/retroflexivity/typst-eggs/blob/main/assets/example.html).
+Eggs' fully custom richly inline-styled HTML output looks almost as good as the PDF one. [Check it out](https://html-preview.github.io/?url=https://github.com/retroflexivity/typst-eggs/blob/0.9.0/assets/example.html).
 
 ## More stuff
 
