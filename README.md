@@ -61,7 +61,7 @@ References are clever, bracketed and with support for two-example references via
 
 ### Judges
 
-Common judges are recognized automatically at the beginning of an example or a gloss word, and are typeset without taking space. `judge()` does it automatically.
+Common judges are recognized automatically at the beginning of an example or a gloss word, and are typeset without taking space. `judge()` does it manually.
 
 ### Abbreviations
 
