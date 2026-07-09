@@ -13,24 +13,25 @@
 /// *Default*: 1.5em
 ///
 /// -> content
-#let trailing(body, gap: 1.5em) = context if is-html() {
-    context {
-      html.elem("span",
-        attrs: (
-          class: "eggs-trailing",
-          ..if html-align-trailing.get() {(
-            style: html-style(
-              float: "right"
-            )
-          )}
-        ),
-        body
-      )    
-    }
+#let trailing(body, gap: 1.5em) = {
+  // need this for gloss lines to be sensitive to trailing
+  context if is-html() {
+    html.elem("span",
+      attrs: (
+        class: "eggs-trailing",
+        ..if html-align-trailing.get() {(
+          style: html-style(
+            float: "right"
+          )
+        )}
+      ),
+      body
+    )    
   } else {
     box()
     h(1fr)
     sym.wj
     box({h(gap); body})
   }
-
+  metadata("eggs-trailing")
+}
