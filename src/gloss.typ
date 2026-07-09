@@ -121,15 +121,22 @@
         par(hanging-indent: hanging-indent, leading: leading,
           // turn list of lines into list of columns
           cols
-          .map(words => {
+          .zip(
+            (false,) * (cols.len() - 1) + (true,)
+          )
+          .map(((words, final)) => {
             box(
               grid(
                 row-gutter: line-spacing,
-                ..words
-              )
+                ..words,
+              ),
+              // the final box takes the whole remaining width
+              // to properly align trailing citations
+              ..if final and words.any(word => metadata("eggs-trailing") in word.children) {
+                (width: 1fr)
+              }
             )
-            h(word-spacing)
-          }).join()
+          }).join(h(word-spacing))
         )
       )
     }
