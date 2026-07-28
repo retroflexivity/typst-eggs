@@ -14,6 +14,26 @@
   it
 }
 
+// apply numbering if numbers are passed,
+// otherwise extract suffix and prefix and concat.
+// also unpack arrays
+#let numbering-plus(pattern, ..args) = {
+  let ns = if args.pos().len() == 1 and type(args.pos().at(0)) == array {
+    args.pos().at(0)
+  } else {
+    args.pos()
+  }
+  if ns.all(it => type(it) == int) {
+    numbering(pattern, ..ns)
+  } else {
+    let syms = regex("[1aAiIαΑ一壹あいアイא가ㄱ*١۱१১ক①⓵]")
+    let occurs = pattern.matches(syms)
+    let prefix = pattern.slice(0, occurs.at(0).start)
+    let suffix = pattern.slice(occurs.at(-1).end)
+    prefix + ns.at(0) + suffix
+  }
+}
+
 // in all text-type children,
 // find `from` string and replace it with `to` content
 // returning an array of content 

@@ -1,6 +1,6 @@
 #import "@preview/elembic:1.1.1" as e
 
-#import "utils.typ": prefix
+#import "utils.typ": prefix, numbering-plus
 #import "example.typ": example, subexample
 
 
@@ -8,9 +8,9 @@
 // if trim-start, only use the lowest-level number
 #let format-num(nums, pattern, trim-start: false) = {
   if trim-start and nums.len() > 1 {
-    numbering(pattern, nums.at(-1))
+    numbering-plus(pattern, nums.at(-1))
   } else {
-    numbering(pattern, ..nums)
+    numbering-plus(pattern, ..nums)
   }
 }
 
