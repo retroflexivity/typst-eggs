@@ -46,8 +46,13 @@
     } else {
       fields.ref-pattern
     }
+    let number = if fields.number != none {
+      (fields.number,)
+    } else {
+      fields._counter.at(loc)
+    }
 
-    format-num(fields._counter.at(loc), pattern, trim-start: is-second)
+    format-num(number, pattern, trim-start: is-second)
 
   }
 }
