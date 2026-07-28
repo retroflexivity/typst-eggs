@@ -12,6 +12,8 @@
 
 (2): #ex-ref(2)
 
+(10): #ex-ref(<ten>)
+
 #example(label: <one>)[
   example
 ]
@@ -22,6 +24,10 @@
   + subexample #ex-label(<sub-one>)
   + subexample
   #ex-label(<subs>)
+]
+
+#example(number: 10)[
+  example number 10 #ex-label(<ten>)
 ]
 
 #footnote[
