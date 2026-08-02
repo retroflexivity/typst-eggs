@@ -122,7 +122,7 @@
           // turn list of lines into list of columns
           cols
           .map(words => {
-            box(
+            box(baseline: top,
               grid(
                 row-gutter: line-spacing,
                 ..words
