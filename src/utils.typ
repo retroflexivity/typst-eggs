@@ -14,23 +14,27 @@
   it
 }
 
-// apply numbering if numbers are passed,
-// otherwise extract suffix and prefix and concat.
-// also unpack arrays
+// like `numbering`, but also supports strings, content, and arrays
+// applies `numbering` if numbers are passed,
+// otherwise parses manually.
+// unpack arrays by flattening
 #let numbering-plus(pattern, ..args) = {
-  let ns = if args.pos().len() == 1 and type(args.pos().at(0)) == array {
-    args.pos().at(0)
-  } else {
-    args.pos()
-  }
+  let ns = args.pos().flatten()
+  
+  // if numbers passed, use numbers, otherwise, parse manually
   if ns.all(it => type(it) == int) {
     numbering(pattern, ..ns)
   } else {
-    let syms = regex("[1aAiIαΑ一壹あいアイא가ㄱ*١۱१১ক①⓵]")
-    let occurs = pattern.matches(syms)
-    let prefix = pattern.slice(0, occurs.at(0).start)
-    let suffix = pattern.slice(occurs.at(-1).end)
-    prefix + ns.at(0) + suffix
+    let pref-syms = pattern.matches(regex("(.*?)([1aAiIαΑ一壹あいアイא가ㄱ*١۱१১ক①⓵])"))
+    // suffix is what follows the last counting symbol
+    let suffix = pattern.slice(pref-syms.at(-1).end)
+
+    // replicate the final prefix
+    pref-syms += (pref-syms.at(-1),) * 10
+    let parts = ns.zip(pref-syms.map(it => it.captures))
+      .map(((n, (p, s))) => p + if (type(n) == content) {n} else if type(n) == int {numbering(s, n)} else {str(n)})
+
+    parts.join() + suffix
   }
 }
 
