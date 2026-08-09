@@ -58,11 +58,14 @@
 #let html-item(elem) = (number: 1, label: none, ..args) => {
   let style = html-style-maybe.with(level: elem.html-styling)
 
+  let num = numbering-plus("1a", number)
+  let li-value = if type(num) == str {(value: num)} else if type(num) == content {(value: num.text)} else {(:)}
+
   (
     html.elem("li",
       attrs: (
         class: elem._unique-name,
-        value: numbering-plus("1a", number),
+        ..li-value,
         ..style(
           basic: (
             list-style-type: "\"" + numbering-plus(elem.num-pattern, number) + " \""
@@ -139,13 +142,12 @@
 ) = {
 
   // turn a list into subexamples
-  let into-subexamples(enabled, level: 0, subexample-wrapper: none, parent-number: none, parent-label: none) = it => {
+  let into-subexamples(enabled, level: 0, subexample-wrapper: none, parent-label: none) = it => {
     if enabled {
       subexample-wrapper(
         ..it.children.map(item => {
           subexample-func(
             item.body,
-            _parent-number: parent-number,
             _parent-label: parent-label,
           )
         })
@@ -164,12 +166,11 @@
     }
   }
 
-  let show-with-autos(elem, level: 0, parent-number: none, parent-label: none) = {
+  let show-with-autos(elem, level: 0, parent-label: none) = {
     show enum: into-subexamples(
       elem.auto-subexamples,
       level: 0,
       subexample-wrapper: elem.at("subexample-wrapper", default: "none"),
-      parent-number: parent-number,
       parent-label: parent-label
     )
     show list: into-glosses(elem.auto-glosses)
@@ -185,10 +186,17 @@
 
   let number = if elem.number != none { elem.number } else { elem._counter.get().at(level) }
 
+  show: it => {
+    if subexample-func != none {
+      e.set_(subexample-func, _parent-number: number)(it)
+    } else {
+      it
+    }
+  }
+
   let body = show-with-autos(
     elem,
     level: level,
-    parent-number: elem.at("number", default: none),
     parent-label: if elem.auto-subexamples and elem.auto-labels { elem.at("label", default: none) } else { none }
   )
 
@@ -214,7 +222,7 @@
 ///   *Required*
 ///
 /// - number (int | array | string | none): Overrides automatic numbering of the subexample. If not none, the counter does not increment.
-///   Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`) and strings (e.g. `number: "5b"` -> `(5b)`) are supported.
+///   Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`), strings (e.g. `number: "5b"` -> `(5b)`), and partially content are supported.
 ///
 ///   *Default*: none
 ///
@@ -279,7 +287,7 @@
 
   fields: (
     e.field("body", content, required: true, doc: "The body of the subexample"),
-    e.field("number", e.types.option(e.types.union(int, array, str)), doc: "Overrides automatic numbering of the subexample. If not none, the counter does not increment. Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`) and strings (e.g. `number: \"5b\"` -> `(5b)`) are supported."),
+    e.field("number", e.types.option(e.types.union(int, array, str, content)), doc: "Overrides automatic numbering of the subexample. If not none, the counter does not increment. Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`), strings (e.g. `number: \"5b\"` -> `(5b)`), and partially content are supported."),
 
     e.field("auto-glosses", bool, default: true, doc: "Whether to treat bullet lists as glosses."),
     // accept lists for legacy support of ()
@@ -304,7 +312,7 @@
 
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
     e.field("_unique-name", str, default: "subeggsample", doc: "The unique name to be used when disambiguation from other things named 'example' is necessary, like html classes."),
-    e.field("_parent-number", e.types.option(int), doc: "Top-level example number, when overriden. Set automatically."),
+    e.field("_parent-number", e.types.option(e.types.union(int, array, str, content)), doc: "Top-level example number, when overriden. Set automatically."),
     e.field("_parent-label", e.types.option(label), doc: "Top-level example label for auto-labels. Set automatically."),
     e.field("auto-subexamples", bool, synthesized: true),
     e.field("get-spacing", function, synthesized: true, default: () => par.leading),
@@ -376,7 +384,8 @@
 ///   *Required*
 ///
 /// - number (int | array | string | none): Overrides automatic numbering of the subexample. If not none, the counter does not increment.
-///   Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`) and strings (e.g. `number: "5b"` -> `(5b)`) are supported.
+///   Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`),
+///   strings (e.g. `number: "5b"` -> `(5b)`), and partially content are supported.
 ///
 ///   *Default*: none
 ///
@@ -449,7 +458,7 @@
 
   fields: (
     e.field("body", content, required: true, doc: "The body of the example"),
-    e.field("number", e.types.option(e.types.union(int, array, str)), doc: "Overrides automatic numbering of the example. If not none, the counter does not increment. Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`) and strings (e.g. `number: \"5b\"` -> `(5b)`) are supported."),
+    e.field("number", e.types.option(e.types.union(int, array, str, content)), doc: "Overrides automatic numbering of the example. If not none, the counter does not increment. Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`), strings (e.g. `number: \"5b\"` -> `(5b)`), and partially content are supported."),
 
     e.field("auto-subexamples", bool, default: true, doc: "Whether to treat numbered lists in examples as subexamples."),
     e.field("auto-glosses", bool, default: true, doc: "Whether to treat bullet lists in examples as glosses."),
