@@ -1,0 +1,8 @@
+image: alpine/latest
+secrets:
+  - 2ffb27f0-ead0-47c5-9747-4772d163cf4f
+tasks:
+  - mirror: |
+      cd typst-eggs
+      ssh-keyscan github.com >> ~/.ssh/known_hosts
+      git push --mirror git@github.com:retroflexivity/typst-eggs.git
