@@ -288,6 +288,7 @@
       "?": true,
       "OK": true,
     ), folds: false, doc: "A dictionary of characters to convert into judges (keys) and whether to superscript them (values)."),
+    e.field("extract-label", bool, default: false, doc: "Whether to search the subexample for `<>`-labels."),
 
     e.field("indent", length, default: 0em, doc: "Distance between the left edge of the top-level example body and the left edge of the subexample number."),
     e.field("body-indent", length, default: 1.5em, doc: "Distance between the left edge of the subexample marker and the left edge of the subexample body."),
@@ -444,6 +445,7 @@
   "example",
   prefix: prefix,
   doc: "Top-level linguistic example",
+  // labelable: true,
 
   fields: (
     e.field("body", content, required: true, doc: "The body of the example"),
@@ -459,6 +461,7 @@
       "?": true,
       "OK": true,
     ), folds: false, doc: "A dictionary of characters to convert into judges (keys) and whether to superscript them (values)."),
+    e.field("extract-label", bool, default: false, doc: "Whether to search the example for `<>`-labels."),
 
     e.field("subexample-wrapper", function, default: (..args) => {args.pos().join()}, doc: "A function to wrap the subexample list. Should accept any number of arguments and return content. E.g. to align your subexamples horizontally, pass `grid.with(columns: 5)`. Only works for automatic examples."),
 
@@ -484,7 +487,12 @@
     if args.named().at("label", default: none) != none {
       constructor(..args)
     } else {
-      constructor(..args, label: get-ex-label(args.pos().at(0, default: [])))
+      let label = get-ex-label(args.pos().at(0, default: []))
+      if label != none {
+        constructor(..args, label: label)
+      } else {
+        constructor(..args)
+      }
     }
   },
 
