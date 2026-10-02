@@ -99,6 +99,8 @@ Contributions are much welcome, too.
 
 TODO:
 - Smarter gloss line styling;
+- Trailings in glosses;
+- <> labels;
 - Figure out how to modify spacing between examples specifically.
 
 ## License
