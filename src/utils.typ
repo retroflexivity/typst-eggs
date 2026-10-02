@@ -14,6 +14,30 @@
   it
 }
 
+// like `numbering`, but also supports strings, content, and arrays
+// applies `numbering` if numbers are passed,
+// otherwise parses manually.
+// unpack arrays by flattening
+#let numbering-plus(pattern, ..args) = {
+  let ns = args.pos().flatten()
+  
+  // if numbers passed, use numbers, otherwise, parse manually
+  if ns.all(it => type(it) == int) {
+    numbering(pattern, ..ns)
+  } else {
+    let pref-syms = pattern.matches(regex("(.*?)([1aAiIαΑ一壹あいアイא가ㄱ*١۱१১ক①⓵])"))
+    // suffix is what follows the last counting symbol
+    let suffix = pattern.slice(pref-syms.at(-1).end)
+
+    // replicate the final prefix
+    pref-syms += (pref-syms.at(-1),) * 10
+    let parts = ns.zip(pref-syms.map(it => it.captures))
+      .map(((n, (p, s))) => p + if (type(n) == content) {n} else if type(n) == int {numbering(s, n)} else {str(n)})
+
+    parts.join() + suffix
+  }
+}
+
 // in all text-type children,
 // find `from` string and replace it with `to` content
 // returning an array of content 

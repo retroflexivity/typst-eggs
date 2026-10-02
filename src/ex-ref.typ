@@ -1,6 +1,6 @@
 #import "@preview/elembic:1.1.1" as e
 
-#import "utils.typ": prefix
+#import "utils.typ": prefix, numbering-plus
 #import "example.typ": example, subexample
 
 
@@ -8,9 +8,9 @@
 // if trim-start, only use the lowest-level number
 #let format-num(nums, pattern, trim-start: false) = {
   if trim-start and nums.len() > 1 {
-    numbering(pattern, nums.at(-1))
+    numbering-plus(pattern, nums.at(-1))
   } else {
-    numbering(pattern, ..nums)
+    numbering-plus(pattern, ..nums)
   }
 }
 
@@ -38,7 +38,6 @@
     } else {
       it
     }
-    let loc = elem.location()
     let fields = e.fields(elem)
 
     let pattern = if is-second and e.func(elem) == subexample {
@@ -46,10 +45,18 @@
     } else {
       fields.ref-pattern
     }
+
+    // either retrieve the number or use the counter
     let number = if fields.number != none {
       (fields.number,)
     } else {
-      fields._counter.at(loc)
+      fields._counter.at(elem.location())
+    }
+    // we normally only care about the last number of the counter,
+    // because _parent-number should always be set for subexamples,
+    // but this should precautiously work for unparentnumbered subexamples too
+    if fields.at("_parent-number", default: none) != none {
+      number = (fields._parent-number, number.at(-1))
     }
 
     format-num(number, pattern, trim-start: is-second)

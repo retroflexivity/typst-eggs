@@ -1,7 +1,7 @@
 #import "@preview/elembic:1.1.1" as e
 
 #import "gloss.typ": gloss
-#import "utils.typ": auto-length, gen-get-function, prefix, is-html, html-style, html-height, html-style-maybe
+#import "utils.typ": auto-length, gen-get-function, prefix, is-html, html-style, html-height, html-style-maybe, numbering-plus
 #import "ex-label.typ": ex-label, get-ex-label
 #import "judge.typ": judge, format-judges
 
@@ -50,7 +50,7 @@
 #let auto-sub-label(parent-label) = label(
   str(parent-label)
   + ":"
-  + (numbering("a", ctr.get().at(1, default: 0) + 1))
+  + (numbering-plus("a", ctr.get().at(1, default: 0) + 1))
 )
 
 
@@ -58,14 +58,17 @@
 #let html-item(elem) = (number: 1, label: none, ..args) => {
   let style = html-style-maybe.with(level: elem.html-styling)
 
+  let num = numbering-plus("1a", number)
+  let li-value = if type(num) == str {(value: num)} else if type(num) == content {(value: num.text)} else {(:)}
+
   (
     html.elem("li",
       attrs: (
         class: elem._unique-name,
-        value: str(number),
+        ..li-value,
         ..style(
           basic: (
-            list-style-type: "\"" + numbering(elem.num-pattern, number) + " \""
+            list-style-type: "\"" + numbering-plus(elem.num-pattern, number) + " \""
           ),
           full: (
             padding-left: elem.indent,
@@ -89,7 +92,7 @@
                 min-width: elem.body-indent
               )
             ),
-            numbering(elem.num-pattern, number)
+            numbering-plus(elem.num-pattern, number)
           ) 
         },
         // example body
@@ -139,13 +142,12 @@
 ) = {
 
   // turn a list into subexamples
-  let into-subexamples(enabled, level: 0, subexample-wrapper: none, parent-number: none, parent-label: none) = it => {
+  let into-subexamples(enabled, level: 0, subexample-wrapper: none, parent-label: none) = it => {
     if enabled {
       subexample-wrapper(
         ..it.children.map(item => {
           subexample-func(
             item.body,
-            _parent-number: parent-number,
             _parent-label: parent-label,
           )
         })
@@ -164,12 +166,11 @@
     }
   }
 
-  let show-with-autos(elem, level: 0, parent-number: none, parent-label: none) = {
+  let show-with-autos(elem, level: 0, parent-label: none) = {
     show enum: into-subexamples(
       elem.auto-subexamples,
       level: 0,
       subexample-wrapper: elem.at("subexample-wrapper", default: "none"),
-      parent-number: parent-number,
       parent-label: parent-label
     )
     show list: into-glosses(elem.auto-glosses)
@@ -185,10 +186,17 @@
 
   let number = if elem.number != none { elem.number } else { elem._counter.get().at(level) }
 
+  show: it => {
+    if subexample-func != none {
+      e.set_(subexample-func, _parent-number: number)(it)
+    } else {
+      it
+    }
+  }
+
   let body = show-with-autos(
     elem,
     level: level,
-    parent-number: elem.at("number", default: none),
     parent-label: if elem.auto-subexamples and elem.auto-labels { elem.at("label", default: none) } else { none }
   )
 
@@ -198,7 +206,7 @@
     grid(
       columns: (elem.indent, elem.body-indent, 1fr),
       [],
-      numbering(elem.num-pattern, number),
+      numbering-plus(elem.num-pattern, number),
       grid.cell(
         body,
         breakable: elem.breakable),
@@ -213,7 +221,8 @@
 ///
 ///   *Required*
 ///
-/// - number (int | none): Overrides automatic numbering of the subexample. If not none, the counter does not increment.
+/// - number (int | array | string | none): Overrides automatic numbering of the subexample. If not none, the counter does not increment.
+///   Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`), strings (e.g. `number: "5b"` -> `(5b)`), and partially content are supported.
 ///
 ///   *Default*: none
 ///
@@ -278,7 +287,7 @@
 
   fields: (
     e.field("body", content, required: true, doc: "The body of the subexample"),
-    e.field("number", e.types.option(int), doc: "Overrides automatic numbering of the subexample. If not none, the counter does not increment."),
+    e.field("number", e.types.option(e.types.union(int, array, str, content)), doc: "Overrides automatic numbering of the subexample. If not none, the counter does not increment. Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`), strings (e.g. `number: \"5b\"` -> `(5b)`), and partially content are supported."),
 
     e.field("auto-glosses", bool, default: true, doc: "Whether to treat bullet lists as glosses."),
     // accept lists for legacy support of ()
@@ -303,7 +312,7 @@
 
     e.field("_counter", counter, default: counter("eggsample"), doc: "The example counter. Set automatically and differs in footnotes."),
     e.field("_unique-name", str, default: "subeggsample", doc: "The unique name to be used when disambiguation from other things named 'example' is necessary, like html classes."),
-    e.field("_parent-number", e.types.option(int), doc: "Top-level example number, when overriden. Set automatically."),
+    e.field("_parent-number", e.types.option(e.types.union(int, array, str, content)), doc: "Top-level example number, when overriden. Set automatically."),
     e.field("_parent-label", e.types.option(label), doc: "Top-level example label for auto-labels. Set automatically."),
     e.field("auto-subexamples", bool, synthesized: true),
     e.field("get-spacing", function, synthesized: true, default: () => par.leading),
@@ -354,7 +363,7 @@
         it._counter.get().at(1)
       }
 
-      numbering(
+      numbering-plus(
         it.ref-pattern,
         parent-number, number
       )
@@ -374,7 +383,9 @@
 ///
 ///   *Required*
 ///
-/// - number (int | none): Overrides automatic numbering of the example. If not none, the counter does not increment.
+/// - number (int | array | string | none): Overrides automatic numbering of the subexample. If not none, the counter does not increment.
+///   Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`),
+///   strings (e.g. `number: "5b"` -> `(5b)`), and partially content are supported.
 ///
 ///   *Default*: none
 ///
@@ -447,7 +458,7 @@
 
   fields: (
     e.field("body", content, required: true, doc: "The body of the example"),
-    e.field("number", e.types.option(int), doc: "Overrides automatic numbering of the example. If not none, the counter does not increment."),
+    e.field("number", e.types.option(e.types.union(int, array, str, content)), doc: "Overrides automatic numbering of the example. If not none, the counter does not increment. Integers, arrays of integers (e.g. `number: (5, 2)` -> `(5b)`), strings (e.g. `number: \"5b\"` -> `(5b)`), and partially content are supported."),
 
     e.field("auto-subexamples", bool, default: true, doc: "Whether to treat numbered lists in examples as subexamples."),
     e.field("auto-glosses", bool, default: true, doc: "Whether to treat bullet lists in examples as glosses."),
@@ -467,7 +478,7 @@
     e.field("spacing", auto-length, default: auto, doc: "Vertical spacing around the example. Currently, there is no way to modify spacing between two examples specifically."),
     e.field("breakable", bool, default: false, doc: "Whether the example figure is breakable."),
 
-    e.field("num-pattern", e.types.union(str, function), default: "(1)", doc: "Example number format."),
+    e.field("num-pattern", e.types.union(str, function), default: "(1a)", doc: "Example number format."),
     e.field("ref-pattern", e.types.union(str, function), default: "1a", doc: "Example reference format (without brackets). A 2-level numbering pattern."),
     e.field("label-supplement", e.types.option(str), default: none, doc: "The example figure supplement used in references. Has no effect when `smart-ref` is `true`."),
     e.field("smart-refs", bool, default: true, doc: "Whether to format `@`-references and `ref`-references to examples Adding parenthesis and parsing the supplement."),
@@ -513,7 +524,7 @@
   reference: (
     supplement: it => it.label-supplement,
     // using custom counter
-    numbering: it => _ => numbering(
+    numbering: it => _ => numbering-plus(
       it.ref-pattern,
       if it.number != none { it.number } else { it._counter.get().at(0) }
     )

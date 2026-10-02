@@ -77,12 +77,12 @@
 /// - num-pattern (str | function): Example number format.
 ///   A numbering pattern.
 ///
-///   *Default*: "(1)"
+///   *Default*: "(1a)"
 ///
 /// - footnote-num-pattern (str | function): Example number format inside footnotes.
 ///   A numbering pattern.
 ///
-///   *Default*: "(i)"
+///   *Default*: "(ia)"
 ///
 /// - sub-num-pattern (str | function): Subexample number format.
 ///   A numbering pattern.
