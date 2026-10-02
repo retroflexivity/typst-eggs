@@ -93,7 +93,7 @@ On Linux, run `just` in the directory to install the package to ~/.local/typst/p
 
 ## Contributing
 
-Please submit an issue for any bug you find and any suggestion you have.
+Please submit a ticket (issue) for any bug you find and any suggestion you have.
 
 Contributions are much welcome, too.
 
