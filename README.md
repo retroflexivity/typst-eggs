@@ -22,7 +22,7 @@ Below is an example of how to typeset an example.
 ]
 ```
 
-<img src="assets/example.svg" alt="an example with subexamples and glosses" width="450"/>
+![an example with subexamples and glosses](assets/example.svg)
 
 ### Basics
 
