@@ -2,8 +2,12 @@
 
 This is a [Typst](https://github.com/typst/typst) package that provides linguistic examples and interlinear glossing.
 
+<!-- exclude -->
+It is developed on [sourcehut](https://sr.ht/~retroflexivity/eggs/) with a [Github fork](https://github.com/retroflexivity/typst-eggs).
+
 See it on [Typst Universe](https://typst.app/universe/package/eggs).
 
+<!-- include -->
 ## Usage
 
 Below is an example of how to typeset an example.

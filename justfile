@@ -14,7 +14,7 @@ install:
         --exclude='.*' \
         --exclude='justfile' \
 
-    @sed -i '/<!-- exclude -->/Q' .temp/README.md
+    @sed -i '/<!-- exclude -->/,/<!-- include -->/d' .temp/README.md
 
     @rm -rf {{ fulldir }}
     @mv -Tf .temp {{ fulldir }}
