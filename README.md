@@ -13,7 +13,7 @@ See it on [Typst Universe](https://typst.app/universe/package/eggs).
 Below is an example of how to typeset an example.
 
 ```typst
-#import "@preview/eggs:0.9.0": *
+#import "@preview/eggs:0.10.0": *
 #import abbreviations: pl, ins
 #show: eggs
 
@@ -81,7 +81,7 @@ Customization is done via the global show rule: `#show eggs.with(...)`.
 
 ## HTML
 
-Eggs' fully custom richly inline-styled HTML output looks almost as good as the PDF one. [Check it out](https://html-preview.github.io/?url=https://github.com/retroflexivity/typst-eggs/blob/0.9.0/assets/example.html).
+Eggs' fully custom richly inline-styled HTML output looks almost as good as the PDF one. [Check it out](https://html-preview.github.io/?url=https://github.com/retroflexivity/typst-eggs/blob/0.10.0/assets/example.html).
 
 ## More stuff
 
