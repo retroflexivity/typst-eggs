@@ -559,6 +559,19 @@ In other cases, you may want to skip a word in some gloss line that is present i
   ```
 )
 
+== Repeat an earlier example
+
+Typst's built-in #link("https://typst.app/docs/reference/introspection/query")[`query`] allows retrieving an example by label and showing it again.
+
+#code-ex(
+  ```typst
+    It is important to regularly remind oneself of the example @ok.
+
+    #context query(<ok>).first()
+  ```
+)
+
+
 == Number examples by chapter
 
 Package #link("https://typst.app/universe/package/headcount")[headcount] provides graceful numbering dependent on current chapter.
