@@ -532,9 +532,9 @@ A more sophisticated function can include splitting the content automatically an
   ```
 )
 
-== Hide elements and pad under brackets in glosses
+== Skip words and pad under brackets in glosses
 
-When typesetting glosses, it's common that you need to put a bracket next to the following word with no tabulation between them, but align the other lines with the word, not the bracket.#footnote[`expex` uses `@` and `\nogloss` for this.]
+When typesetting glosses, you often need to put a bracket on one of the lines, but align the other lines with the word after the bracket.#footnote[`expex` uses `@` and `\nogloss` for this.]
 
 A clean way to do this is to add a hidden printed bracket with the built-in #link("https://typst.app/docs/reference/layout/hide/")[hide].
 
@@ -663,7 +663,7 @@ The look of term lists can also be modified using show rules.
   })
 
   #example[
-    + - anníksi  ponokáíksi̥  #highlight[á]ótsiyaaw̥ḁ.
+    + - anníksi  ponokáíksi̥  áótsiyaaw̥ḁ.
     / EY: When you talk about swimming, _á-_ is like "being in the moment of"
     / EY: The difference here is between "swimming" vs. "swim"
     / EY: 'Those elk swim' is a statement of fact... doesn't imply any particular time
